@@ -8,60 +8,67 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import huni.techtown.org.jarvice.common.data.SalesObject;
+import huni.techtown.org.jarvice.common.data.DailySalesObject;
 
 /**
  *
  * 원본 데이터
  *
  * */
-public class TBL_MY_SALES extends TABLE<SalesObject> {
-    private String TAG = TBL_MY_SALES.class.getSimpleName();
+public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
+    private String TAG = TBL_DAILY_SALES.class.getSimpleName();
 
     /*** Table 이름 정의 *******************/
-    public static final String TABLE_NAME = "tbl_my_sales";
+    public static final String TABLE_NAME = "tbl_daily_sales";
 
+    /*** 21개 ***/
     /*** Column 이름 정의 **********************/
-    public static final String ID					= "_id";
-    public static final String SELL_DATE		    = "sell_date";              // 날짜
-    public static final String RECEIPT_NO			= "receipt_no";             // 영수증번호
-    public static final String SORT			        = "sort";                   // 구분
-    public static final String TABLE_NO			    = "table_no";               // 테이블명
-    public static final String FIRST_ORDER			= "first_order";            // 최초주문
-    public static final String PAYMENT_TIME			= "payment_time";           // 결제시각
-    public static final String PRODUCT_CODE		    = "product_code";           // 상품코드
-    public static final String BARCODE				= "barcode";                // 바코드
-    public static final String PRODUCT_NAME		    = "product_name";           // 상품명
-    public static final String PRODUCT_COUNT	    = "product_count";          // 수량
-    public static final String SELL			        = "sell";                   // 총매출액
-    public static final String DISCOUNT				= "discount";               // 할인액
-    public static final String DISCOUNT_TYPE	    = "discount_type";          // 할인구분
-    public static final String REAL_SALES			= "real_sales";             // 실매출액
-    public static final String PLUS_SALES	        = "plus_sales";             // 가액
-    public static final String VAT				    = "vat";                    // 부가세
-    public static final String CATEGORY             = "category";               // 상품 분류
+    public static final String ID					            = "_id";
+    public static final String SELL_DATE		                = "sell_date";              // 날짜
+    public static final String SELL_ALL			                = "sell_all";               // 전체매출
+    public static final String SELL_REAL			            = "sell_real";              // 전체 실 매출
+    public static final String SELL_FOOD			            = "sell_food";              // 음식 판매 금액
+    public static final String SELL_FOOD_PERCENT			    = "sell_food_percent";      // 음식 판매 퍼센트
+    public static final String SELL_FOOD_PRODUCT			    = "sell_food_product";      // 음식 판매 갯수
+    public static final String SELL_BEER			            = "sell_beer";              // 주류 판매 금액
+    public static final String SELL_BEER_PERCENT			    = "sell_beer_percent";      // 주류 판매 퍼센트
+    public static final String SELL_BEER_PRODUCT			    = "sell_beer_product";      // 주류 판매 갯수
+    public static final String SELL_COCK			            = "sell_cock";              // 칵테일 판매 금액
+    public static final String SELL_COCK_PERCENT			    = "sell_cock_percent";      // 칵테일 판매 퍼센트
+    public static final String SELL_COCK_PRODUCT			    = "sell_cock_product";      // 칵테일 판매 갯수
+    public static final String SELL_LIQUOR			            = "sell_liquor";            // 양주 판매 금액
+    public static final String SELL_LIQUOR_PERCENT			    = "sell_liquor_percent";    // 양주 판매 퍼센트
+    public static final String SELL_LIQUOR_PRODUCT			    = "sell_liquor_product";    // 양주 판매 갯수
+    public static final String SELL_DRINK			            = "sell_drink";             // 음료 판매 금액
+    public static final String SELL_DRINK_PERCENT			    = "sell_drink_percent";     // 음료 판매 퍼센트
+    public static final String SELL_DRINK_PRODUCT			    = "sell_drink_product";     // 음료 판매 갯수
+    public static final String SELL_LUNCH			            = "sell_lunch";             // 점심 판매 금액
+    public static final String SELL_LUNCH_PERCENT			    = "sell_lunch_percent";     // 점심 판매 퍼센트
 
     /*** Table 생성 쿼리 **********************/
     public static final String CREATE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " " +
             "(" +
                 ID						+ " INTEGER NOT NULL UNIQUE PRIMARY KEY," +
                 SELL_DATE			    + " TEXT," +
-                RECEIPT_NO				+ " TEXT," +
-                SORT			        + " TEXT," +
-                TABLE_NO			    + " TEXT," +
-                FIRST_ORDER				+ " TEXT," +
-                PAYMENT_TIME			+ " TEXT," +
-                PRODUCT_CODE			+ " INTEGER," +
-                BARCODE				    + " TEXT," +
-                PRODUCT_NAME		    + " TEXT," +
-                PRODUCT_COUNT		    + " INTEGER," +
-                SELL				    + " INTEGER," +
-                DISCOUNT				+ " INTEGER DEFAULT 0," +
-                DISCOUNT_TYPE			+ " TEXT," +
-                REAL_SALES				+ " INTEGER," +
-                PLUS_SALES		        + " INTEGER," +
-                VAT					    + " INTEGER," +
-                CATEGORY                + " TEXT " +
+                SELL_ALL				+ " TEXT," +
+                SELL_REAL			    + " TEXT," +
+                SELL_FOOD			    + " TEXT," +
+                SELL_FOOD_PERCENT	    + " TEXT," +
+                SELL_FOOD_PRODUCT		+ " TEXT," +
+                SELL_BEER			    + " TEXT," +
+                SELL_BEER_PERCENT	    + " TEXT," +
+                SELL_BEER_PRODUCT		+ " TEXT," +
+                SELL_COCK		        + " TEXT," +
+                SELL_COCK_PERCENT		+ " TEXT," +
+                SELL_COCK_PRODUCT		+ " TEXT," +
+                SELL_LIQUOR				+ " TEXT," +
+                SELL_LIQUOR_PERCENT		+ " TEXT," +
+                SELL_LIQUOR_PRODUCT     + " TEXT," +
+                SELL_DRINK              + " TEXT," +
+                SELL_DRINK_PERCENT      + " TEXT," +
+                SELL_DRINK_PRODUCT      + " TEXT," +
+                SELL_LUNCH              + " TEXT," +
+                SELL_LUNCH_PERCENT      + " TEXT " +
                 ");";
 
     /*** Table 생성 쿼리 **********************/
@@ -69,9 +76,10 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
 
     /*** INDEX 정의 **********************/
     protected static class INDEX {
-        public int ID, SELL_DATE, RECEIPT_NO, SORT, TABLE_NO, FIRST_ORDER,
-                PAYMENT_TIME, PRODUCT_CODE, BARCODE, PRODUCT_NAME, PRODUCT_COUNT,
-                SELL, DISCOUNT, DISCOUNT_TYPE, REAL_SALES, PLUS_SALES, VAT, CATEGORY;
+        public int ID, SELL_DATE, SELL_ALL, SELL_REAL, SELL_FOOD, SELL_FOOD_PERCENT,
+                SELL_FOOD_PRODUCT, SELL_BEER, SELL_BEER_PERCENT, SELL_BEER_PRODUCT, SELL_COCK,
+                SELL_COCK_PERCENT, SELL_COCK_PRODUCT, SELL_LIQUOR, SELL_LIQUOR_PERCENT, SELL_LIQUOR_PRODUCT,
+                SELL_DRINK, SELL_DRINK_PERCENT, SELL_DRINK_PRODUCT, SELL_LUNCH, SELL_LUNCH_PERCENT;
     }
 
     protected static INDEX cursorToIndex(Cursor c) throws Exception {
@@ -79,65 +87,71 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
 
         idx.ID                      = c.getColumnIndex(ID);
         idx.SELL_DATE               = c.getColumnIndex(SELL_DATE);
-        idx.RECEIPT_NO              = c.getColumnIndex(RECEIPT_NO);
-        idx.SORT                    = c.getColumnIndex(SORT);
-        idx.TABLE_NO                = c.getColumnIndex(TABLE_NO);
-        idx.FIRST_ORDER             = c.getColumnIndex(FIRST_ORDER);
-        idx.PAYMENT_TIME            = c.getColumnIndex(PAYMENT_TIME);
-        idx.PRODUCT_CODE            = c.getColumnIndex(PRODUCT_CODE);
-        idx.BARCODE                 = c.getColumnIndex(BARCODE);
-        idx.PRODUCT_NAME            = c.getColumnIndex(PRODUCT_NAME);
-        idx.PRODUCT_COUNT           = c.getColumnIndex(PRODUCT_COUNT);
-        idx.SELL                    = c.getColumnIndex(SELL);
-        idx.DISCOUNT                = c.getColumnIndex(DISCOUNT);
-        idx.DISCOUNT_TYPE           = c.getColumnIndex(DISCOUNT_TYPE);
-        idx.REAL_SALES              = c.getColumnIndex(REAL_SALES);
-        idx.PLUS_SALES              = c.getColumnIndex(PLUS_SALES);
-        idx.VAT                     = c.getColumnIndex(VAT);
-        idx.CATEGORY                = c.getColumnIndex(CATEGORY);
+        idx.SELL_ALL                = c.getColumnIndex(SELL_ALL);
+        idx.SELL_REAL               = c.getColumnIndex(SELL_REAL);
+        idx.SELL_FOOD               = c.getColumnIndex(SELL_FOOD);
+        idx.SELL_FOOD_PERCENT       = c.getColumnIndex(SELL_FOOD_PERCENT);
+        idx.SELL_FOOD_PRODUCT       = c.getColumnIndex(SELL_FOOD_PRODUCT);
+        idx.SELL_BEER               = c.getColumnIndex(SELL_BEER);
+        idx.SELL_BEER_PERCENT       = c.getColumnIndex(SELL_BEER_PERCENT);
+        idx.SELL_BEER_PRODUCT       = c.getColumnIndex(SELL_BEER_PRODUCT);
+        idx.SELL_COCK               = c.getColumnIndex(SELL_COCK);
+        idx.SELL_COCK_PERCENT       = c.getColumnIndex(SELL_COCK_PERCENT);
+        idx.SELL_COCK_PRODUCT       = c.getColumnIndex(SELL_COCK_PRODUCT);
+        idx.SELL_LIQUOR             = c.getColumnIndex(SELL_LIQUOR);
+        idx.SELL_LIQUOR_PERCENT     = c.getColumnIndex(SELL_LIQUOR_PERCENT);
+        idx.SELL_LIQUOR_PRODUCT     = c.getColumnIndex(SELL_LIQUOR_PRODUCT);
+        idx.SELL_DRINK              = c.getColumnIndex(SELL_DRINK);
+        idx.SELL_DRINK_PERCENT      = c.getColumnIndex(SELL_DRINK_PERCENT);
+        idx.SELL_DRINK_PRODUCT      = c.getColumnIndex(SELL_DRINK_PRODUCT);
+        idx.SELL_LUNCH              = c.getColumnIndex(SELL_LUNCH);
+        idx.SELL_LUNCH_PERCENT      = c.getColumnIndex(SELL_LUNCH_PERCENT);
 
         return idx;
     }
 
     /*** 생성자 *************************/
-    public TBL_MY_SALES(SQLiteDatabase db) {
+    public TBL_DAILY_SALES(SQLiteDatabase db) {
         super(db, TABLE_NAME);
     }
 
     /**
-     * 오브젝트를 SalesObject 변환한다.
+     * 오브젝트를 DailySalesObject 변환한다.
      * @param o
      * @return
      */
     @Override
-    public ContentValues fetchObject2Values(SalesObject o) {
+    public ContentValues fetchObject2Values(DailySalesObject o) {
         ContentValues values = new ContentValues();
 
         values.put(ID,                      o.getId());
         values.put(SELL_DATE,               o.getSellDate());
-        values.put(RECEIPT_NO,              o.getReceiptNo());
-        values.put(SORT,                    o.getSort());
-        values.put(TABLE_NO,                o.getTableNo());
-        values.put(FIRST_ORDER,             o.getFirstOrder());
-        values.put(PAYMENT_TIME,            o.getPaymentTime());
-        values.put(PRODUCT_CODE,            o.getProductCode());
-        values.put(BARCODE,                 o.getBarcode());
-        values.put(PRODUCT_NAME,            o.getProductName());
-        values.put(PRODUCT_COUNT,           o.getProductCount());
-        values.put(SELL,                    o.getSell());
-        values.put(DISCOUNT,                o.getDiscount());
-        values.put(DISCOUNT_TYPE,           o.getDiscountType());
-        values.put(REAL_SALES,              o.getRealSales());
-        values.put(PLUS_SALES,              o.getPlusSales());
-        values.put(VAT,                     o.getVat());
-        values.put(CATEGORY,                o.getCategory());
+        values.put(SELL_ALL,                o.getSellAll());
+        values.put(SELL_REAL,               o.getSellReal());
+        values.put(SELL_FOOD,               o.getSellFood());
+        values.put(SELL_FOOD_PERCENT,       o.getSellFoodPercent());
+        values.put(SELL_FOOD_PRODUCT,       o.getSellFoodProduct());
+        values.put(SELL_BEER,               o.getSellBeer());
+        values.put(SELL_BEER_PERCENT,       o.getSellBeerPercent());
+        values.put(SELL_BEER_PRODUCT,       o.getSellBeerProduct());
+        values.put(SELL_COCK,               o.getSellCock());
+        values.put(SELL_COCK_PERCENT,       o.getSellCockPercent());
+        values.put(SELL_COCK_PRODUCT,       o.getSellCockProduct());
+        values.put(SELL_LIQUOR,             o.getSellLiquor());
+        values.put(SELL_LIQUOR_PERCENT,     o.getSellLiquorPercent());
+        values.put(SELL_LIQUOR_PRODUCT,     o.getSellLiquorProduct());
+        values.put(SELL_DRINK,              o.getSellDrink());
+        values.put(SELL_DRINK_PERCENT,      o.getSellDrinkPercent());
+        values.put(SELL_DRINK_PRODUCT,      o.getSellDrinkProduct());
+        values.put(SELL_LUNCH,              o.getSellLunch());
+        values.put(SELL_LUNCH_PERCENT,      o.getSellLunchPercent());
 
         return values;
     }
 
     @Override
-    public List<SalesObject> fetchCursor2List(Cursor c) throws Exception {
-        ArrayList<SalesObject> list = new ArrayList<SalesObject>();
+    public List<DailySalesObject> fetchCursor2List(Cursor c) throws Exception {
+        ArrayList<DailySalesObject> list = new ArrayList<DailySalesObject>();
         try {
             if (c.moveToFirst()) {
                 INDEX idx = cursorToIndex(c);
@@ -158,45 +172,48 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
      * @return
      * @throws Exception
      */
-    public SalesObject fetchCursor2Object(INDEX idx, Cursor c) throws Exception {
-        SalesObject o = new SalesObject();
+    public DailySalesObject fetchCursor2Object(INDEX idx, Cursor c) throws Exception {
+        DailySalesObject o = new DailySalesObject();
         if (idx.ID != -1) o.setId(c.getLong(idx.ID));
         if (idx.SELL_DATE != -1) o.setSellDate(c.getString(idx.SELL_DATE));
-        if (idx.RECEIPT_NO != -1) o.setReceiptNo(c.getString(idx.RECEIPT_NO));
-        if (idx.SORT != -1) o.setSort(c.getString(idx.SORT));
-        if (idx.TABLE_NO != -1) o.setTableNo(c.getString(idx.TABLE_NO));
-        if (idx.FIRST_ORDER != -1) o.setFirstOrder(c.getString(idx.FIRST_ORDER));
-        if (idx.PAYMENT_TIME != -1) o.setPaymentTime(c.getString(idx.PAYMENT_TIME));
-        if (idx.PRODUCT_CODE != -1) o.setProductCode(c.getString(idx.PRODUCT_CODE));
-        if (idx.BARCODE != -1) o.setBarcode(c.getString(idx.BARCODE));
-        if (idx.PRODUCT_NAME != -1) o.setProductName(c.getString(idx.PRODUCT_NAME));
-        if (idx.PRODUCT_COUNT != -1) o.setProductCount(c.getString(idx.PRODUCT_COUNT));
-        if (idx.SELL != -1) o.setSell(c.getString(idx.SELL));
-        if (idx.DISCOUNT != -1) o.setDiscount(c.getString(idx.DISCOUNT));
-        if (idx.DISCOUNT_TYPE != -1) o.setDiscountType(c.getString(idx.DISCOUNT_TYPE));
-        if (idx.REAL_SALES != -1) o.setRealSales(c.getString(idx.REAL_SALES));
-        if (idx.PLUS_SALES != -1) o.setPlusSales(c.getString(idx.PLUS_SALES));
-        if (idx.VAT != -1) o.setVat(c.getString(idx.VAT));
-        if (idx.CATEGORY != -1) o.setVat(c.getString(idx.CATEGORY));
+        if (idx.SELL_ALL != -1) o.setSellAll(c.getString(idx.SELL_ALL));
+        if (idx.SELL_REAL != -1) o.setSellReal(c.getString(idx.SELL_REAL));
+        if (idx.SELL_FOOD != -1) o.setSellFood(c.getString(idx.SELL_FOOD));
+        if (idx.SELL_FOOD_PERCENT != -1) o.setSellFoodPercent(c.getString(idx.SELL_FOOD_PERCENT));
+        if (idx.SELL_FOOD_PRODUCT != -1) o.setSellFoodProduct(c.getString(idx.SELL_FOOD_PRODUCT));
+        if (idx.SELL_BEER != -1) o.setSellBeer(c.getString(idx.SELL_BEER));
+        if (idx.SELL_BEER_PERCENT != -1) o.setSellBeerPercent(c.getString(idx.SELL_BEER_PERCENT));
+        if (idx.SELL_BEER_PRODUCT != -1) o.setSellBeerProduct(c.getString(idx.SELL_BEER_PRODUCT));
+        if (idx.SELL_COCK != -1) o.setSellCock(c.getString(idx.SELL_COCK));
+        if (idx.SELL_COCK_PERCENT != -1) o.setSellCockPercent(c.getString(idx.SELL_COCK_PERCENT));
+        if (idx.SELL_COCK_PRODUCT != -1) o.setSellCockProduct(c.getString(idx.SELL_COCK_PRODUCT));
+        if (idx.SELL_LIQUOR != -1) o.setSellLiquor(c.getString(idx.SELL_LIQUOR));
+        if (idx.SELL_LIQUOR_PERCENT != -1) o.setSellLiquorPercent(c.getString(idx.SELL_LIQUOR_PERCENT));
+        if (idx.SELL_LIQUOR_PRODUCT != -1) o.setSellLiquorProduct(c.getString(idx.SELL_LIQUOR_PRODUCT));
+        if (idx.SELL_DRINK != -1) o.setSellDrink(c.getString(idx.SELL_DRINK));
+        if (idx.SELL_DRINK_PERCENT != -1) o.setSellDrinkPercent(c.getString(idx.SELL_DRINK_PERCENT));
+        if (idx.SELL_DRINK_PRODUCT != -1) o.setSellDrinkProduct(c.getString(idx.SELL_DRINK_PRODUCT));
+        if (idx.SELL_LUNCH != -1) o.setSellLunch(c.getString(idx.SELL_LUNCH));
+        if (idx.SELL_LUNCH_PERCENT != -1) o.setSellLunchPercent(c.getString(idx.SELL_LUNCH_PERCENT));
 
         return o;
     }
 
-    public void insert(List<SalesObject> list, String f) {
+    public void insert(List<DailySalesObject> list, String f) {
         Log.d(TABLE_NAME, "insert() - f: " + f);
         List<ContentValues> valueList = new ArrayList<>();
-        for (SalesObject o : list) {
+        for (DailySalesObject o : list) {
             Log.d(TABLE_NAME, "insert()");
             valueList.add(fetchObject2Values(o));
         }
         fastInsert(valueList);
     }
 
-    public int insertForSync(List<SalesObject> addList) {
+    public int insertForSync(List<DailySalesObject> addList) {
         try {
             int count = 0;
             db.beginTransaction();
-            for (SalesObject contact : addList) {
+            for (DailySalesObject contact : addList) {
                 if (insert(contact) > 0) {
                     count++;
                 }
@@ -217,7 +234,7 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
         return -1;
     }
 
-    public List<SalesObject> getList() {
+    public List<DailySalesObject> getList() {
         return select(null, null, null, null, null);
     }
 //
@@ -323,14 +340,14 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
 //        return -1;
 //    }
 
-//    public List<SalesObject> getContactList(ArrayList<Long> list) {
+//    public List<DailySalesObject> getContactList(ArrayList<Long> list) {
 //        String where = IUID + " " + getInString(list);
 //        return select(null, where,null,null,null);
 //    }
 //
-//    public SalesObject getContact(long iuid) {
+//    public DailySalesObject getContact(long iuid) {
 //        String where = IUID + "=" + iuid;
-//        List<SalesObject> list = select(null,where,null,null,null);
+//        List<DailySalesObject> list = select(null,where,null,null,null);
 //        if (list.size() > 0) {
 //            return list.get(0);
 //        }
@@ -351,14 +368,14 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
         return buffer_select.toString();
     }
 
-//    public List<SalesObject> getFavoriteList() {
+//    public List<DailySalesObject> getFavoriteList() {
 //        String where = FAVORITES + " = 1";
 //        return select(null, where,null,null,null);
 //    }
 //
-//    public void setFavoriteListForContact(List<SalesObject> list) {
+//    public void setFavoriteListForContact(List<DailySalesObject> list) {
 //        ArrayList<Long> fLIst = new ArrayList<>();
-//        for (SalesObject contact : list) {
+//        for (DailySalesObject contact : list) {
 ////            fLIst.add(contact.getIUid());
 //        }
 //
@@ -367,7 +384,7 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
 //        execSQL(sql);
 //    }
 //
-//    public void removeFavoriteListForContact(List<SalesObject> list) {
+//    public void removeFavoriteListForContact(List<DailySalesObject> list) {
 //        ArrayList<Long> fLIst = new ArrayList<>();
 //
 //
@@ -389,25 +406,25 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
 //    }
 //
 //    // 친구 상태인 것만 연락처 조회
-//    public List<SalesObject> getFriendContactList() {
+//    public List<DailySalesObject> getFriendContactList() {
 //        String where = FRIEND_STATUS + " = 3";
 //        return select(null, where,null,null,null);
 //    }
 //
 //    // 친구 상태가 아닌 연락처 조회
-//    public List<SalesObject> getNotFriendContactList() {
+//    public List<DailySalesObject> getNotFriendContactList() {
 //        String where = FRIEND_STATUS + " != 3";
 //        return select(null, where,null,null,null);
 //    }
 //
 //    // 메인화면 (친구요청중 // 친구인) 연락처 조회
-//    public List<SalesObject> getMainFriendContactList() {
+//    public List<DailySalesObject> getMainFriendContactList() {
 //        String where = FRIEND_STATUS + " = 1" + " OR " + FRIEND_STATUS + " = 3";
 //        return select(null, where,null,null,null);
 //    }
 
     // 친구 정보 업데이트
-//    public boolean updateContact(SalesObject contact) {
+//    public boolean updateContact(DailySalesObject contact) {
 //        String where = E164 + "='" + contact.getE164Number() + "'";
 //        return update(contact, where, null);
 //    }
@@ -427,13 +444,13 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
 //        return ret;
 //    }
 
-    public int getMemberCount(String sellDate) {
-        String whereClause = SELL_DATE + "=" + sellDate;
-        return getCount(whereClause, null);
-    }
-
-    public int getSum(String sellDate) {
-        String whereClause = SELL_DATE + "=" + sellDate;
-        return getSum(whereClause, null);
-    }
+//    public int getMemberCount(String sellDate) {
+//        String whereClause = SELL_DATE + "=" + sellDate;
+//        return getCount(whereClause, null);
+//    }
+//
+//    public int getSum(String sellDate) {
+//        String whereClause = SELL_DATE + "=" + sellDate;
+//        return getSum(whereClause, null);
+//    }
 }

@@ -239,5 +239,12 @@
         <item name="android:textSize">15dp</item>
     </style>
 
+    <style name="TextAppearance.Notosans.Bold" parent="@style/TextAppearance.AppCompat.Subhead">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:fontFamily">@font/notosans_bold</item>
+    </style>
+
+
 
 </resources>

@@ -146,7 +146,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void createTables(SQLiteDatabase db) {
 //        db.execSQL(TBL_MY_SALES.DROP);
         db.execSQL(TBL_MY_SALES.CREATE);
-        db.execSQL(TBL_MONTH_SALES.CREATE);
+//        db.execSQL(TBL_MONTH_SALES.CREATE);
+        db.execSQL(TBL_DAILY_SALES.CREATE);
 //        db.execSQL(TBL_GROUP_MEMBER.CREATE);
 //        db.execSQL(TBL_CALL_HISTORY.CREATE);
 //        db.execSQL(TBL_CALL_HISTORY_MEMBER.CREATE);

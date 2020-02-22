@@ -1,16 +1,13 @@
 package huni.techtown.org.jarvice.common;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import huni.techtown.org.jarvice.common.data.SalesObject;
 import huni.techtown.org.jarvice.database.DatabaseHelper;
-import huni.techtown.org.jarvice.database.TBL_MONTH_SALES;
+import huni.techtown.org.jarvice.database.TBL_DAILY_SALES;
 import huni.techtown.org.jarvice.database.TBL_MY_SALES;
 
 public class DatabaseManager {
@@ -24,14 +21,17 @@ public class DatabaseManager {
     //입력받은 총 데이터
     private TBL_MY_SALES mTblMySales;
 
-    private TBL_MONTH_SALES mTblMonthSales;
+    private TBL_DAILY_SALES mTblDailySales;
+
+//    private TBL_MONTH_SALES mTblMonthSales;
 
     private DatabaseManager(Context context) {
         mHelper = new DatabaseHelper(context);
         mContext = context;
 
         mTblMySales = new TBL_MY_SALES(mHelper.getWritableDatabase());
-        mTblMonthSales = new TBL_MONTH_SALES(mHelper.getWritableDatabase());
+//        mTblMonthSales = new TBL_MONTH_SALES(mHelper.getWritableDatabase());
+        mTblDailySales = new TBL_DAILY_SALES(mHelper.getWritableDatabase());
     }
 
     public static DatabaseManager getInstance(Context context) {
@@ -50,8 +50,8 @@ public class DatabaseManager {
         return mTblMySales;
     }
 
-    public TBL_MONTH_SALES getMonthSales() {
-        return mTblMonthSales;
+    public TBL_DAILY_SALES getDailySales() {
+        return mTblDailySales;
     }
 
 
@@ -61,6 +61,7 @@ public class DatabaseManager {
      */
     public void truncate() {
         mTblMySales.truncate();
+        mTblDailySales.truncate();
     }
 
     public List<SalesObject> getChannelHistory(String test, String f) {
@@ -70,4 +71,21 @@ public class DatabaseManager {
 
         return mTblMySales.select_raw(newSql);
     }
+
+    public List<SalesObject> getTodaysSell(String test, String f) {
+        Log.d(TAG, "getChannelHistory() - f: " + f + ", sid: " + test);
+        String newSql = "SELECT SUM(" +TBL_MY_SALES.SELL +")"+ " FROM " + TBL_MY_SALES.TABLE_NAME
+                + " WHERE " + TBL_MY_SALES.SELL_DATE + "=" + "'" + test + "'";
+
+        return mTblMySales.select_raw(newSql);
+    }
+
+    public int getMemberCount(String gogo) {
+        return mTblMySales.getMemberCount(gogo);
+    }
+
+    public int getSumCount(String gogo) {
+        return mTblMySales.getSum(gogo);
+    }
+
 }

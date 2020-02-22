@@ -17,6 +17,8 @@
     <string name="main_home_commercial_title">자영업자를 위해 만든 서비스</string>
     <string name="main_home_commercial_detail">실제 가게를 운영하면서 느꼈던 필요한 정보를 모아\n사장님들을 위한 서비스를 직접 만들게 되었습니다.\n전국의 모든 자영업자들을 응원합니다. </string>
     <string name="main_home_commercial_by_boss">다락 안암점 사장 최수혁 올림</string>
+
+    <!-- 자비스 소개-->
     <string name="main_home_intro_title">자비스 소개</string>
     <string name="main_home_intro_first_title">가게 운영을 효율적으로!</string>
     <string name="main_home_intro_first_detail">실제 데이터 기반 방문 및 매출 분석으로\n가게 영업 상황을 정확하게 파악해 보세요.\n매출은 늘고, 지출은 줄도록 도와드려요.</string>
@@ -25,15 +27,27 @@
     <string name="main_home_intro_third_title">필요한 데만 집중할 수 있도록!</string>
     <string name="main_home_intro_third_detail">매일매일 가게 운영만으로도 힘든 사장님이\n에너지를 중요한 일에만 쏟을 수 있도록\n번거로운 일은 자비스가 대신 처리해드려요.</string>
 
-
+    <!-- 자비스 주요 기능-->
     <string name="main_home_function_title">자비스 주요 기능</string>
     <string name="main_home_function_tab_first">마감내역</string>
     <string name="main_home_function_tab_second">가게도우미</string>
-
     <string name="main_home_function_tab_third">가게분석</string>
-    <string name="main_home_function_tab_first_title">마감내역 리포트 공유</string>
-    <string name="main_home_function_tab_first_detail">일, 주, 월 별로 마감 내역을 정리하여 한 눈에 확인할 수 있도록 리포트를 공유드립니다.</string>
+    <string name="main_home_function_tab_first_title">마감 영수증 공유</string>
+    <string name="main_home_function_tab_first_detail">한번 보고 버리는 종이 영수증을 정확하게 분석, 정리하여\n핸드폰으로 한 눈에 볼 수 있도록 영수증을 공유드립니다.</string>
+
+    <!-- CBT -->
     <string name="main_home_cbt_title">곧 CBT 예정입니다.\n사전 예약을 원하시는 분께서는 구독해주세요</string>
     <string name="main_home_cbt_button">구독하기</string>
+    <string name="main_home_cbt_edit_hint">email@domain.com</string>
+
+    <!-- 마감내역 -->
+    <string name="main_deadline_title_company">주식회사 작은다락 243-86-01269</string>
+    <string name="main_deadline_title_date">2019.12.5 목요일 매출 알려드려요.</string>
+    <string name="main_deadline_bar_graph_title">매출 그래프</string>
+    <string name="main_deadline_day">일</string>
+    <string name="main_deadline_week">주</string>
+    <string name="main_deadline_month">월</string>
+    
+    <string name="main_deadline_pie_graph_title">매출 통계</string>
 
 </resources>

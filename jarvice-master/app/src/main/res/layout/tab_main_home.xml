@@ -32,14 +32,15 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="33dp"
                         android:paddingLeft="25dp"
                         android:text="@string/main_home_today_report"
                         android:textColor="@color/color_222222"
                         android:textSize="14dp"
-                        android:textStyle="bold|italic" />
+                        android:textStyle="bold|italic"
+                        android:fontFamily="@font/notosans_bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -49,7 +50,8 @@
                         android:paddingLeft="25dp"
                         android:text="@string/main_home_today_report_detail"
                         android:textColor="@color/color_222222"
-                        android:textSize="15dp" />
+                        android:textSize="15dp"
+                        android:fontFamily="@font/notosans_regular"/>
                 </LinearLayout>
 
                 <ImageView
@@ -90,7 +92,8 @@
                         android:text="@string/main_home_commercial_title"
                         android:textColor="@color/color_222222"
                         android:textSize="16dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/notosans_bold"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -99,7 +102,8 @@
                         android:lineSpacingExtra="7dp"
                         android:text="@string/main_home_commercial_detail"
                         android:textColor="@color/color_666666"
-                        android:textSize="12dp" />
+                        android:textSize="12dp"
+                        android:fontFamily="@font/notosans_regular"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -109,7 +113,8 @@
                         android:text="@string/main_home_commercial_by_boss"
                         android:textColor="@color/color_666666"
                         android:textSize="13dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:fontFamily="@font/notosans_bold"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -128,7 +133,8 @@
                     android:text="@string/main_home_intro_title"
                     android:textSize="20dp"
                     android:textStyle="bold"
-                    android:textColor="@color/color_222222" />
+                    android:textColor="@color/color_222222"
+                    android:fontFamily="@font/notosans_bold"/>
 
                 <!--첫 번째 영역 -->
                 <LinearLayout
@@ -164,8 +170,9 @@
                             android:background="@drawable/first_intro_circular_border_text"
                             android:textColor="@color/color_ffffff"
                             android:textSize="15dp"
-                            android:textStyle="bold" />
-                        
+                            android:textStyle="bold"
+                            android:fontFamily="@font/notosans_bold"/>
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -176,8 +183,8 @@
                             android:text="@string/main_home_intro_first_detail"
                             android:textSize="14dp"
                             android:lineSpacingExtra="6sp"
-
-                            android:textColor="@color/color_666666"/>
+                            android:textColor="@color/color_666666"
+                            android:fontFamily="@font/notosans_regular"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -215,7 +222,8 @@
                             android:background="@drawable/second_intro_circular_border_text"
                             android:textColor="@color/color_ffffff"
                             android:textSize="15dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:fontFamily="@font/notosans_bold"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -227,7 +235,8 @@
                             android:text="@string/main_home_intro_second_detail"
                             android:textSize="14dp"
                             android:lineSpacingExtra="6sp"
-                            android:textColor="@color/color_666666"/>
+                            android:textColor="@color/color_666666"
+                            android:fontFamily="@font/notosans_regular"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -265,7 +274,8 @@
                             android:background="@drawable/third_intro_circular_border_text"
                             android:textColor="@color/color_ffffff"
                             android:textSize="15dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:fontFamily="@font/notosans_bold"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -277,23 +287,17 @@
                             android:text="@string/main_home_intro_third_detail"
                             android:textSize="14dp"
                             android:lineSpacingExtra="6sp"
-                            android:textColor="@color/color_666666"/>
+                            android:textColor="@color/color_666666"
+                            android:fontFamily="@font/notosans_regular"/>
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-
-
-            <!-- 슬라이드 영역 -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:text="dsadadsadssa"
-                android:textSize="20dp" />
 
             <!-- 자비스 주요 기능-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
                 android:orientation="vertical">
@@ -305,79 +309,155 @@
                     android:text="@string/main_home_function_title"
                     android:textColor="@color/color_222222"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:fontFamily="@font/notosans_bold"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tv_main_home_function_first_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="a" />
+                        android:paddingRight="12dp"
+                        android:paddingLeft="12dp"
+                        android:paddingTop="7dp"
+                        android:paddingBottom="6.5dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/main_home_function_tab_first"
+                        android:textColor="@color/color_707594"
+                        android:textSize="14dp"
+                        android:background="@drawable/circular_regular"
+                        android:clickable="true"
+                        android:focusable="true" />
 
                     <TextView
+                        android:id="@+id/tv_main_home_function_second_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="b" />
+                        android:layout_marginLeft="10dp"
+                        android:paddingRight="12dp"
+                        android:paddingLeft="12dp"
+                        android:paddingTop="7dp"
+                        android:paddingBottom="6.5dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/main_home_function_tab_second"
+                        android:textColor="@color/color_707594"
+                        android:textSize="14dp"
+                        android:background="@drawable/circular_regular"
+                        android:clickable="true"/>
 
                     <TextView
+                        android:id="@+id/tv_main_home_function_third_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="c" />
+                        android:layout_marginLeft="10dp"
+                        android:paddingRight="12dp"
+                        android:paddingLeft="12dp"
+                        android:paddingTop="7dp"
+                        android:paddingBottom="6.5dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/main_home_function_tab_third"
+                        android:textColor="@color/color_707594"
+                        android:textSize="14dp"
+                        android:background="@drawable/circular_regular"
+                        android:clickable="true"/>
 
                 </LinearLayout>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/group_2"/>
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/main_home_function_tab_first_title"
-                    android:textSize="16dp"
-                    android:textColor="@color/color_333333"
-                    android:textStyle="bold"/>
+                    android:layout_marginTop="20dp"
+                    android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/main_home_function_tab_first_detail"
-                    android:textSize="13dp"
-                    android:textColor="@color/color_333333"
-                    android:lineSpacingExtra="6dp"/>
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/tab_home_cardview_viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="220dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/layoutDots"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="top|center_horizontal"
+                        android:orientation="horizontal" />
+                </LinearLayout>
 
             </LinearLayout>
+
+            <!-- 자비스 주요 기능 -->
 
             <!-- CBT -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="43dp"
                 android:orientation="vertical"
                 android:background="@color/color_282f4b">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="33dp"
+                    android:gravity="center_horizontal"
                     android:text="@string/main_home_cbt_title"
                     android:textSize="14dp"
                     android:textColor="@color/color_ffffff"
-                    android:gravity="center_horizontal" />
+                    android:lineSpacingExtra="5dp"
+                    android:fontFamily="@font/notosans_regular"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginBottom="40dp"
+                    android:layout_marginLeft="38dp"
+                    android:layout_marginRight="38dp"
                     android:orientation="horizontal">
 
+                    <EditText
+                        android:id="@+id/et_main_home_cbt_input"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="6.5dp"
+                        android:paddingBottom="9.5dp"
+                        android:paddingLeft="38.5dp"
+                        android:paddingRight="38.5dp"
+                        android:background="@drawable/cbt_circular_edittext"
+                        android:text=""
+                        android:textSize="12dp"
+                        android:textColor="@color/color_909090"
+                        android:hint="@string/main_home_cbt_edit_hint"
+                        android:textColorHint="@color/color_909090"
+                        android:maxLines="1"
+                        android:inputType="textEmailAddress"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:paddingLeft="21dp"
+                        android:paddingRight="19.5dp"
+                        android:paddingTop="7dp"
+                        android:paddingBottom="9dp"
+                        android:background="@drawable/cbt_circular_button"
+                        android:gravity="center_horizontal"
+                        android:textAlignment="center"
+                        android:text="@string/main_home_cbt_button"
+                        android:textSize="12dp"
+                        android:textColor="@color/color_ffffff"
+                        android:fontFamily="@font/notosans_bold"/>
                 </LinearLayout>
 
             </LinearLayout>
 
-
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
+
 </RelativeLayout>

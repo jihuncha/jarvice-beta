@@ -26,6 +26,7 @@ import java.util.Locale;
 
 import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.DatabaseManager;
+import huni.techtown.org.jarvice.common.data.SalesObject;
 import huni.techtown.org.jarvice.component.Tools;
 import huni.techtown.org.jarvice.database.TBL_MY_SALES;
 import huni.techtown.org.jarvice.ui.Fragment.TabLayoutAnalysis;
@@ -54,42 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        setContentView(R.layout.activity_main);
-
         tblMySales = DatabaseManager.getInstance(mContext).getMySales();
-//        test = findViewById(R.id.test2);
-//        test.setOnClickListener(this);
-
-
-//        Log.d(TAG, "test : " + databaseReference.getDatabase().toString());
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Log.d(TAG, "Single ValueEventListener : " + snapshot.getValue());
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.d(TAG, " test2 : " + databaseError.getMessage());
-//            }
-//        });
-
-
-//        FirebaseDatabase.getInstance().getReference().addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Log.d(TAG, "ValueEventListener : " + snapshot.getValue());
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
 
@@ -97,11 +63,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Log.d(TAG, "123:  " + thisWeek);
 
-
         clParentView = (CoordinatorLayout) findViewById(R.id.cl_parent_view);
 
         initToolbar();
         initComponent();
+        setToolBarTitleClick();
+
+        ArrayList<SalesObject> test = new ArrayList<SalesObject>();
+        test.addAll(DatabaseManager.getInstance(mContext).getChannelHistory("2019-04-12","tt"));
+
+
+        int sum = 0;
+        Log.e(TAG, "length : " + test.size());
+        for (int i = 0; i < test.size(); i++) {
+            Log.d(TAG, "test : " + test.get(i).getSell());
+            String result = "";
+            if (test.get(i).getSell().contains(",")) {
+                result = test.get(i).getSell().replace(",", "");
+            } else {
+                result = test.get(i).getSell();
+            }
+            sum += Integer.parseInt(result);
+        }
+
+        Log.e(TAG, "sum check : " + sum);
+
+        Log.e(TAG, "" + DatabaseManager.getInstance(mContext).getSumCount("2019-04-12"));
 
     }
 
@@ -114,9 +101,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Tools.setSystemBarColor(this);
         invalidateOptionsMenu();
 
-        //        toolbar.setBackgroundColor(getResources().getColor(R.color.color_ffffff));
-//        toolbar.setTitleTextAppearance(this, R.style.CustomText);
-//        toolbar.setTitleTextColor(getResources().getColor(R.color.color_4263ff));
     }
 
     private void initComponent() {
@@ -126,6 +110,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         main_tab_layout = (TabLayout) findViewById(R.id.main_tab_layout);
         main_tab_layout.setupWithViewPager(view_pager);
     }
+
+    //TODO toobar 타이틀만 onclick 하는 방법이 없어서 view 로 페이크
+    //https://stackoverflow.com/questions/33287190/make-toolbar-title-clickable-and-respond-to-it?noredirect=1&lq=1
+    private void setToolBarTitleClick() {
+        toolbar.findViewById(R.id.tv_title).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                view_pager.setCurrentItem(0);
+            }
+        });
+
+        getSupportActionBar().setTitle(null);
+    }
+
 
     private void setupViewPager(ViewPager viewPager) {
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());

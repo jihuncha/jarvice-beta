@@ -426,4 +426,60 @@ public abstract class TABLE<T> {
         }
         Log.w(tableName, "insertOrUpdate failed!");
     }
+
+    /**
+     * row의 개수를 반환한다.
+     * @param whereClause
+     * @param whereArgs
+     * @return
+     */
+    public int getSum(String whereClause, String[] whereArgs) {
+        Cursor c = null;
+        try {
+
+//            String newSql = "SELECT SUM(" +TBL_MY_SALES.SELL +")"+ " FROM " + TBL_MY_SALES.TABLE_NAME
+//                    + " WHERE " + TBL_MY_SALES.SELL_DATE + "=" + "'" + test + "'";
+            String sqlStr = "SELECT SUM(" + TBL_MY_SALES.SELL + ") FROM " + tableName;
+            if (whereClause != null && whereClause.length() != 0) {
+                sqlStr += " WHERE " + whereClause;
+            }
+
+            float amount = 0;
+
+            Log.d(tableName, "test : " + sqlStr);
+            if ((c = db.rawQuery(sqlStr, whereArgs)) != null) {
+                if (c.getCount() != 0 && c.moveToFirst()) {
+                    int count = c.getInt(0);
+//                    int count = c.getInt(c.getColumnIndex("Total"));
+//                                        int count = c.getInt(0);
+
+                    Log.d(tableName, "getCount() - count: " + count);
+                    return count;
+                }
+            }
+//            if ((c = db.rawQuery(sqlStr, whereArgs)) != null) {
+//                if (c.getCount() != 0 && c.moveToFirst()) {
+//                    do {
+//                        amount = c.getInt(0);
+//                    }
+//                    while (c.moveToNext());
+//                }
+//            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (c != null) {
+                try {
+                    c.close();
+                }
+                catch (Exception ignore) { }
+            }
+        }
+        Log.w(tableName, "getCount() failed!");
+
+        return 0;
+    }
+
 }

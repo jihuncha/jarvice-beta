@@ -348,4 +348,20 @@
     <color name="color_ef638b">#ef638b</color>
     <color name="color_7468fa">#7468fa</color>
     <color name="color_25d371">#25d371</color>
+    <color name="color_eff3fa">#eff3fa</color>
+    <color name="color_707594">#707594</color>
+    <color name="color_bbbbbb">#bbbbbb</color>
+    <color name="color_d8d8d8">#d8d8d8</color>
+    <color name="color_999999">#999999</color>
+
+    <!-- Chart Color-->
+    <color name="color_ef6754">#ef6754</color>
+    <color name="color_24609e">#24609e</color>
+    <color name="color_ffbe37">#ffbe37</color>
+    <color name="color_08b3a2">#08b3a2</color>
+    <color name="color_e6e9f7">#e6e9f7</color>
+    <color name="color_909090">#909090</color>
+    <color name="color_a6d7deee">#a6d7deee</color>
+
+
 </resources>

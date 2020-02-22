@@ -22,6 +22,7 @@ public class SalesObject implements Serializable {
     private String sort;
     private String tableNo;
     private String vat;
+    private String category;
 
     public SalesObject(){}
 
@@ -32,7 +33,8 @@ public class SalesObject implements Serializable {
                        String productName, String realSales,
                        String receiptNo, String sell,
                        String sellDate, String sort,
-                       String tableNo, String vat) {
+                       String tableNo, String vat,
+                       String category) {
         this.barcode = barcode;
         this.discount = discount;
         this.discountType = discountType;
@@ -50,6 +52,7 @@ public class SalesObject implements Serializable {
         this.sort = sort;
         this.tableNo = tableNo;
         this.vat = vat;
+        this.category = category;
     }
 
     public String getBarcode() {
@@ -188,26 +191,35 @@ public class SalesObject implements Serializable {
         this.vat = vat;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "SalesObject{" +
                 "barcode='" + barcode + '\'' +
-                ", discount=" + discount +
+                ", discount='" + discount + '\'' +
                 ", discountType='" + discountType + '\'' +
                 ", firstOrder='" + firstOrder + '\'' +
                 ", id=" + id +
                 ", paymentTime='" + paymentTime + '\'' +
-                ", plusSales=" + plusSales +
-                ", productCode=" + productCode +
-                ", productCount=" + productCount +
+                ", plusSales='" + plusSales + '\'' +
+                ", productCode='" + productCode + '\'' +
+                ", productCount='" + productCount + '\'' +
                 ", productName='" + productName + '\'' +
-                ", realSales=" + realSales +
+                ", realSales='" + realSales + '\'' +
                 ", receiptNo='" + receiptNo + '\'' +
-                ", sell=" + sell +
+                ", sell='" + sell + '\'' +
                 ", sellDate='" + sellDate + '\'' +
                 ", sort='" + sort + '\'' +
                 ", tableNo='" + tableNo + '\'' +
-                ", vat=" + vat +
+                ", vat='" + vat + '\'' +
+                ", category='" + category + '\'' +
                 '}';
     }
 }
