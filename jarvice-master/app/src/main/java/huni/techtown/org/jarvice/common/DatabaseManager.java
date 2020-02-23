@@ -8,6 +8,7 @@ import java.util.List;
 import huni.techtown.org.jarvice.common.data.SalesObject;
 import huni.techtown.org.jarvice.database.DatabaseHelper;
 import huni.techtown.org.jarvice.database.TBL_DAILY_SALES;
+import huni.techtown.org.jarvice.database.TBL_MONTH_SALES;
 import huni.techtown.org.jarvice.database.TBL_MY_SALES;
 
 public class DatabaseManager {
@@ -23,15 +24,15 @@ public class DatabaseManager {
 
     private TBL_DAILY_SALES mTblDailySales;
 
-//    private TBL_MONTH_SALES mTblMonthSales;
+    private TBL_MONTH_SALES mTblMonthSales;
 
     private DatabaseManager(Context context) {
         mHelper = new DatabaseHelper(context);
         mContext = context;
 
         mTblMySales = new TBL_MY_SALES(mHelper.getWritableDatabase());
-//        mTblMonthSales = new TBL_MONTH_SALES(mHelper.getWritableDatabase());
         mTblDailySales = new TBL_DAILY_SALES(mHelper.getWritableDatabase());
+        mTblMonthSales = new TBL_MONTH_SALES(mHelper.getWritableDatabase());
     }
 
     public static DatabaseManager getInstance(Context context) {
@@ -43,6 +44,13 @@ public class DatabaseManager {
             }
         }
         return sInstance;
+    }
+
+    public static DatabaseHelper getDatabaseHelper(){
+        if(mHelper == null){
+            mHelper = new DatabaseHelper(mContext);
+        }
+        return mHelper;
     }
 
 
@@ -60,8 +68,10 @@ public class DatabaseManager {
      * 테이블을 몽땅 truncate 시킨다.
      */
     public void truncate() {
+        Log.d(TAG, "truncate()");
         mTblMySales.truncate();
         mTblDailySales.truncate();
+        mTblMonthSales.truncate();
     }
 
     public List<SalesObject> getChannelHistory(String test, String f) {

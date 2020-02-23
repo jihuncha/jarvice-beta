@@ -21,6 +21,7 @@ import java.util.List;
 
 import huni.techtown.org.jarvice.JarviceConfig;
 import huni.techtown.org.jarvice.R;
+import huni.techtown.org.jarvice.common.CurrentManager;
 import huni.techtown.org.jarvice.common.DatabaseManager;
 import huni.techtown.org.jarvice.common.data.DailySalesObject;
 import huni.techtown.org.jarvice.common.data.SalesObject;
@@ -44,33 +45,94 @@ public class SplashActivity  extends AppCompatActivity {
     //일일 데이터
     DatabaseReference dailyDataReference = databaseReference.child("testTwo");
 
-    private TBL_MY_SALES tblMySales;
+    private TBL_MY_SALES tblMySalesDb = null;
+    private TBL_DAILY_SALES tblDailySalesDb = null;
+
+    private List<SalesObject> salesDataList = new ArrayList<SalesObject>();
+    private List<DailySalesObject> DailySalesDataList = new ArrayList<DailySalesObject>();
 
     //로딩시간
     private long        mNextTime = 0;
+
+    public interface onDownloadEnd {
+        void onRawDataEnd();
+        void onDailyDataEnd();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+
         mContext = this;
         mHandler = new Handler();
 
         mNextTime = System.currentTimeMillis() + 2000;
 
-        Stetho.initializeWithDefaults(this);
+        Stetho.initializeWithDefaults(mContext);
+
+        //DB 삭제
+        DatabaseManager.getInstance(mContext).truncate();
 
         //데이터 베이스 인스턴스 생성
-        DatabaseManager.getInstance(this);
-        final List<SalesObject> salesDataList = new ArrayList<SalesObject>();
-        final TBL_MY_SALES tblMySalesDb = DatabaseManager.getInstance(mContext).getMySales();
+        DatabaseManager.getInstance(mContext);
+//        DatabaseManager.getInstance(mContext).truncate();
+//        DatabaseManager.getInstance(mContext).
+//        final List<SalesObject> salesDataList = new ArrayList<SalesObject>();
+//        final TBL_MY_SALES tblMySalesDb = DatabaseManager.getInstance(mContext).getMySales();
+//
+//        final List<DailySalesObject> DailySalesDataList = new ArrayList<DailySalesObject>();
+//        final TBL_DAILY_SALES tblDailySalesDb = DatabaseManager.getInstance(mContext).getDailySales();
+//        tblMySalesDb.truncate();
+//        tblDailySalesDb.truncate();
 
-        final List<DailySalesObject> DailySalesDataList = new ArrayList<DailySalesObject>();
-        final TBL_DAILY_SALES tblDailySalesDb = DatabaseManager.getInstance(mContext).getDailySales();
+        tblMySalesDb = DatabaseManager.getInstance(mContext).getMySales();
+        tblDailySalesDb = DatabaseManager.getInstance(mContext).getDailySales();
 
-        tblMySalesDb.truncate();
-        tblDailySalesDb.truncate();
+        final onDownloadEnd mListener = new onDownloadEnd() {
+            @Override
+            public void onRawDataEnd() {
+                Log.e(TAG, "testestse2222 ");
+
+//                tblMySalesDb.insertForSync(
+//               )
+                Thread t1 = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tblMySalesDb.insertForSync(salesDataList);
+//                        CurrentManager.getInstance(mContext).
+                        CurrentManager.getInstance(mContext).rawDataFinish(true, "end1");
+                    }
+                });
+                t1.start();
+
+                if (CurrentManager.getInstance(mContext).dailyDataCheck()) {
+                    Log.d(TAG, "sfsdfs");
+                    goToMainActivity();
+                }
+            }
+
+            @Override
+            public void onDailyDataEnd() {
+                Log.e(TAG, "333333333333333333s ");
+                Thread t1 = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tblDailySalesDb.insertForSync(DailySalesDataList);
+
+                        CurrentManager.getInstance(mContext).dailyDataFinish(true, "end2");
+                    }
+                });
+
+                t1.start();
+
+                if (CurrentManager.getInstance(mContext).rawDataCheck()) {
+                    Log.d(TAG, "222222222222222222222");
+                    goToMainActivity();
+                }
+            }
+        };
 
         //원본데이터 가져오기
         rawDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -85,7 +147,9 @@ public class SplashActivity  extends AppCompatActivity {
                     salesDataList.add(insertData);
                 }
 
-                tblMySalesDb.insertForSync(salesDataList);
+//                tblMySalesDb.insertForSync(salesDataList);
+                mListener.onRawDataEnd();
+
                 Log.d(TAG, "onDataChange - finish!");
             }
 
@@ -112,9 +176,10 @@ public class SplashActivity  extends AppCompatActivity {
                     DailySalesDataList.add(insertData);
                 }
 
-                tblDailySalesDb.insertForSync(DailySalesDataList);
+//                tblDailySalesDb.insertForSync(DailySalesDataList);
+                mListener.onDailyDataEnd();
                 Log.d(TAG, "onDataChange - finish!");
-                goToMainActivity();
+//                goToMainActivity();
             }
 
             @Override
