@@ -2,6 +2,7 @@ package huni.techtown.org.jarvice.common.data;
 
 import java.io.Serializable;
 
+
 public class MonthSalesObject implements Serializable {
     private String TAG = MonthSalesObject.class.getSimpleName();
 

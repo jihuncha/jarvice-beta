@@ -27,7 +27,7 @@ import java.util.Locale;
 import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.DatabaseManager;
 import huni.techtown.org.jarvice.common.data.SalesObject;
-import huni.techtown.org.jarvice.component.Tools;
+import huni.techtown.org.jarvice.ui.utils.Tools;
 import huni.techtown.org.jarvice.database.TBL_MY_SALES;
 import huni.techtown.org.jarvice.ui.Fragment.TabLayoutAnalysis;
 import huni.techtown.org.jarvice.ui.Fragment.TabLayoutDeadline;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int thisWeek = getWeekOfYear(sdf.format(new Date()));
 
-        Log.d(TAG, "123:  " + thisWeek);
+        Log.d(TAG, "Week Check:  " + thisWeek);
 
         clParentView = (CoordinatorLayout) findViewById(R.id.cl_parent_view);
 
@@ -71,19 +71,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initComponent();
         setToolBarTitleClick();
 
-        ArrayList<SalesObject> test = new ArrayList<SalesObject>();
-        test.addAll(DatabaseManager.getInstance(mContext).getChannelHistory("2019-04-12","tt"));
-
+        ArrayList<SalesObject> SalesObjectTest = new ArrayList<SalesObject>();
+        SalesObjectTest.addAll(DatabaseManager.getInstance(mContext).getDateSalesObject("2019-04-12","MainActivity - onCreate"));
 
         int sum = 0;
-        Log.e(TAG, "length : " + test.size());
-        for (int i = 0; i < test.size(); i++) {
-            Log.d(TAG, "test : " + test.get(i).getSell());
+        Log.e(TAG, "length : " + SalesObjectTest.size());
+        for (int i = 0; i < SalesObjectTest.size(); i++) {
+            Log.d(TAG, "test : " + SalesObjectTest.get(i).getSell());
             String result = "";
-            if (test.get(i).getSell().contains(",")) {
-                result = test.get(i).getSell().replace(",", "");
+            if (SalesObjectTest.get(i).getSell().contains(",")) {
+                result = SalesObjectTest.get(i).getSell().replace(",", "");
             } else {
-                result = test.get(i).getSell();
+                result = SalesObjectTest.get(i).getSell();
             }
             sum += Integer.parseInt(result);
         }

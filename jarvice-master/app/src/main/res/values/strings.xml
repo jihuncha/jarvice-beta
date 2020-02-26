@@ -49,5 +49,14 @@
     <string name="main_deadline_month">월</string>
     
     <string name="main_deadline_pie_graph_title">매출 통계</string>
+    <string name="main_deadline_pie_graph_food">음식</string>
+    <string name="main_deadline_pie_graph_beer">주류</string>
+    <string name="main_deadline_pie_graph_cock">각테일</string>
+    <string name="main_deadline_pie_graph_liquor">양주</string>
+    <string name="main_deadline_pie_graph_drink">음료</string>
+    <string name="main_deadline_pie_graph_lunch">점심</string>
+    <string name="main_deadline_pie_graph_delivery">배달</string>
+
+    <string name="main_deadline_pie_graph_sell_real">총 매출</string>
 
 </resources>

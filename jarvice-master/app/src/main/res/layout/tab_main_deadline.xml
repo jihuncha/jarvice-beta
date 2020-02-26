@@ -4,9 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingBottom="10dp"
         android:background="@color/color_f7f9fd">
 
         <LinearLayout
@@ -136,32 +139,63 @@
 
                 <com.github.mikephil.charting.charts.PieChart
                     android:layout_width="match_parent"
-                    android:layout_height="170dp"
+                    android:layout_height="300dp"
                     android:layout_marginTop="22dp"
-                    android:id="@+id/piechart"/>
+                    android:id="@+id/piechart" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="29dp"
                     android:layout_gravity="center"
-                    android:text="fdsfa" />
+                    android:text="@string/main_deadline_pie_graph_sell_real"
+                    android:textSize="14dp"
+                    android:textColor="@color/color_222222"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/notosans_regular" />
+
+                <TextView
+                    android:id="@+id/tv_sell_real_result"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="fdsfa"
+                    android:textSize="30dp"
+                    android:textColor="@color/color_222222"
+                    android:gravity="center_horizontal"
+                    android:fontFamily="@font/notosans_regular"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@color/color_f0f0f0" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_sell_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/circular_background_graph"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="fdsfa" />
-
-
-
+                    android:text="dddddddddddddd"
+                    android:textSize="20dp" />
             </LinearLayout>
 
-
         </LinearLayout>
-    </ScrollView>
 
-
-
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>

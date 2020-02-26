@@ -20,12 +20,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import huni.techtown.org.jarvice.R;
-import huni.techtown.org.jarvice.component.Tools;
+import huni.techtown.org.jarvice.ui.utils.Tools;
 
 public class TabLayoutHome extends Fragment implements View.OnClickListener {
     private static final String TAG = TabLayoutHome.class.getSimpleName();

@@ -77,15 +77,6 @@ public class SplashActivity  extends AppCompatActivity {
 
         //데이터 베이스 인스턴스 생성
         DatabaseManager.getInstance(mContext);
-//        DatabaseManager.getInstance(mContext).truncate();
-//        DatabaseManager.getInstance(mContext).
-//        final List<SalesObject> salesDataList = new ArrayList<SalesObject>();
-//        final TBL_MY_SALES tblMySalesDb = DatabaseManager.getInstance(mContext).getMySales();
-//
-//        final List<DailySalesObject> DailySalesDataList = new ArrayList<DailySalesObject>();
-//        final TBL_DAILY_SALES tblDailySalesDb = DatabaseManager.getInstance(mContext).getDailySales();
-//        tblMySalesDb.truncate();
-//        tblDailySalesDb.truncate();
 
         tblMySalesDb = DatabaseManager.getInstance(mContext).getMySales();
         tblDailySalesDb = DatabaseManager.getInstance(mContext).getDailySales();
@@ -93,29 +84,26 @@ public class SplashActivity  extends AppCompatActivity {
         final onDownloadEnd mListener = new onDownloadEnd() {
             @Override
             public void onRawDataEnd() {
-                Log.e(TAG, "testestse2222 ");
+                Log.e(TAG, "onRawDataEnd ");
 
-//                tblMySalesDb.insertForSync(
-//               )
                 Thread t1 = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         tblMySalesDb.insertForSync(salesDataList);
-//                        CurrentManager.getInstance(mContext).
                         CurrentManager.getInstance(mContext).rawDataFinish(true, "end1");
                     }
                 });
                 t1.start();
 
                 if (CurrentManager.getInstance(mContext).dailyDataCheck()) {
-                    Log.d(TAG, "sfsdfs");
+                    Log.d(TAG, "onRawDataEnd - goToMainActivity");
                     goToMainActivity();
                 }
             }
 
             @Override
             public void onDailyDataEnd() {
-                Log.e(TAG, "333333333333333333s ");
+                Log.e(TAG, "onDailyDataEnd ");
                 Thread t1 = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -128,7 +116,7 @@ public class SplashActivity  extends AppCompatActivity {
                 t1.start();
 
                 if (CurrentManager.getInstance(mContext).rawDataCheck()) {
-                    Log.d(TAG, "222222222222222222222");
+                    Log.d(TAG, "onDailyDataEnd - goToMainActivity");
                     goToMainActivity();
                 }
             }
@@ -140,16 +128,14 @@ public class SplashActivity  extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "rawData : " + dataSnapshot.getValue());
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
                     SalesObject insertData = snapshot.getValue(SalesObject.class);
 
-                    Log.d(TAG, insertData.toString());
+                    Log.d(TAG, "onDataChange - rawData : " + insertData);
+
                     salesDataList.add(insertData);
                 }
 
-//                tblMySalesDb.insertForSync(salesDataList);
                 mListener.onRawDataEnd();
-
                 Log.d(TAG, "onDataChange - finish!");
             }
 
@@ -168,18 +154,15 @@ public class SplashActivity  extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d(TAG, "dailyDataReference : " + dataSnapshot.getValue());
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-//                    SalesObject insertData = snapshot.getValue(SalesObject.class);
                     DailySalesObject insertData = snapshot.getValue(DailySalesObject.class);
 
-                    Log.d(TAG, "daily : " + insertData.toString());
+                    Log.d(TAG, "onDataChange - dailyData : " + insertData);
+
                     DailySalesDataList.add(insertData);
                 }
 
-//                tblDailySalesDb.insertForSync(DailySalesDataList);
                 mListener.onDailyDataEnd();
                 Log.d(TAG, "onDataChange - finish!");
-//                goToMainActivity();
             }
 
             @Override
@@ -191,23 +174,6 @@ public class SplashActivity  extends AppCompatActivity {
             }
         });
 
-//        // 데이터 변동 못읽어오는 녀석.
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.d(TAG ,"Count "+ dataSnapshot.getChildrenCount());
-//
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    Log.d(TAG, "Single ValueEventListener : " + snapshot.getValue());
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.d(TAG, " error : " + databaseError.getMessage());
-//            }
-//        });
     }
 
     private void goToMainActivity() {

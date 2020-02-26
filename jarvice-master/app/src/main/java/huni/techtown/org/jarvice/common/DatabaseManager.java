@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import huni.techtown.org.jarvice.common.data.DailySalesObject;
 import huni.techtown.org.jarvice.common.data.SalesObject;
 import huni.techtown.org.jarvice.database.DatabaseHelper;
 import huni.techtown.org.jarvice.database.TBL_DAILY_SALES;
@@ -74,10 +75,10 @@ public class DatabaseManager {
         mTblMonthSales.truncate();
     }
 
-    public List<SalesObject> getChannelHistory(String test, String f) {
-        Log.d(TAG, "getChannelHistory() - f: " + f + ", sid: " + test);
+    public List<SalesObject> getDateSalesObject(String input, String f) {
+        Log.d(TAG, "getChannelHistory() - f: " + f + ", sid: " + input);
         String newSql = "SELECT * FROM " + TBL_MY_SALES.TABLE_NAME
-                + " WHERE " + TBL_MY_SALES.SELL_DATE + "=" + "'" + test + "'";
+                + " WHERE " + TBL_MY_SALES.SELL_DATE + "=" + "'" + input + "'";
 
         return mTblMySales.select_raw(newSql);
     }
@@ -98,4 +99,11 @@ public class DatabaseManager {
         return mTblMySales.getSum(gogo);
     }
 
+    public List<DailySalesObject> getDailCheck(String gogo) {
+        return mTblDailySales.getDailyData(gogo);
+    }
+
+    public List<DailySalesObject> getLastData() {
+        return mTblDailySales.getLastData();
+    }
 }

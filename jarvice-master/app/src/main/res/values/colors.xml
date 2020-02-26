@@ -353,6 +353,7 @@
     <color name="color_bbbbbb">#bbbbbb</color>
     <color name="color_d8d8d8">#d8d8d8</color>
     <color name="color_999999">#999999</color>
+    <color name="color_f0f0f0">#f0f0f0</color>
 
     <!-- Chart Color-->
     <color name="color_ef6754">#ef6754</color>
@@ -362,6 +363,7 @@
     <color name="color_e6e9f7">#e6e9f7</color>
     <color name="color_909090">#909090</color>
     <color name="color_a6d7deee">#a6d7deee</color>
+    <color name="color_a5d7deee">#a5d7deee</color>
 
 
 </resources>

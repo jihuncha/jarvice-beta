@@ -179,6 +179,9 @@ public abstract class TABLE<T> {
         Cursor c = null;
         try {
             c = db.query(tableName, columns, whereClause, whereArgs, null /* groupBy */, null /* having */, orderBy, limit);
+            c.moveToPosition(c.getCount() -1 );
+
+            Log.d(tableName, "fdsfa : " + c.moveToPosition(c.getCount() -1 ));
             if (c == null) {
                 Log.e(tableName, "select() - cursor is null.");
                 return null;
@@ -465,6 +468,46 @@ public abstract class TABLE<T> {
 //                    while (c.moveToNext());
 //                }
 //            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (c != null) {
+                try {
+                    c.close();
+                }
+                catch (Exception ignore) { }
+            }
+        }
+        Log.w(tableName, "getCount() failed!");
+
+        return 0;
+    }
+
+    /**
+     * row의 개수를 반환한다.
+     * @param whereClause
+     * @param whereArgs
+     * @return
+     */
+    public int getLastColumn(String whereClause, String[] whereArgs) {
+        Cursor c = null;
+        try {
+            String sqlStr = "SELECT COUNT(*) FROM " + tableName ;
+            if (whereClause != null && whereClause.length() != 0) {
+                sqlStr += " ORDER BY " + whereClause + " DESC LIMIT 1";
+            }
+
+            Log.d(tableName, "test : " + sqlStr);
+            if ((c = db.rawQuery(sqlStr, whereArgs)) != null) {
+                if (c.getCount() != 0 && c.moveToFirst()) {
+                    int count = c.getInt(0);
+
+                    Log.d(tableName, "getCount() - count: " + count);
+                    return count;
+                }
+            }
         }
         catch (Exception e) {
             e.printStackTrace();

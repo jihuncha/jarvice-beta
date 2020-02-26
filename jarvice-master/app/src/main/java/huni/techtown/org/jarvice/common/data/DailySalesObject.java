@@ -2,6 +2,13 @@ package huni.techtown.org.jarvice.common.data;
 
 import java.io.Serializable;
 
+
+/**
+ * 당일 매출 통계 - 서버 데이터
+ *
+ *
+ *
+* **/
 public class DailySalesObject implements Serializable {
     private String TAG = DailySalesObject.class.getSimpleName();
 
@@ -26,6 +33,8 @@ public class DailySalesObject implements Serializable {
     private String sellDrinkProduct;
     private String sellLunch;
     private String sellLunchPercent;
+    private String sellDelivery;
+    private String sellDeliveryPercent;
 
     public DailySalesObject(){}
 
@@ -35,7 +44,8 @@ public class DailySalesObject implements Serializable {
                             String sellCock, String sellCockPercent, String sellCockProduct,
                             String sellLiquor, String sellLiquorPercent, String sellLiquorProduct,
                             String sellDrink, String sellDrinkPercent, String sellDrinkProduct,
-                            String sellLunch, String sellLunchPercent) {
+                            String sellLunch, String sellLunchPercent, String sellDelivery,
+                            String sellDeliveryPercent) {
         this.id = id;
         this.sellDate = sellDate;
         this.sellAll = sellAll;
@@ -57,6 +67,8 @@ public class DailySalesObject implements Serializable {
         this.sellDrinkProduct = sellDrinkProduct;
         this.sellLunch = sellLunch;
         this.sellLunchPercent = sellLunchPercent;
+        this.sellDelivery = sellDelivery;
+        this.sellDeliveryPercent = sellDeliveryPercent;
     }
 
     public long getId() {
@@ -227,6 +239,22 @@ public class DailySalesObject implements Serializable {
         this.sellLunchPercent = sellLunchPercent;
     }
 
+    public String getSellDelivery() {
+        return sellDelivery;
+    }
+
+    public void setSellDelivery(String sellDelivery) {
+        this.sellDelivery = sellDelivery;
+    }
+
+    public String getSellDeliveryPercent() {
+        return sellDeliveryPercent;
+    }
+
+    public void setSellDeliveryPercent(String sellDeliveryPercent) {
+        this.sellDeliveryPercent = sellDeliveryPercent;
+    }
+
     @Override
     public String toString() {
         return "DailySalesObject{" +
@@ -251,6 +279,8 @@ public class DailySalesObject implements Serializable {
                 ", sellDrinkProduct='" + sellDrinkProduct + '\'' +
                 ", sellLunch='" + sellLunch + '\'' +
                 ", sellLunchPercent='" + sellLunchPercent + '\'' +
+                ", sellDelivery='" + sellDelivery + '\'' +
+                ", sellDeliveryPercent='" + sellDeliveryPercent + '\'' +
                 '}';
     }
 }

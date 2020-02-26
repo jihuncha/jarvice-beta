@@ -24,26 +24,28 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
     /*** 21개 ***/
     /*** Column 이름 정의 **********************/
     public static final String ID					            = "_id";
-    public static final String SELL_DATE		                = "sell_date";              // 날짜
-    public static final String SELL_ALL			                = "sell_all";               // 전체매출
-    public static final String SELL_REAL			            = "sell_real";              // 전체 실 매출
-    public static final String SELL_FOOD			            = "sell_food";              // 음식 판매 금액
-    public static final String SELL_FOOD_PERCENT			    = "sell_food_percent";      // 음식 판매 퍼센트
-    public static final String SELL_FOOD_PRODUCT			    = "sell_food_product";      // 음식 판매 갯수
-    public static final String SELL_BEER			            = "sell_beer";              // 주류 판매 금액
-    public static final String SELL_BEER_PERCENT			    = "sell_beer_percent";      // 주류 판매 퍼센트
-    public static final String SELL_BEER_PRODUCT			    = "sell_beer_product";      // 주류 판매 갯수
-    public static final String SELL_COCK			            = "sell_cock";              // 칵테일 판매 금액
-    public static final String SELL_COCK_PERCENT			    = "sell_cock_percent";      // 칵테일 판매 퍼센트
-    public static final String SELL_COCK_PRODUCT			    = "sell_cock_product";      // 칵테일 판매 갯수
-    public static final String SELL_LIQUOR			            = "sell_liquor";            // 양주 판매 금액
-    public static final String SELL_LIQUOR_PERCENT			    = "sell_liquor_percent";    // 양주 판매 퍼센트
-    public static final String SELL_LIQUOR_PRODUCT			    = "sell_liquor_product";    // 양주 판매 갯수
-    public static final String SELL_DRINK			            = "sell_drink";             // 음료 판매 금액
-    public static final String SELL_DRINK_PERCENT			    = "sell_drink_percent";     // 음료 판매 퍼센트
-    public static final String SELL_DRINK_PRODUCT			    = "sell_drink_product";     // 음료 판매 갯수
-    public static final String SELL_LUNCH			            = "sell_lunch";             // 점심 판매 금액
-    public static final String SELL_LUNCH_PERCENT			    = "sell_lunch_percent";     // 점심 판매 퍼센트
+    public static final String SELL_DATE		                = "sell_date";                  // 날짜
+    public static final String SELL_ALL			                = "sell_all";                   // 전체매출
+    public static final String SELL_REAL			            = "sell_real";                  // 전체 실 매출
+    public static final String SELL_FOOD			            = "sell_food";                  // 음식 판매 금액
+    public static final String SELL_FOOD_PERCENT			    = "sell_food_percent";          // 음식 판매 퍼센트
+    public static final String SELL_FOOD_PRODUCT			    = "sell_food_product";          // 음식 판매 갯수
+    public static final String SELL_BEER			            = "sell_beer";                  // 주류 판매 금액
+    public static final String SELL_BEER_PERCENT			    = "sell_beer_percent";          // 주류 판매 퍼센트
+    public static final String SELL_BEER_PRODUCT			    = "sell_beer_product";          // 주류 판매 갯수
+    public static final String SELL_COCK			            = "sell_cock";                  // 칵테일 판매 금액
+    public static final String SELL_COCK_PERCENT			    = "sell_cock_percent";          // 칵테일 판매 퍼센트
+    public static final String SELL_COCK_PRODUCT			    = "sell_cock_product";          // 칵테일 판매 갯수
+    public static final String SELL_LIQUOR			            = "sell_liquor";                // 양주 판매 금액
+    public static final String SELL_LIQUOR_PERCENT			    = "sell_liquor_percent";        // 양주 판매 퍼센트
+    public static final String SELL_LIQUOR_PRODUCT			    = "sell_liquor_product";        // 양주 판매 갯수
+    public static final String SELL_DRINK			            = "sell_drink";                 // 음료 판매 금액
+    public static final String SELL_DRINK_PERCENT			    = "sell_drink_percent";         // 음료 판매 퍼센트
+    public static final String SELL_DRINK_PRODUCT			    = "sell_drink_product";         // 음료 판매 갯수
+    public static final String SELL_LUNCH			            = "sell_lunch";                 // 점심 판매 금액
+    public static final String SELL_LUNCH_PERCENT			    = "sell_lunch_percent";         // 점심 판매 퍼센트
+    public static final String SELL_DELIVERY			        = "sell_delivery";              // 배달 판매 금액
+    public static final String SELL_DELIVERY_PERCENT			= "sell_delivery_percent";      // 배달 판매 퍼센트
 
     /*** Table 생성 쿼리 **********************/
     public static final String CREATE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " " +
@@ -68,7 +70,9 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
                 SELL_DRINK_PERCENT      + " TEXT," +
                 SELL_DRINK_PRODUCT      + " TEXT," +
                 SELL_LUNCH              + " TEXT," +
-                SELL_LUNCH_PERCENT      + " TEXT " +
+                SELL_LUNCH_PERCENT      + " TEXT, "+
+                SELL_DELIVERY           + " TEXT," +
+                SELL_DELIVERY_PERCENT   + " TEXT " +
                 ");";
 
     /*** Table 생성 쿼리 **********************/
@@ -79,7 +83,8 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
         public int ID, SELL_DATE, SELL_ALL, SELL_REAL, SELL_FOOD, SELL_FOOD_PERCENT,
                 SELL_FOOD_PRODUCT, SELL_BEER, SELL_BEER_PERCENT, SELL_BEER_PRODUCT, SELL_COCK,
                 SELL_COCK_PERCENT, SELL_COCK_PRODUCT, SELL_LIQUOR, SELL_LIQUOR_PERCENT, SELL_LIQUOR_PRODUCT,
-                SELL_DRINK, SELL_DRINK_PERCENT, SELL_DRINK_PRODUCT, SELL_LUNCH, SELL_LUNCH_PERCENT;
+                SELL_DRINK, SELL_DRINK_PERCENT, SELL_DRINK_PRODUCT, SELL_LUNCH, SELL_LUNCH_PERCENT,
+                SELL_DELIVERY, SELL_DELIVERY_PERCENT;
     }
 
     protected static INDEX cursorToIndex(Cursor c) throws Exception {
@@ -106,6 +111,8 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
         idx.SELL_DRINK_PRODUCT      = c.getColumnIndex(SELL_DRINK_PRODUCT);
         idx.SELL_LUNCH              = c.getColumnIndex(SELL_LUNCH);
         idx.SELL_LUNCH_PERCENT      = c.getColumnIndex(SELL_LUNCH_PERCENT);
+        idx.SELL_DELIVERY           = c.getColumnIndex(SELL_DELIVERY);
+        idx.SELL_DELIVERY_PERCENT   = c.getColumnIndex(SELL_DELIVERY_PERCENT);
 
         return idx;
     }
@@ -145,6 +152,8 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
         values.put(SELL_DRINK_PRODUCT,      o.getSellDrinkProduct());
         values.put(SELL_LUNCH,              o.getSellLunch());
         values.put(SELL_LUNCH_PERCENT,      o.getSellLunchPercent());
+        values.put(SELL_DELIVERY,           o.getSellDelivery());
+        values.put(SELL_DELIVERY_PERCENT,   o.getSellDeliveryPercent());
 
         return values;
     }
@@ -195,6 +204,8 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
         if (idx.SELL_DRINK_PRODUCT != -1) o.setSellDrinkProduct(c.getString(idx.SELL_DRINK_PRODUCT));
         if (idx.SELL_LUNCH != -1) o.setSellLunch(c.getString(idx.SELL_LUNCH));
         if (idx.SELL_LUNCH_PERCENT != -1) o.setSellLunchPercent(c.getString(idx.SELL_LUNCH_PERCENT));
+        if (idx.SELL_DELIVERY != -1) o.setSellDelivery(c.getString(idx.SELL_DELIVERY));
+        if (idx.SELL_DELIVERY_PERCENT != -1) o.setSellDeliveryPercent(c.getString(idx.SELL_DELIVERY_PERCENT));
 
         return o;
     }
@@ -453,4 +464,23 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
 //        String whereClause = SELL_DATE + "=" + sellDate;
 //        return getSum(whereClause, null);
 //    }
+
+    //TODO date형태가 이상하여 LIKE 사용
+    public List<DailySalesObject> getDailyData(String sellDate) {
+        String whereClause = SELL_DATE + " LIKE '%" + sellDate + "%'";
+        return select(null, whereClause,null,null,null);
+    }
+
+//    public List<DailySalesObject> getLastData() {
+//        String whereClause =
+//    }
+
+    //id 기준으로 정렬 및 결과값이 Total 이 아닌 것으로 추출.
+    public List<DailySalesObject> getLastData() {
+//        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " != '" + "Total" +  "' ORDER BY " + ID + " DESC LIMIT 1";
+
+        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " != '" + "Total" +  "' AND " + SELL_REAL + " != '" + "0" + "' ORDER BY " + ID + " DESC LIMIT 1";
+
+        return select_raw(sql);
+    }
 }

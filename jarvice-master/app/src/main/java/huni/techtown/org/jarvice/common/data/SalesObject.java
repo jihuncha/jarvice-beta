@@ -2,6 +2,12 @@ package huni.techtown.org.jarvice.common.data;
 
 import java.io.Serializable;
 
+/**
+ * 원본데이터 - 서버 데이터
+ *
+ *
+ *
+ * **/
 public class SalesObject implements Serializable {
     private String TAG = SalesObject.class.getSimpleName();
 
