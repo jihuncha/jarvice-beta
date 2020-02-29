@@ -316,7 +316,7 @@ public class Tools {
         }
     }
 
-    //Ãµ´ÜÀ§¿¡ , Ãß°¡ÇÏ´Â ·ÎÁ÷
+    //ì²œë‹¨ìœ„ì— , ì¶”ê°€í•˜ëŠ” ë¡œì§
     public static String decimalFormat(String input) {
         DecimalFormat sellFormatter = new DecimalFormat("###,###");
         String sellFormatterResult = "";
@@ -326,10 +326,10 @@ public class Tools {
 
         }
 
-        return sellFormatterResult + "¿ø";
+        return sellFormatterResult + "ì›";
     }
 
-    //,À» Á¦°ÅÇÏ´Â ·ÎÁ÷
+    //,ì„ ì œê±°í•˜ëŠ” ë¡œì§
     public static String deleteComma(String input) {
         String result = "";
         if (input.contains(",")) {
@@ -341,7 +341,7 @@ public class Tools {
         return result;
     }
 
-    //¸î¹ø¤ŠÁÖÀÎÁö °¡Á®¿Â´Ù
+    //ëª‡ë²ˆì¨°ì£¼ì¸ì§€ ê°€ì ¸ì˜¨ë‹¤
     public static int getWeekOfYear(String date) {
         Calendar calendar = Calendar.getInstance();
         String[] dates = date.split("-");
@@ -352,7 +352,7 @@ public class Tools {
         return calendar.get(Calendar.WEEK_OF_MONTH);
     }
 
-    //Æ¯Á¤¿äÀÏ°¡Á®¿À±â
+    //íŠ¹ì •ìš”ì¼ê°€ì ¸ì˜¤ê¸°
     public static String getDayOfWeek (String date) {
         Calendar calendar = Calendar.getInstance();
         String[] dates = date.split("-");
@@ -365,25 +365,25 @@ public class Tools {
 
         switch (calendar.get(Calendar.DAY_OF_WEEK)) {
             case 1:
-                result = "¿ù¿äÀÏ";
+                result = "ì›”ìš”ì¼";
                 break;
             case 2:
-                result = "È­¿äÀÏ";
+                result = "í™”ìš”ì¼";
                 break;
             case 3:
-                result = "¼ö¿äÀÏ";
+                result = "ìˆ˜ìš”ì¼";
                 break;
             case 4:
-                result = "¸ñ¿äÀÏ";
+                result = "ëª©ìš”ì¼";
                 break;
             case 5:
-                result = "±İ¿äÀÏ";
+                result = "ê¸ˆìš”ì¼";
                 break;
             case 6:
-                result = "Åä¿äÀÏ";
+                result = "í† ìš”ì¼";
                 break;
             case 7:
-                result = "ÀÏ¿äÀÏ";
+                result = "ì¼ìš”ì¼";
                 break;
         }
 
