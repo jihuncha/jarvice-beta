@@ -354,6 +354,8 @@
     <color name="color_d8d8d8">#d8d8d8</color>
     <color name="color_999999">#999999</color>
     <color name="color_f0f0f0">#f0f0f0</color>
+    <color name="color_4e4e4e">#4e4e4e</color>
+    <color name="color_cccccc">#cccccc</color>
 
     <!-- Chart Color-->
     <color name="color_ef6754">#ef6754</color>

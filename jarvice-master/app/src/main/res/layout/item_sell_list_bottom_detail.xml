@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_deadline_sell_item_detail"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8.5dp"
+    android:clickable="false"
+    android:orientation="vertical"
+    android:background="@drawable/circular_background_graph">
+
+    <LinearLayout
+        android:id="@+id/main_deadline_sell_item_parent_detail"
+        android:layout_width="match_parent"
+        android:layout_height="22.5dp"
+        android:background="@drawable/circular_background_graph"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/main_deadline_sell_item_title_detail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="25dp"
+            android:text="김밥"
+            android:textSize="15dp"
+            android:textColor="@color/color_4e4e4e"
+            android:fontFamily="@font/notosans_regular" />
+
+        <TextView
+            android:id="@+id/main_deadline_sell_item_money_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="25dp"
+            android:text="380,500원"
+            android:textSize="15dp"
+            android:textColor="@color/color_222222"
+            android:gravity="end"
+            android:fontFamily="@font/notosans_bold"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+</LinearLayout>

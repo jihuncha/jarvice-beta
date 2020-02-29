@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_main_deadline_sell_list_color_parent"
+    android:layout_width="match_parent"
+    android:layout_height="22.5dp"
+    android:layout_marginBottom="8.5dp"
+    android:orientation="vertical"
+    android:background="@color/color_ffffff">
+
+    <LinearLayout
+        android:id="@+id/ll_main_deadline_sell_list_color_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_main_deadline_sell_list_color"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/circular_background_graph_selector" />
+
+        <TextView
+            android:id="@+id/tv_main_deadline_sell_list_color_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/main_deadline_pie_graph_food"
+            android:textSize="15dp"
+            android:textColor="@color/color_222222"
+            android:fontFamily="@font/notosans_regular" />
+
+        <TextView
+            android:id="@+id/tv_main_deadline_sell_list_color_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="380,500원"
+            android:textSize="15dp"
+            android:textColor="@color/color_222222"
+            android:fontFamily="@font/notosans_regular"/>
+
+        <TextView
+            android:id="@+id/tv_main_deadline_sell_list_color_percent"
+            android:layout_width="32.5dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10.5dp"
+            android:layout_marginRight="25dp"
+            android:text="45%"
+            android:textSize="15dp"
+            android:textColor="@color/color_222222"
+            android:fontFamily="@font/notosans_bold"
+            android:textStyle="bold"
+            android:textAlignment="textEnd"/>
+
+    </LinearLayout>
+
+</LinearLayout>

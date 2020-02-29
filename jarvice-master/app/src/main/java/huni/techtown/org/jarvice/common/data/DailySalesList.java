@@ -15,14 +15,20 @@ public class DailySalesList implements Serializable {
     private String sellDate;
     private String categoryName;
     private String categoryRealSell;
+    private String categorySellPer;
+    private int color;
     private List<DailySalesListItems> itemList;
+
+    public boolean expanded = false;
 
     public DailySalesList(){}
 
-    public DailySalesList(String sellDate, String categoryName, String categoryRealSell, List<DailySalesListItems> itemList) {
+    public DailySalesList(String sellDate, String categoryName, String categoryRealSell, String categorySellPer, int color, List<DailySalesListItems> itemList) {
         this.sellDate = sellDate;
         this.categoryName = categoryName;
         this.categoryRealSell = categoryRealSell;
+        this.categorySellPer = categorySellPer;
+        this.color = color;
         this.itemList = itemList;
     }
 
@@ -50,6 +56,22 @@ public class DailySalesList implements Serializable {
         this.categoryRealSell = categoryRealSell;
     }
 
+    public String getCategorySellPer() {
+        return categorySellPer;
+    }
+
+    public void setCategorySellPer(String categorySellPer) {
+        this.categorySellPer = categorySellPer;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
+
     public List<DailySalesListItems> getItemList() {
         return itemList;
     }
@@ -64,6 +86,8 @@ public class DailySalesList implements Serializable {
                 "sellDate='" + sellDate + '\'' +
                 ", categoryName='" + categoryName + '\'' +
                 ", categoryRealSell='" + categoryRealSell + '\'' +
+                ", categorySellPer='" + categorySellPer + '\'' +
+                ", color=" + color +
                 ", itemList=" + itemList +
                 '}';
     }

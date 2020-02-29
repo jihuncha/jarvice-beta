@@ -2,13 +2,14 @@ package huni.techtown.org.jarvice.ui.Fragment;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,45 +35,71 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Stream;
 
 import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.CurrentManager;
 import huni.techtown.org.jarvice.common.DatabaseManager;
 import huni.techtown.org.jarvice.common.data.DailySalesList;
+import huni.techtown.org.jarvice.common.data.DailySalesListItems;
 import huni.techtown.org.jarvice.common.data.DailySalesObject;
+import huni.techtown.org.jarvice.common.data.SalesObject;
 import huni.techtown.org.jarvice.ui.adapter.AdapterListExpand;
-import huni.techtown.org.jarvice.ui.utils.LineItemDecoration;
+import huni.techtown.org.jarvice.ui.adapter.AdapterPieChartList;
+import huni.techtown.org.jarvice.ui.utils.DateUtils;
+import huni.techtown.org.jarvice.ui.utils.Tools;
 
-public class TabLayoutDeadline extends Fragment {
+public class TabLayoutDeadline extends Fragment implements View.OnClickListener {
     private static final String TAG = TabLayoutDeadline.class.getSimpleName();
 
     private Handler mHandler;
     private Context mContext;
 
-    private ViewPager deadlineSalesBarChart;
-    private DeadlineViewpagerAdapter deadlineViewpagerAdapter;
+    //타이틀
+    private TextView tv_main_deadline_company_title;
+    private TextView tv_main_deadline_company_date;
+
     //막대 그래프
     private BarChart barChart;
 
+    private ViewPager deadlineSalesBarChart;
+    private DeadlineViewpagerAdapter deadlineViewpagerAdapter;
+
     // 일/주/월 로 나누기
     private int barChartPosition;
+    private TextView tv_main_deadline_barchart_day;
+    private TextView tv_main_deadline_barchart_week;
+    private TextView tv_main_deadline_barchart_month;
 
-    //데이터
+    //막대 데이터
     private ArrayList<BarEntry> barEntryData;
-    //데이터 라벨
+    //막대 데이터 라벨
     private ArrayList<String> barEntryLabels ;
-    private BarDataSet barDataSet ;
+    private BarDataSet barDataSet;
     private BarData barData;
 
-    private boolean firstTime;
-
+    //원 그래프
     private PieChart pieChart;
     private DailySalesObject pieChartData;
 
-    private RecyclerView rvSellList;
-    private AdapterListExpand mAdapter;
-    private List<DailySalesList> insertData;
+    //총매출액
+    private TextView tvSellRealResult;
+
+    //그래프 아래 상세 금액/percent 표기
+    private RecyclerView rvSellListColor;
+    private AdapterPieChartList mAdapterPieChartList;
+
+    //그래프 하단에 판매량
+    private RecyclerView rvSellListDetail;
+    private AdapterListExpand mAdapterListExpand;
+    private List<DailySalesList> insertListOfSellsData;
+
+    //상세 표기
+    private  List<SalesObject> lastRawData;
+    private  HashMap<String, List<DailySalesListItems>> lastRawDataHash;
 
     public TabLayoutDeadline() {
     }
@@ -90,6 +117,19 @@ public class TabLayoutDeadline extends Fragment {
         mContext = container.getContext();
         mHandler = new Handler();
 
+        //데이터가져오기..!!
+        pieChartData = DatabaseManager.getInstance(mContext).getLastData().get(0);
+
+        tv_main_deadline_company_title = root.findViewById(R.id.tv_main_deadline_company_title);
+        tv_main_deadline_company_date = root.findViewById(R.id.tv_main_deadline_company_date);
+
+        Log.d(TAG, "Test : " + Tools.getDayOfWeek(pieChartData.getSellDate()));
+
+        String getLastDataDate = pieChartData.getSellDate().replace("-" , ".");
+        String getDayOfWeek = Tools.getDayOfWeek(pieChartData.getSellDate());
+        tv_main_deadline_company_date.setText(getLastDataDate + " "
+                + getDayOfWeek + " " + mContext.getResources().getString(R.string.main_deadline_title_date));
+
         //Bar Chart
         String dateString = CurrentManager.getInstance(mContext).toFormatString(System.currentTimeMillis(), "yyyy-MM-dd");
         Log.d(TAG, "test22 : " + dateString);
@@ -97,7 +137,6 @@ public class TabLayoutDeadline extends Fragment {
 
         barEntryData = new ArrayList<>();
         barEntryLabels = new ArrayList<String>();
-        firstTime = false;
 
         AddValuesToBARENTRY();
         AddValuesToBarEntryLabels();
@@ -110,23 +149,78 @@ public class TabLayoutDeadline extends Fragment {
         //view 유지하는 갯수 양쪽 2개씩으로 수정
         deadlineSalesBarChart.setOffscreenPageLimit(2);
 
+        //일/주/월
+        barChartPosition = 0;
+        tv_main_deadline_barchart_day = root.findViewById(R.id.tv_main_deadline_barchart_day);
+        tv_main_deadline_barchart_week = root.findViewById(R.id.tv_main_deadline_barchart_week);
+        tv_main_deadline_barchart_month = root.findViewById(R.id.tv_main_deadline_barchart_month);
+
+        tv_main_deadline_barchart_day.setOnClickListener(this);
+        tv_main_deadline_barchart_week.setOnClickListener(this);
+        tv_main_deadline_barchart_month.setOnClickListener(this);
+
         //Pie Chart
         Log.e(TAG, "testsd : " + DatabaseManager.getInstance(mContext).getLastData());
 
-        pieChartData = DatabaseManager.getInstance(mContext).getLastData().get(0);
-        pieChart = (PieChart)root.findViewById(R.id.piechart);
+        pieChart = (PieChart) root.findViewById(R.id.piechart);
 
+        lastRawData = new ArrayList<>();
+
+        Log.e(TAG, " test 3434 : " + DatabaseManager.getInstance(mContext).getDateSalesObject(pieChartData.getSellDate(),"MainActivity - onCreate"));
+
+        //해당 날짜에 있는 rawdata 목록.
+        lastRawData.addAll(DatabaseManager.getInstance(mContext).getDateSalesObject(pieChartData.getSellDate(),"MainActivity - onCreate"));
+
+        //해당 raw 데이터들을 카테고리별로 나눈다.
+        lastRawDataHash = new HashMap<>();
+
+        //pieChart 하단 부분 및 list 부분 처리를위한 객체 생성 - initSellList
+        insertListOfSellsData = new ArrayList<DailySalesList>();
+
+        //원 그래프 작성
         initPieChart();
 
-        rvSellList = (RecyclerView)root.findViewById(R.id.rv_sell_list);
-        rvSellList.setLayoutManager(new LinearLayoutManager(mContext));
-//        rvSellList.addItemDecoration(new LineItemDecoration(mContext, LinearLayout.VERTICAL));
-        rvSellList.setHasFixedSize(true);
+        // 판매 항목 상세 보기 객체 생성
+        initSellDetailList();
 
-        insertData = new ArrayList<DailySalesList>();
+        //원 그래프 하단 판매 항목 객체 생성
         initSellList();
-        mAdapter = new AdapterListExpand(mContext, pieChartData);
-        rvSellList.setAdapter(mAdapter);
+
+
+        Log.e(TAG, "result all = " + insertListOfSellsData);
+        //총매출 text 지정
+        tvSellRealResult = (TextView) root.findViewById(R.id.tv_sell_real_result);
+        tvSellRealResult.setText(Tools.decimalFormat(pieChartData.getSellReal()));
+
+        rvSellListColor = (RecyclerView) root.findViewById(R.id.rv_sell_list_color);
+        rvSellListColor.setLayoutManager(new LinearLayoutManager(mContext));
+        rvSellListColor.setHasFixedSize(true);
+
+        //Pie Chart Text Area
+        mAdapterPieChartList = new AdapterPieChartList(mContext, insertListOfSellsData);
+        // on item list clicked
+        mAdapterPieChartList.setOnItemClickListener(new AdapterPieChartList.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, DailySalesList obj, int position) {
+                Log.d(TAG, "Test656 : " + position);
+            }
+        });
+        rvSellListColor.setAdapter(mAdapterPieChartList);
+
+        rvSellListDetail = (RecyclerView)root.findViewById(R.id.rv_sell_list_detail);
+        rvSellListDetail.setLayoutManager(new LinearLayoutManager(mContext));
+        rvSellListDetail.setHasFixedSize(true);
+
+        //Pie Chart Bottom Area
+        mAdapterListExpand = new AdapterListExpand(mContext, insertListOfSellsData);
+        // on item list clicked
+        mAdapterListExpand.setOnItemClickListener(new AdapterListExpand.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, DailySalesList obj, int position) {
+                Log.d(TAG, "Test656 : " + position);
+            }
+        });
+        rvSellListDetail.setAdapter(mAdapterListExpand);
 
         return root;
     }
@@ -216,6 +310,47 @@ public class TabLayoutDeadline extends Fragment {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.tv_main_deadline_barchart_day :
+                tv_main_deadline_barchart_day.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                tv_main_deadline_barchart_day.setTypeface(Typeface.DEFAULT_BOLD);
+
+                tv_main_deadline_barchart_week.setBackground(null);
+                tv_main_deadline_barchart_month.setBackground(null);
+                tv_main_deadline_barchart_week.setTypeface(Typeface.DEFAULT);
+                tv_main_deadline_barchart_month.setTypeface(Typeface.DEFAULT);
+                deadlineSalesBarChart.setCurrentItem(0);
+
+                break;
+
+            case R.id.tv_main_deadline_barchart_week :
+                tv_main_deadline_barchart_week.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                tv_main_deadline_barchart_week.setTypeface(Typeface.DEFAULT_BOLD);
+
+                tv_main_deadline_barchart_day.setBackground(null);
+                tv_main_deadline_barchart_month.setBackground(null);
+                tv_main_deadline_barchart_day.setTypeface(Typeface.DEFAULT);
+                tv_main_deadline_barchart_month.setTypeface(Typeface.DEFAULT);
+                deadlineSalesBarChart.setCurrentItem(1);
+
+                break;
+
+            case R.id.tv_main_deadline_barchart_month :
+                tv_main_deadline_barchart_month.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                tv_main_deadline_barchart_month.setTypeface(Typeface.DEFAULT_BOLD);
+
+                tv_main_deadline_barchart_day.setBackground(null);
+                tv_main_deadline_barchart_week.setBackground(null);
+                tv_main_deadline_barchart_day.setTypeface(Typeface.DEFAULT);
+                tv_main_deadline_barchart_week.setTypeface(Typeface.DEFAULT);
+                deadlineSalesBarChart.setCurrentItem(2);
+
+                break;
+        }
+    }
+
 
     public class MyCustomFormatter extends ValueFormatter {
         private final BarLineChartBase<?> chart;
@@ -235,6 +370,12 @@ public class TabLayoutDeadline extends Fragment {
 
     }
 
+
+    /**
+     *
+     *  원 그래프 그리기.
+     *
+     * */
     public void initPieChart() {
         if (pieChartData == null) {
             Log.e(TAG, "processPieData - data is null!!");
@@ -282,7 +423,8 @@ public class TabLayoutDeadline extends Fragment {
         dataSet.setSelectionShift(5f);
         int [] color={ getResources().getColor(R.color.color_ef6754), getResources().getColor(R.color.color_24609e),
                 getResources().getColor(R.color.color_ffbe37), getResources().getColor(R.color.color_08b3a2),
-                getResources().getColor(R.color.purple_500), getResources().getColor(R.color.amber_900)
+                getResources().getColor(R.color.purple_500), getResources().getColor(R.color.brown_400),
+                getResources().getColor(R.color.light_blue_900)
         };
 
 //        Log.d(TAG, pieChart.)
@@ -305,6 +447,7 @@ public class TabLayoutDeadline extends Fragment {
     }
 
     /**
+     * BarChart 영역
      * View pager adapter
      */
     public class DeadlineViewpagerAdapter extends PagerAdapter {
@@ -351,7 +494,6 @@ public class TabLayoutDeadline extends Fragment {
             return super.getItemPosition(object);
         }
 
-
     }
 
     //  viewpager change listener
@@ -364,31 +506,33 @@ public class TabLayoutDeadline extends Fragment {
 //            //TODO background가 selector로 안바뀜..??
             switch (position) {
                 case 0 :
-//                    initBarChart();
-//
-//                    barChart.setVisibility(View.VISIBLE);
-//
-//                    barChart2.setVisibility(View.GONE);
-//                    barChart3.setVisibility(View.GONE);
+                    tv_main_deadline_barchart_day.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                    tv_main_deadline_barchart_day.setTypeface(Typeface.DEFAULT_BOLD);
+
+                    tv_main_deadline_barchart_week.setBackground(null);
+                    tv_main_deadline_barchart_month.setBackground(null);
+                    tv_main_deadline_barchart_week.setTypeface(Typeface.DEFAULT);
+                    tv_main_deadline_barchart_month.setTypeface(Typeface.DEFAULT);
                     break;
 
                 case 1:
+                    tv_main_deadline_barchart_week.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                    tv_main_deadline_barchart_week.setTypeface(Typeface.DEFAULT_BOLD);
 
-
-//                    barChart.setVisibility(View.GONE);
-//
-//                    barChart2.setVisibility(View.VISIBLE);
-//                    barChart3.setVisibility(View.GONE);
-//                    initWeekChart();
-
+                    tv_main_deadline_barchart_day.setBackground(null);
+                    tv_main_deadline_barchart_month.setBackground(null);
+                    tv_main_deadline_barchart_day.setTypeface(Typeface.DEFAULT);
+                    tv_main_deadline_barchart_month.setTypeface(Typeface.DEFAULT);
                     break;
 
                 case 2:
-//                    barChart.setVisibility(View.GONE);
-//
-//                    barChart2.setVisibility(View.GONE);
-//                    barChart3.setVisibility(View.VISIBLE);
-//                    initMonthChart();
+                    tv_main_deadline_barchart_month.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                    tv_main_deadline_barchart_month.setTypeface(Typeface.DEFAULT_BOLD);
+
+                    tv_main_deadline_barchart_day.setBackground(null);
+                    tv_main_deadline_barchart_week.setBackground(null);
+                    tv_main_deadline_barchart_day.setTypeface(Typeface.DEFAULT);
+                    tv_main_deadline_barchart_week.setTypeface(Typeface.DEFAULT);
                     break;
             }
 
@@ -405,68 +549,215 @@ public class TabLayoutDeadline extends Fragment {
         }
     };
 
+    //객체 생성하여 리스트 작성
     public void initSellList() {
         Log.d(TAG, "initSellList");
 
         //TODO 이 노가다를 해야하나??더 좋은 방법이...??
+        //TODO 정책 수정 -> 결국 7개 다보내야함
 
-        if (!pieChartData.getSellFood().equals("0")) {
-            DailySalesList dsl = new DailySalesList();
-            dsl.setSellDate(pieChartData.getSellDate());
-            dsl.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_food));
-            dsl.setCategoryRealSell(pieChartData.getSellReal());
-            insertData.add(dsl);
+//        if (!pieChartData.getSellFood().equals("0")) {
+        DailySalesList dsl1 = new DailySalesList();
+        dsl1.setSellDate(pieChartData.getSellDate());
+        dsl1.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_food));
+        dsl1.setCategoryRealSell(pieChartData.getSellFood());
+        dsl1.setCategorySellPer(pieChartData.getSellFoodPercent());
+        dsl1.setColor(R.color.color_ef6754);
+        dsl1.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_food)));
+        insertListOfSellsData.add(dsl1);
+//        }
+
+//        if (!pieChartData.getSellBeer().equals("0")) {
+        DailySalesList dsl2 = new DailySalesList();
+        dsl2.setSellDate(pieChartData.getSellDate());
+        dsl2.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_beer));
+        dsl2.setCategoryRealSell(pieChartData.getSellBeer());
+        dsl2.setCategorySellPer(pieChartData.getSellBeerPercent());
+        dsl2.setColor(R.color.color_24609e);
+        dsl2.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_beer)));
+        insertListOfSellsData.add(dsl2);
+//        }
+
+//        if (!pieChartData.getSellCock().equals("0")) {
+        DailySalesList dsl3 = new DailySalesList();
+        dsl3.setSellDate(pieChartData.getSellDate());
+        dsl3.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_cock));
+        dsl3.setCategoryRealSell(pieChartData.getSellCock());
+        dsl3.setCategorySellPer(pieChartData.getSellCockPercent());
+        dsl3.setColor(R.color.color_ffbe37);
+        dsl3.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_cock)));
+        insertListOfSellsData.add(dsl3);
+//        }
+
+//        if (!pieChartData.getSellLiquor().equals("0")) {
+        DailySalesList dsl4 = new DailySalesList();
+        dsl4.setSellDate(pieChartData.getSellDate());
+        dsl4.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_liquor));
+        dsl4.setCategoryRealSell(pieChartData.getSellLiquor());
+        dsl4.setCategorySellPer(pieChartData.getSellLiquorPercent());
+        dsl4.setColor(R.color.color_08b3a2);
+        dsl4.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_liquor)));
+        insertListOfSellsData.add(dsl4);
+//        }
+
+//        if (!pieChartData.getSellDrink().equals("0")) { ;
+        DailySalesList dsl5 = new DailySalesList();
+        dsl5.setSellDate(pieChartData.getSellDate());
+        dsl5.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_drink));
+        dsl5.setCategoryRealSell(pieChartData.getSellDrink());
+        dsl5.setCategorySellPer(pieChartData.getSellDrinkPercent());
+        dsl5.setColor(R.color.purple_500);
+        dsl5.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_drink)));
+        insertListOfSellsData.add(dsl5);
+//        }
+
+//        if (!pieChartData.getSellLunch().equals("0")) {
+        DailySalesList dsl6 = new DailySalesList();
+        dsl6.setSellDate(pieChartData.getSellDate());
+        dsl6.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_lunch));
+        dsl6.setCategoryRealSell(pieChartData.getSellLunch());
+        dsl6.setCategorySellPer(pieChartData.getSellLunchPercent());
+        dsl6.setColor(R.color.brown_400);
+        dsl6.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_lunch)));
+        insertListOfSellsData.add(dsl6);
+//        }
+
+//        if (!pieChartData.getSellDelivery().equals("0")) {
+        DailySalesList dsl7 = new DailySalesList();
+        dsl7.setSellDate(pieChartData.getSellDate());
+        dsl7.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_delivery));
+        dsl7.setCategoryRealSell(pieChartData.getSellDelivery());
+        dsl7.setCategorySellPer(pieChartData.getSellDeliveryPercent());
+        dsl7.setColor(R.color.light_blue_900);
+        dsl7.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_delivery)));
+        insertListOfSellsData.add(dsl7);
+//        }
+
+    }
+
+
+    public void initSellDetailList() {
+        Log.d(TAG, "initSellDetailList");
+        DateUtils.d(TAG, "initSellDetailList - start");
+
+        //TODO 이 노가다를 해야하나??더 좋은 방법이...??
+        List<SalesObject> food = new ArrayList<SalesObject>();
+        List<SalesObject> beer = new ArrayList<SalesObject>();
+        List<SalesObject> cock = new ArrayList<SalesObject>();
+        List<SalesObject> liquor = new ArrayList<SalesObject>();
+        List<SalesObject> drink = new ArrayList<SalesObject>();
+        List<SalesObject> lunch = new ArrayList<SalesObject>();
+        List<SalesObject> delivery = new ArrayList<SalesObject>();
+
+        for (int i = 0; i < lastRawData.size(); i++ ) {
+            if (lastRawData.get(i).getCategory().equals("푸드")){
+                food.add(lastRawData.get(i));
+            }
+
+            if (lastRawData.get(i).getCategory().equals("주류")){
+                beer.add(lastRawData.get(i));
+            }
+
+            if (lastRawData.get(i).getCategory().equals("칵테일")){
+                cock.add(lastRawData.get(i));
+            }
+
+            if (lastRawData.get(i).getCategory().equals("양주")){
+                liquor.add(lastRawData.get(i));
+            }
+
+            if (lastRawData.get(i).getCategory().equals("드링크")){
+                drink.add(lastRawData.get(i));
+            }
+
+            if (lastRawData.get(i).getCategory().equals("런치")){
+                lunch.add(lastRawData.get(i));
+            }
+
+            if (lastRawData.get(i).getCategory().equals("배달")){
+                delivery.add(lastRawData.get(i));
+            }
         }
 
-        if (!pieChartData.getSellBeer().equals("0")) {
-            DailySalesList dsl = new DailySalesList();
-            dsl.setSellDate(pieChartData.getSellDate());
-            dsl.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_beer));
-            dsl.setCategoryRealSell(pieChartData.getSellBeer());
-            insertData.add(dsl);
+        if (food.size() != 0) {
+//            makeListItems(food);
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_food), makeListItems(food));
         }
 
-        if (!pieChartData.getSellCock().equals("0")) {
-            DailySalesList dsl = new DailySalesList();
-            dsl.setSellDate(pieChartData.getSellDate());
-            dsl.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_cock));
-            dsl.setCategoryRealSell(pieChartData.getSellCock());
-            insertData.add(dsl);
+        if (beer.size() != 0) {
+//            makeListItems(beer);
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_beer), makeListItems(beer));
         }
 
-        if (!pieChartData.getSellLiquor().equals("0")) {
-            DailySalesList dsl = new DailySalesList();
-            dsl.setSellDate(pieChartData.getSellDate());
-            dsl.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_liquor));
-            dsl.setCategoryRealSell(pieChartData.getSellLiquor());
-            insertData.add(dsl);
+        if (cock.size() != 0) {
+//            makeListItems(cock);
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_cock), makeListItems(cock));
         }
 
-        if (!pieChartData.getSellDrink().equals("0")) { ;
-            DailySalesList dsl = new DailySalesList();
-            dsl.setSellDate(pieChartData.getSellDate());
-            dsl.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_drink));
-            dsl.setCategoryRealSell(pieChartData.getSellDrink());
-            insertData.add(dsl);
+        if (liquor.size() != 0) {
+//            makeListItems(liquor);
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_liquor), makeListItems(liquor));
         }
 
-        if (!pieChartData.getSellLunch().equals("0")) {
-            DailySalesList dsl = new DailySalesList();
-            dsl.setSellDate(pieChartData.getSellDate());
-            dsl.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_lunch));
-            dsl.setCategoryRealSell(pieChartData.getSellLunch());
-            insertData.add(dsl);
+        if (drink.size() != 0) {
+//            makeListItems(drink);
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_drink), makeListItems(drink));
         }
 
-        if (!pieChartData.getSellDelivery().equals("0")) {
-            DailySalesList dsl = new DailySalesList();
-            dsl.setSellDate(pieChartData.getSellDate());
-            dsl.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_delivery));
-            dsl.setCategoryRealSell(pieChartData.getSellDelivery());
-            insertData.add(dsl);
+        if (lunch.size() != 0) {
+//            makeListItems(lunch);
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_lunch), makeListItems(lunch));
         }
 
-        Log.d(TAG, "testddd : " + insertData.toString());
+        if (delivery.size() != 0) {
+//            makeListItems(delivery);
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_delivery), makeListItems(delivery));
+        }
 
+        Log.d(TAG, "initSellDetailList - hash : " + lastRawDataHash.toString());
+        DateUtils.d(TAG, "initSellDetailList - end");
+    }
+
+    /**
+    * 중복되는 아이템 체크를 위한 로직
+    *
+    * */
+    public List<DailySalesListItems> makeListItems(List<SalesObject> inputList) {
+        //같은 카테고리에서 같은 종류의 음식이 있는지 체크하는로직
+        List<String> check  = new ArrayList<String>();
+        List<DailySalesListItems> result = new ArrayList<>();
+
+        for (int i = 0; i < inputList.size(); i ++) {
+            //상품명이 다른것이 잇을경우
+            if (!check.contains(inputList.get(i).getProductName())) {
+                check.add(inputList.get(i).getProductName());
+
+                //새로운 아이템을 생성해준다.
+                DailySalesListItems items = new DailySalesListItems();
+                items.setItemName(inputList.get(i).getProductName());
+                items.setItemCount(inputList.get(i).getProductCount());
+                items.setItemRealSell(Tools.deleteComma(inputList.get(i).getRealSales()));
+
+                //결과 값에 반영한다.
+                result.add(items);
+            } else {
+                //기존에 있는 상품일 경우
+                for (int j = 0; j < result.size(); j++) {
+                    if (result.get(j).getItemName().equals(inputList.get(i).getProductName())) {
+                        //상품갯수
+                        String count = result.get(j).getItemCount();
+                        //판매금액
+                        String sales = result.get(j).getItemRealSell();
+                        //파싱 이후 set해준다 (,때문에)
+                        int resultCount = Integer.parseInt(Tools.deleteComma(count)) + Integer.parseInt(Tools.deleteComma(inputList.get(i).getProductCount()));
+                        result.get(j).setItemCount("" + resultCount);
+                        int resultSales = Integer.parseInt(Tools.deleteComma(sales)) + Integer.parseInt(Tools.deleteComma(inputList.get(i).getRealSales()));
+                        result.get(j).setItemRealSell("" + resultSales);
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }

@@ -38,7 +38,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import huni.techtown.org.jarvice.R;
@@ -312,6 +314,81 @@ public class Tools {
         } catch (ActivityNotFoundException e) {
             activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + activity.getPackageName())));
         }
+    }
+
+    //천단위에 , 추가하는 로직
+    public static String decimalFormat(String input) {
+        DecimalFormat sellFormatter = new DecimalFormat("###,###");
+        String sellFormatterResult = "";
+        try {
+            sellFormatterResult = sellFormatter.format(Integer.parseInt(input));
+        } catch (Exception e ) {
+
+        }
+
+        return sellFormatterResult + "원";
+    }
+
+    //,을 제거하는 로직
+    public static String deleteComma(String input) {
+        String result = "";
+        if (input.contains(",")) {
+            result = input.replace(",", "");
+        } else {
+            result = input;
+        }
+
+        return result;
+    }
+
+    //몇번쨰주인지 가져온다
+    public static int getWeekOfYear(String date) {
+        Calendar calendar = Calendar.getInstance();
+        String[] dates = date.split("-");
+        int year = Integer.parseInt(dates[0]);
+        int month = Integer.parseInt(dates[1]);
+        int day = Integer.parseInt(dates[2]);
+        calendar.set(year, month - 1, day);
+        return calendar.get(Calendar.WEEK_OF_MONTH);
+    }
+
+    //특정요일가져오기
+    public static String getDayOfWeek (String date) {
+        Calendar calendar = Calendar.getInstance();
+        String[] dates = date.split("-");
+        int year = Integer.parseInt(dates[0]);
+        int month = Integer.parseInt(dates[1]);
+        int day = Integer.parseInt(dates[2]);
+        calendar.set(year, month - 1, day);
+
+        String result = "";
+
+        switch (calendar.get(Calendar.DAY_OF_WEEK)) {
+            case 1:
+                result = "월요일";
+                break;
+            case 2:
+                result = "화요일";
+                break;
+            case 3:
+                result = "수요일";
+                break;
+            case 4:
+                result = "목요일";
+                break;
+            case 5:
+                result = "금요일";
+                break;
+            case 6:
+                result = "토요일";
+                break;
+            case 7:
+                result = "일요일";
+                break;
+        }
+
+        return result;
+
     }
 
 }

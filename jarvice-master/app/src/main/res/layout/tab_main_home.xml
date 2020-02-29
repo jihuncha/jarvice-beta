@@ -253,7 +253,7 @@
                         android:paddingRight="9.5dp"
                         android:paddingTop="8dp"
                         android:paddingBottom="8dp"
-                        android:text="01"
+                        android:text="03"
                         android:textColor="@color/color_25d371"
                         android:textStyle="italic"
                         android:textSize="16dp" />

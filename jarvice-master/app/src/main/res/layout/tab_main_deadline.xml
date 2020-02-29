@@ -20,6 +20,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tv_main_deadline_company_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14.5dp"
@@ -32,6 +33,7 @@
                 android:fontFamily="@font/notosans_regular"/>
 
             <TextView
+                android:id="@+id/tv_main_deadline_company_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -68,6 +70,7 @@
                         android:fontFamily="@font/notosans_bold"/>
 
                     <LinearLayout
+                        android:id="@+id/ll_main_deadline_barchart_day_week_month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -76,37 +79,47 @@
                         android:background="@drawable/circular_background_graph_selector">
 
                         <TextView
+                            android:id="@+id/tv_main_deadline_barchart_day"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="7.5dp"
                             android:paddingBottom="5dp"
                             android:paddingTop="5dp"
                             android:textSize="12dp"
                             android:text="@string/main_deadline_day"
-                            android:fontFamily="@font/notosans_bold"/>
+                            android:clickable="true"
+                            android:background="@drawable/barchart_circular_background"
+                            android:fontFamily="@font/notosans_regular"/>
 
                         <TextView
+                            android:id="@+id/tv_main_deadline_barchart_week"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="7.5dp"
                             android:paddingBottom="5dp"
                             android:paddingTop="5dp"
                             android:textSize="12dp"
                             android:text="@string/main_deadline_week"
-                            android:fontFamily="@font/notosans_bold"/>
+                            android:clickable="true"
+                            android:fontFamily="@font/notosans_regular"/>
 
                         <TextView
+                            android:id="@+id/tv_main_deadline_barchart_month"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="7.5dp"
                             android:paddingBottom="5dp"
                             android:paddingTop="5dp"
                             android:textSize="12dp"
                             android:text="@string/main_deadline_month"
-                            android:fontFamily="@font/notosans_bold"/>
+                            android:clickable="true"
+                            android:fontFamily="@font/notosans_regular"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -159,7 +172,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="fdsfa"
+                    android:text="300000000"
                     android:textSize="30dp"
                     android:textColor="@color/color_222222"
                     android:gravity="center_horizontal"
@@ -173,10 +186,16 @@
                     android:layout_marginRight="25dp"
                     android:background="@color/color_f0f0f0" />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_sell_list_color"
+                    android:layout_marginTop="17dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_sell_list"
+                android:id="@+id/rv_sell_list_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

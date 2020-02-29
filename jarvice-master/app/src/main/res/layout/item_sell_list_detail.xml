@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_deadline_sell_item"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     android:layout_marginTop="15dp"
     android:clickable="true"
     android:orientation="vertical"
     android:background="@drawable/circular_background_graph">
 
     <LinearLayout
+        android:id="@+id/main_deadline_sell_item_parent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="70dp"
         android:background="@drawable/circular_background_graph"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -50,16 +51,39 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/lyt_expand"
+        android:id="@+id/ll_main_deadline_sell_list_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/circular_background_graph"
         android:orientation="vertical"
         android:visibility="gone">
 
-        <ListView
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="1dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/color_f0f0f0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_main_deadline_sell_list_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp"/>
+
+        <TextView
+            android:id="@+id/tv_main_deadline_sell_list_detail_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="25dp"
+            android:text="@string/main_deadline_pie_graph_detail_empty"
+            android:textSize="15dp"
+            android:textColor="@color/color_cccccc"
+            android:fontFamily="@font/notosans_regular"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

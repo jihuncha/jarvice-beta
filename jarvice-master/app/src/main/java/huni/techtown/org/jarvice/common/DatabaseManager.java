@@ -106,4 +106,6 @@ public class DatabaseManager {
     public List<DailySalesObject> getLastData() {
         return mTblDailySales.getLastData();
     }
+
+//    public List<Sa>
 }

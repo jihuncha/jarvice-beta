@@ -42,7 +42,7 @@
 
     <!-- 마감내역 -->
     <string name="main_deadline_title_company">주식회사 작은다락 243-86-01269</string>
-    <string name="main_deadline_title_date">2019.12.5 목요일 매출 알려드려요.</string>
+    <string name="main_deadline_title_date">매출 알려드려요.</string>
     <string name="main_deadline_bar_graph_title">매출 그래프</string>
     <string name="main_deadline_day">일</string>
     <string name="main_deadline_week">주</string>
@@ -51,12 +51,13 @@
     <string name="main_deadline_pie_graph_title">매출 통계</string>
     <string name="main_deadline_pie_graph_food">음식</string>
     <string name="main_deadline_pie_graph_beer">주류</string>
-    <string name="main_deadline_pie_graph_cock">각테일</string>
+    <string name="main_deadline_pie_graph_cock">칵테일</string>
     <string name="main_deadline_pie_graph_liquor">양주</string>
     <string name="main_deadline_pie_graph_drink">음료</string>
     <string name="main_deadline_pie_graph_lunch">점심</string>
     <string name="main_deadline_pie_graph_delivery">배달</string>
 
     <string name="main_deadline_pie_graph_sell_real">총 매출</string>
+    <string name="main_deadline_pie_graph_detail_empty">매출 내역이 없습니다.</string>
 
 </resources>

@@ -8,6 +8,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import huni.techtown.org.jarvice.common.data.DailySalesObject;
 import huni.techtown.org.jarvice.common.data.SalesObject;
 
 /**
@@ -177,7 +178,7 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
         if (idx.REAL_SALES != -1) o.setRealSales(c.getString(idx.REAL_SALES));
         if (idx.PLUS_SALES != -1) o.setPlusSales(c.getString(idx.PLUS_SALES));
         if (idx.VAT != -1) o.setVat(c.getString(idx.VAT));
-        if (idx.CATEGORY != -1) o.setVat(c.getString(idx.CATEGORY));
+        if (idx.CATEGORY != -1) o.setCategory(c.getString(idx.CATEGORY));
 
         return o;
     }
@@ -435,5 +436,10 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
     public int getSum(String sellDate) {
         String whereClause = SELL_DATE + "=" + sellDate;
         return getSum(whereClause, null);
+    }
+
+    public List<SalesObject> getDailyData (String sellDate) {
+        String whereClause = SELL_DATE + "=" + sellDate;
+        return select_raw(whereClause);
     }
 }
