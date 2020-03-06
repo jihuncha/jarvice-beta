@@ -10,13 +10,18 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.data.DailySalesList;
 import huni.techtown.org.jarvice.ui.utils.Tools;
 
+
+/**
+ * 원 그래프 하단 목록
+ *
+ *
+* */
 public class AdapterPieChartList extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = AdapterPieChartList.class.getSimpleName();
 
@@ -61,7 +66,6 @@ public class AdapterPieChartList extends RecyclerView.Adapter<RecyclerView.ViewH
         return vh;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof OriginalViewHolder) {

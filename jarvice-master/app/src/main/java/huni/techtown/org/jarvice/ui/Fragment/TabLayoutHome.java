@@ -24,14 +24,20 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import huni.techtown.org.jarvice.R;
+import huni.techtown.org.jarvice.ui.MainActivity;
 import huni.techtown.org.jarvice.ui.utils.Tools;
 
+/**
+* HOME 화면 구현
+*
+* */
 public class TabLayoutHome extends Fragment implements View.OnClickListener {
     private static final String TAG = TabLayoutHome.class.getSimpleName();
 
-    private static final int MAX_STEP = 3;
-
     private Context mContext;
+
+    //하단 cardView 의 아래 dots 사용을위해
+    private static final int MAX_STEP = 3;
 
     private ViewPager mainFunctionViewPager;
     private MyViewPagerAdapter myViewPagerAdapter;
@@ -71,6 +77,11 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
 
         mContext = container.getContext();
 
+        tvMainHomeFunctionFirstTitle = (TextView) root.findViewById(R.id.tv_main_home_function_first_title);
+        tvMainHomeFunctionSecondTitle = (TextView) root.findViewById(R.id.tv_main_home_function_second_title);
+        tvMainHomeFunctionThirdTitle = (TextView) root.findViewById(R.id.tv_main_home_function_third_title);
+
+        //하단 카드뷰 부분
         //TODO 프래그먼트는 구지다..
         about_title_array[0] = mContext.getString(R.string.main_home_function_tab_first);
         about_title_array[1] = mContext.getString(R.string.main_home_function_tab_second);
@@ -86,10 +97,6 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
         myViewPagerAdapter = new MyViewPagerAdapter();
         mainFunctionViewPager.setAdapter(myViewPagerAdapter);
         mainFunctionViewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-
-        tvMainHomeFunctionFirstTitle = (TextView) root.findViewById(R.id.tv_main_home_function_first_title);
-        tvMainHomeFunctionSecondTitle = (TextView) root.findViewById(R.id.tv_main_home_function_second_title);
-        tvMainHomeFunctionThirdTitle = (TextView) root.findViewById(R.id.tv_main_home_function_third_title);
 
         Log.d(TAG, "mainFunctionViewPager - position : " + mainFunctionViewPager.getCurrentItem());
         MAIN_FUNCTION_POSITION = mainFunctionViewPager.getCurrentItem();
@@ -114,7 +121,6 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
                 break;
         }
 
-
         tvMainHomeFunctionFirstTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,7 +142,6 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
             }
         });
 
-
         etMainHomeCbtInput = (EditText) root.findViewById(R.id.et_main_home_cbt_input);
         etMainHomeCbtInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -157,6 +162,8 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
 
             }
         });
+
+
 
         return root;
     }
@@ -192,8 +199,6 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
         if (dots.length > 0) {
             dots[current_index].setImageResource(R.drawable.shape_circle);
             dots[current_index].setColorFilter(getResources().getColor(R.color.color_4263ff), PorterDuff.Mode.SRC_IN);
-
-
         }
     }
 
@@ -254,7 +259,7 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
         }
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(ViewGroup container, final int position) {
             layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View view = layoutInflater.inflate(R.layout.item_tab_home_cardview, container, false);
@@ -262,28 +267,24 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
             ((TextView) view.findViewById(R.id.tv_cardview_description)).setText(about_description_array[position]);
             ((ImageView) view.findViewById(R.id.ig_cardview_img)).setImageResource(bg_images_array[position]);
 
-//            btnNext = (Button) view.findViewById(R.id.btn_next);
-//
-//            if (position == about_title_array.length - 1) {
-//                btnNext.setText("Get Started");
-//            } else {
-//                btnNext.setText("Next");
-//            }
-//
-//
-//            btnNext.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int current = viewPager.getCurrentItem() + 1;
-//                    if (current < MAX_STEP) {
-//                        // move to next screen
-//                        viewPager.setCurrentItem(current);
-//                    } else {
-//                        getActivity().finish();
-//                    }
-//                }
-//            });
+            ((ImageView) view.findViewById(R.id.ig_cardview_img)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d(TAG, "MyViewPagerAdapter - onClick position : " + position);
 
+                    switch (position) {
+                        case 0 :
+                            ((MainActivity)getActivity()).setPagerFragment(1);
+                            break;
+                        case 1:
+                            ((MainActivity)getActivity()).setPagerFragment(2);
+                            break;
+                        case 2:
+                            ((MainActivity)getActivity()).setPagerFragment(3);
+                            break;
+                    }
+                }
+            });
 
             container.addView(view);
             return view;

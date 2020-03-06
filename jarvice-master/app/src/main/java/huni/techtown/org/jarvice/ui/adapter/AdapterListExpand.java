@@ -6,13 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import huni.techtown.org.jarvice.R;
@@ -20,6 +18,12 @@ import huni.techtown.org.jarvice.common.data.DailySalesList;
 import huni.techtown.org.jarvice.ui.utils.Tools;
 import huni.techtown.org.jarvice.ui.utils.ViewAnimation;
 
+
+/**
+ * 원 그래프 하단 아이템 상세목록 펼치기
+ *
+ *
+* */
 public class AdapterListExpand extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = AdapterListExpand.class.getSimpleName();
 

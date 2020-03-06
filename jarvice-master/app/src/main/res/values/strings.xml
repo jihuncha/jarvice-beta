@@ -60,4 +60,11 @@
     <string name="main_deadline_pie_graph_sell_real">총 매출</string>
     <string name="main_deadline_pie_graph_detail_empty">매출 내역이 없습니다.</string>
 
+    <string name="main_deadline_visit_graph_title">시간대 별 방문수</string>
+    <string name="main_deadline_visit_graph_lunch">점심</string>
+    <string name="main_deadline_visit_graph_dinner">저녁</string>
+    <string name="main_deadline_visit_labels">방문자 수</string>
+    <string name="main_deadline_visit_yaxis">방문수</string>
+    <string name="main_deadline_visit_xaxis">시간</string>
+
 </resources>

@@ -6,6 +6,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
@@ -34,7 +35,12 @@ import huni.techtown.org.jarvice.ui.Fragment.TabLayoutDeadline;
 import huni.techtown.org.jarvice.ui.Fragment.TabLayoutHelper;
 import huni.techtown.org.jarvice.ui.Fragment.TabLayoutHome;
 
-
+/**
+ * MainActivity
+ * Tab layout 클릭시 각 Fragment view 로 이동
+ *
+ *
+* */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -94,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initToolbar() {
+        Log.d(TAG, "initToolbar");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.main_app_name);
@@ -105,11 +112,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initComponent() {
+        Log.d(TAG, "initComponent");
         view_pager = (ViewPager) findViewById(R.id.view_pager);
         setupViewPager(view_pager);
+        //main tab 화면은 전체다 그려놓기 -> view 색깔 바뀌는 이슈 존재하여 수정
+        view_pager.setOffscreenPageLimit(2);
 
         main_tab_layout = (TabLayout) findViewById(R.id.main_tab_layout);
         main_tab_layout.setupWithViewPager(view_pager);
+
+        //page 전환 listner
+        view_pager.addOnPageChangeListener(viewPagerPageChangeListener);
     }
 
     //TODO toobar 타이틀만 onclick 하는 방법이 없어서 view 로 페이크
@@ -127,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void setupViewPager(ViewPager viewPager) {
+        Log.d(TAG, "setupViewPager");
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(TabLayoutHome.newInstance(), getString(R.string.main_tab_home));
         adapter.addFragment(TabLayoutDeadline.newInstance(), getString(R.string.main_tab_deadline));
@@ -170,16 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.test2 :
-//                List<SalesObject> list = tblMySales.getList();
-//                if (list != null) {
-//                    for (SalesObject check : list) {
-//                        Log.d(TAG, "company: " + check.toString());
-//
-//
-//                    }
-//                }
-//                break;
+
         }
     }
 
@@ -199,6 +204,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    //tab 바뀌는 것 확인..
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(final int position) {
+            Log.d(TAG, "onPageSelected : " + position);
+
+            switch (position) {
+                case 0 :
+                    break;
+                    
+                case 1:
+                    break;
+
+                case 2:
+                    break;
+
+                case 3:
+                    break;
+            }
+
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
+
+    public void setPagerFragment(int input) {
+        Log.d(TAG, "setPagerFragment - input : " + input);
+        view_pager.setCurrentItem(input);
     }
 
 }

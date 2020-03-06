@@ -24,6 +24,7 @@ import com.github.mikephil.charting.charts.BarLineChartBase;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.LegendEntry;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -34,14 +35,12 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Stream;
 
 import huni.techtown.org.jarvice.R;
-import huni.techtown.org.jarvice.common.CurrentManager;
 import huni.techtown.org.jarvice.common.DatabaseManager;
 import huni.techtown.org.jarvice.common.data.DailySalesList;
 import huni.techtown.org.jarvice.common.data.DailySalesListItems;
@@ -52,6 +51,14 @@ import huni.techtown.org.jarvice.ui.adapter.AdapterPieChartList;
 import huni.techtown.org.jarvice.ui.utils.DateUtils;
 import huni.techtown.org.jarvice.ui.utils.Tools;
 
+/**
+ * 마감내역
+ * 가장 중요한화면
+ * 당일 매출/주간 매출/월간 매출
+ * 판매량 상세 데이터
+ * 방문자 수
+ * 오늘의 메뉴(?)
+* */
 public class TabLayoutDeadline extends Fragment implements View.OnClickListener {
     private static final String TAG = TabLayoutDeadline.class.getSimpleName();
 
@@ -62,6 +69,14 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
     private TextView tv_main_deadline_company_title;
     private TextView tv_main_deadline_company_date;
 
+    //daily/weekly/monthly 데이터가 몇개 있는지 체크
+    private int checkDaily;
+    private int checkWeekly;
+    private int checkMonthly;
+
+    private String weeklyId;
+    private String monthlyId;
+
     //막대 그래프
     private BarChart barChart;
 
@@ -69,21 +84,29 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
     private DeadlineViewpagerAdapter deadlineViewpagerAdapter;
 
     // 일/주/월 로 나누기
-    private int barChartPosition;
     private TextView tv_main_deadline_barchart_day;
     private TextView tv_main_deadline_barchart_week;
     private TextView tv_main_deadline_barchart_month;
 
     //막대 데이터
-    private ArrayList<BarEntry> barEntryData;
+    private ArrayList<BarEntry> barEntryDaily;
+    private ArrayList<BarEntry> barEntryWeekly;
+    private ArrayList<BarEntry> barEntryMonthly;
     //막대 데이터 라벨
-    private ArrayList<String> barEntryLabels ;
+    private ArrayList<String> barEntryDailyLabels;
+    private ArrayList<String> barEntryWeeklyLabels;
+    private ArrayList<String> barEntryMonthlyLabels;
+
+    //막대 데이터 - 매출
     private BarDataSet barDataSet;
     private BarData barData;
 
     //원 그래프
     private PieChart pieChart;
     private DailySalesObject pieChartData;
+
+    private String getLastDataDate;
+    private String getDayOfWeek;
 
     //총매출액
     private TextView tvSellRealResult;
@@ -101,6 +124,24 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
     private  List<SalesObject> lastRawData;
     private  HashMap<String, List<DailySalesListItems>> lastRawDataHash;
 
+    //방문 차트
+    private ViewPager visitBarChart;
+    private VisitViewpagerAdapter visitViewpagerAdapter;
+
+    private ArrayList<BarEntry> barEntryDinner;
+    private ArrayList<String> barEntryDinnerLabels;
+    private ArrayList<BarEntry> barEntryLunch;
+    private ArrayList<String> barEntryLunchLabels;
+
+    //막대 데이터 - 방문자수
+    private BarChart visitChart;
+    private BarDataSet barDataVisitSet;
+    private BarData barDataVisit;
+
+    // 점심/저녁 으로 나누기
+    private TextView tv_main_deadline_barchart_lunch;
+    private TextView tv_main_deadline_barchart_dinner;
+
     public TabLayoutDeadline() {
     }
 
@@ -111,36 +152,70 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.tab_main_deadline, container, false);
         Log.d(TAG, "onCreateView");
+        final View root = inflater.inflate(R.layout.tab_main_deadline, container, false);
 
         mContext = container.getContext();
         mHandler = new Handler();
 
-        //데이터가져오기..!!
+        //날자 선정 -> 0 번쨰가 가장 최근
+        Log.d(TAG, "getLastData - All :  " + DatabaseManager.getInstance(mContext).getLastData());
+
         pieChartData = DatabaseManager.getInstance(mContext).getLastData().get(0);
+        Log.d(TAG, "pieChartData - date : " + pieChartData.getSellDate());
+
+        checkDaily = DatabaseManager.getInstance(mContext).getLastData().size();
 
         tv_main_deadline_company_title = root.findViewById(R.id.tv_main_deadline_company_title);
         tv_main_deadline_company_date = root.findViewById(R.id.tv_main_deadline_company_date);
 
-        Log.d(TAG, "Test : " + Tools.getDayOfWeek(pieChartData.getSellDate()));
+        if (pieChartData != null) {
+            getLastDataDate = pieChartData.getSellDate().replace("-" , ".");
+            getDayOfWeek = Tools.getDayOfWeek(pieChartData.getSellDate());
 
-        String getLastDataDate = pieChartData.getSellDate().replace("-" , ".");
-        String getDayOfWeek = Tools.getDayOfWeek(pieChartData.getSellDate());
+        } else {
+            getLastDataDate = "알수없음";
+            getDayOfWeek = "앒수없음";
+        }
+
+        //타이틀 생성
         tv_main_deadline_company_date.setText(getLastDataDate + " "
                 + getDayOfWeek + " " + mContext.getResources().getString(R.string.main_deadline_title_date));
 
-        //Bar Chart
-        String dateString = CurrentManager.getInstance(mContext).toFormatString(System.currentTimeMillis(), "yyyy-MM-dd");
-        Log.d(TAG, "test22 : " + dateString);
-        Log.d(TAG, "test : " + DatabaseManager.getInstance(mContext).getDailCheck("2019-10-20"));
+        //월간 데이터 탐색
+        String[] checkDataFromDate = pieChartData.getSellDate().split("-");
+        monthlyId = "" +  DatabaseManager.getInstance(mContext).getMonthlyLastDataCheck(checkDataFromDate[0] , checkDataFromDate[1]).get(0).getId();
+        if (monthlyId != null && monthlyId != "") {
+            checkMonthly = DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).size();
+        }
 
-        barEntryData = new ArrayList<>();
-        barEntryLabels = new ArrayList<String>();
+        //주간 데이터 탐색
+        String WeekCheck = pieChartData.getSellWeek();
+        String year = checkDataFromDate[0];
 
-        AddValuesToBARENTRY();
-        AddValuesToBarEntryLabels();
+        weeklyId = "" +  DatabaseManager.getInstance(mContext).getWeeklyLastDataCheck(year, WeekCheck).get(0).getId();
+        if (weeklyId != null && weeklyId != "") {
+            checkWeekly = DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).size();
+        }
 
+        //객체 생성
+        barEntryDaily = new ArrayList<>();
+        barEntryWeekly = new ArrayList<>();
+        barEntryMonthly = new ArrayList<>();
+        barEntryDailyLabels = new ArrayList<String>();
+        barEntryWeeklyLabels = new ArrayList<String>();
+        barEntryMonthlyLabels = new ArrayList<String >();
+
+        barEntryDinner = new ArrayList<>();
+        barEntryDinnerLabels = new ArrayList<String>();
+        barEntryLunch = new ArrayList<>();
+        barEntryLunchLabels = new ArrayList<String>();
+
+        //bar chart 데이터들 삽입
+        addValuesForBarChart();
+        addValuesForBarChartVisit();
+
+        //막대 그래프 (매출 그래프)
         deadlineSalesBarChart = (ViewPager) root.findViewById(R.id.deadline_sales_bar_chart);
         deadlineViewpagerAdapter = new DeadlineViewpagerAdapter();
         deadlineSalesBarChart.setAdapter(deadlineViewpagerAdapter);
@@ -150,7 +225,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         deadlineSalesBarChart.setOffscreenPageLimit(2);
 
         //일/주/월
-        barChartPosition = 0;
         tv_main_deadline_barchart_day = root.findViewById(R.id.tv_main_deadline_barchart_day);
         tv_main_deadline_barchart_week = root.findViewById(R.id.tv_main_deadline_barchart_week);
         tv_main_deadline_barchart_month = root.findViewById(R.id.tv_main_deadline_barchart_month);
@@ -160,16 +234,13 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         tv_main_deadline_barchart_month.setOnClickListener(this);
 
         //Pie Chart
-        Log.e(TAG, "testsd : " + DatabaseManager.getInstance(mContext).getLastData());
-
         pieChart = (PieChart) root.findViewById(R.id.piechart);
 
         lastRawData = new ArrayList<>();
 
-        Log.e(TAG, " test 3434 : " + DatabaseManager.getInstance(mContext).getDateSalesObject(pieChartData.getSellDate(),"MainActivity - onCreate"));
-
         //해당 날짜에 있는 rawdata 목록.
-        lastRawData.addAll(DatabaseManager.getInstance(mContext).getDateSalesObject(pieChartData.getSellDate(),"MainActivity - onCreate"));
+        Log.d(TAG, "rawData : " + DatabaseManager.getInstance(mContext).getDateSalesObject(pieChartData.getSellDate(),TAG + "- onCreateView"));
+        lastRawData.addAll(DatabaseManager.getInstance(mContext).getDateSalesObject(pieChartData.getSellDate(),TAG + "- onCreateView"));
 
         //해당 raw 데이터들을 카테고리별로 나눈다.
         lastRawDataHash = new HashMap<>();
@@ -185,9 +256,8 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         //원 그래프 하단 판매 항목 객체 생성
         initSellList();
+        Log.d(TAG, "insertListOfSellsData all - " + insertListOfSellsData);
 
-
-        Log.e(TAG, "result all = " + insertListOfSellsData);
         //총매출 text 지정
         tvSellRealResult = (TextView) root.findViewById(R.id.tv_sell_real_result);
         tvSellRealResult.setText(Tools.decimalFormat(pieChartData.getSellReal()));
@@ -202,7 +272,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         mAdapterPieChartList.setOnItemClickListener(new AdapterPieChartList.OnItemClickListener() {
             @Override
             public void onItemClick(View view, DailySalesList obj, int position) {
-                Log.d(TAG, "Test656 : " + position);
+                Log.d(TAG, "mAdapterPieChartList - onItemClick : " + position);
             }
         });
         rvSellListColor.setAdapter(mAdapterPieChartList);
@@ -217,10 +287,22 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         mAdapterListExpand.setOnItemClickListener(new AdapterListExpand.OnItemClickListener() {
             @Override
             public void onItemClick(View view, DailySalesList obj, int position) {
-                Log.d(TAG, "Test656 : " + position);
+                Log.d(TAG, "mAdapterListExpand - onItemClick : " + position);
             }
         });
         rvSellListDetail.setAdapter(mAdapterListExpand);
+
+        //방문 차트
+        visitBarChart = (ViewPager) root.findViewById(R.id.visit_bar_chart);
+        visitViewpagerAdapter = new VisitViewpagerAdapter();
+        visitBarChart.setAdapter(visitViewpagerAdapter);
+        visitBarChart.addOnPageChangeListener(bottomViewPagerPageChangeListener);
+
+        tv_main_deadline_barchart_lunch = root.findViewById(R.id.tv_main_deadline_barchart_lunch);
+        tv_main_deadline_barchart_dinner = root.findViewById(R.id.tv_main_deadline_barchart_dinner);
+
+        tv_main_deadline_barchart_lunch.setOnClickListener(this);
+        tv_main_deadline_barchart_dinner.setOnClickListener(this);
 
         return root;
     }
@@ -230,83 +312,200 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void initBarChart() {
-        Log.d(TAG, "initBarChart");
+    public void addValuesForBarChart() {
+        Log.d(TAG, "addValuesForBarChart");
+        //일간
+        switch (checkDaily) {
+            case 3 :
+                barEntryDaily.add(new BarEntry(1, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getLastData().get(2).getSellReal()))));
+                barEntryDaily.add(new BarEntry(2, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getLastData().get(1).getSellReal()))));
+                barEntryDaily.add(new BarEntry(3, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getLastData().get(0).getSellReal()))));
 
-        barDataSet = new BarDataSet(barEntryData, null);
-        barData = new BarData(barDataSet);
+                barEntryDailyLabels.add(Tools.changeForBarChart(DatabaseManager.getInstance(mContext).getLastData().get(2).getSellDate()) +
+                        DatabaseManager.getInstance(mContext).getLastData().get(2).getSellDayOfWeek());
+                barEntryDailyLabels.add(Tools.changeForBarChart(DatabaseManager.getInstance(mContext).getLastData().get(1).getSellDate()) +
+                        DatabaseManager.getInstance(mContext).getLastData().get(1).getSellDayOfWeek());
+                barEntryDailyLabels.add(Tools.changeForBarChart(DatabaseManager.getInstance(mContext).getLastData().get(0).getSellDate()) +
+                        DatabaseManager.getInstance(mContext).getLastData().get(0).getSellDayOfWeek());
 
-        //막대 그래프의 너비
-        barData.setBarWidth(0.3f);
+                break;
 
-        //막대 그래프의 색을 지정해준다.
-        barDataSet.setColors(getResources().getColor(R.color.color_e6e9f7));
-        //막대 그래프 상단 수치text 크기
-        barDataSet.setValueTextSize(13);
+            case 2 :
+                barEntryDaily.add(new BarEntry(1, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getLastData().get(1).getSellReal()))));
+                barEntryDaily.add(new BarEntry(2, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getLastData().get(0).getSellReal()))));
 
-        barChart.animateY(3000);
-        barChart.setExtraBottomOffset(24.5f);
+                barEntryDailyLabels.add(Tools.changeForBarChart(DatabaseManager.getInstance(mContext).getLastData().get(1).getSellDate()) +
+                        DatabaseManager.getInstance(mContext).getLastData().get(1).getSellDayOfWeek());
+                barEntryDailyLabels.add(Tools.changeForBarChart(DatabaseManager.getInstance(mContext).getLastData().get(0).getSellDate()) +
+                        DatabaseManager.getInstance(mContext).getLastData().get(0).getSellDayOfWeek());
 
-        //x축 설정
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setTextSize(14);
-        xAxis.setYOffset(9.5f);
-        xAxis.setTextColor(getResources().getColor(R.color.color_909090));
-        xAxis.setDrawAxisLine(true);
-        xAxis.setDrawGridLines(false);
-        xAxis.setLabelCount(3);
+                break;
+            case 1 :
+                barEntryDaily.add(new BarEntry(1, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getLastData().get(0).getSellReal()))));
+                barEntryDaily.add(new BarEntry(2, 0));
 
-        //Y축 설정 (왼쪽 / 오른쪽)
-        YAxis YLAxis = barChart.getAxisLeft();
-        YAxis YRAXis = barChart.getAxisRight();
+                barEntryDailyLabels.add(Tools.changeForBarChart(DatabaseManager.getInstance(mContext).getLastData().get(0).getSellDate()) +
+                        DatabaseManager.getInstance(mContext).getLastData().get(0).getSellDayOfWeek());
+                barEntryDailyLabels.add("데이터없음");
 
-        //비활성화
-        YLAxis.setDrawLabels(false);
-        YLAxis.setDrawAxisLine(false);
-        //gridline 은 옆에 선
-        YLAxis.setDrawGridLines(true);
+                break;
+        }
 
-        //비활성화
-        YRAXis.setDrawLabels(false);
-        YRAXis.setDrawAxisLine(false);
-        YRAXis.setDrawGridLines(false);
+        //주간
+        switch (checkWeekly) {
+            case 3 :
+                barEntryWeekly.add(new BarEntry(1, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(2).getSellReal()))));
+                barEntryWeekly.add(new BarEntry(2, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(1).getSellReal()))));
+                barEntryWeekly.add(new BarEntry(3, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(0).getSellReal()))));
 
-        // 라벨 커스텀을 위함...(x축 라벨)
-        xAxis.setValueFormatter(new MyCustomFormatter(barChart));
+                barEntryWeeklyLabels.add(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(2).getStartWeek() + " ~ "
+                                            + DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(2).getEndWeek());
+                barEntryWeeklyLabels.add(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(1).getStartWeek() + " ~ "
+                        + DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(1).getEndWeek());
+                barEntryWeeklyLabels.add(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(0).getStartWeek() + " ~ "
+                        + DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(0).getEndWeek());
 
-        // 각종 이벤트 방지.
-        barChart.setTouchEnabled(false);
-        barChart.setDragEnabled(false);
-        barChart.setScaleEnabled(false);
-        barChart.setPinchZoom(false);
-        barChart.setDoubleTapToZoomEnabled(false);
+                break;
 
-        //하단 차트 정보 (막대 색갈별 정보) 안보이게 조정
-        Legend legend = barChart.getLegend();
-        legend.setEnabled(false);
+            case 2 :
+                barEntryWeekly.add(new BarEntry(1, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(1).getSellReal()))));
+                barEntryWeekly.add(new BarEntry(2, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(0).getSellReal()))));
 
-        //하단 상세 설명(?) 안보이게 설정
-        barChart.getDescription().setEnabled(false);
+                barEntryWeeklyLabels.add(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(1).getStartWeek() + " ~ "
+                        + DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(1).getEndWeek());
+                barEntryWeeklyLabels.add(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(0).getStartWeek() + " ~ "
+                        + DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(0).getEndWeek());
 
-        barChart.setData(barData);
-        barChart.notifyDataSetChanged();
-        barChart.invalidate();
+                break;
+            case 1 :
+                barEntryWeekly.add(new BarEntry(1, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(0).getSellReal()))));
+                barEntryWeekly.add(new BarEntry(2, 0));
+
+                barEntryWeeklyLabels.add(DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(0).getStartWeek() + " ~ "
+                        + DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(0).getEndWeek());
+                barEntryWeeklyLabels.add("데이터없음");
+
+                break;
+        }
+
+        //월간
+        switch (checkMonthly) {
+            case 3 :
+                barEntryMonthly.add(new BarEntry(1, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(2).getSellReal()))));
+                barEntryMonthly.add(new BarEntry(2, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(1).getSellReal()))));
+                barEntryMonthly.add(new BarEntry(3, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(0).getSellReal()))));
+
+                barEntryMonthlyLabels.add(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(2).getSellMonth() + "월");
+                barEntryMonthlyLabels.add(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(1).getSellMonth() + "월");
+                barEntryMonthlyLabels.add(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(0).getSellMonth() + "월");
+
+                break;
+
+            case 2 :
+                barEntryMonthly.add(new BarEntry(1, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(1).getSellReal()))));
+                barEntryMonthly.add(new BarEntry(2, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(0).getSellReal()))));
+
+                barEntryMonthlyLabels.add(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(1).getSellMonth() + "월");
+                barEntryMonthlyLabels.add(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(0).getSellMonth() + "월");
+
+                break;
+            case 1 :
+                barEntryMonthly.add(new BarEntry(1, Float.parseFloat(Tools.deleteComma(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(0).getSellReal()))));
+                barEntryMonthly.add(new BarEntry(2, 0));
+
+                barEntryMonthlyLabels.add(DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).get(0).getSellMonth() + "월");
+                barEntryMonthlyLabels.add("데이터없음");
+
+                break;
+        }
+
     }
 
-    public void AddValuesToBARENTRY(){
+    public void addValuesForBarChartVisit() {
+        Log.d(TAG, "addValuesForBarChartVisit");
 
-        barEntryData.add(new BarEntry(1, 872000));
-        barEntryData.add(new BarEntry(2, 1057000));
-        barEntryData.add(new BarEntry(3, 716000));
+        //TODO 추후 구현...
+        //점심
+        barEntryLunch.add(new BarEntry(1, 0));
+        barEntryLunch.add(new BarEntry(2, 0));
+        barEntryLunch.add(new BarEntry(3, 0));
+        barEntryLunch.add(new BarEntry(4, 0));
+        barEntryLunch.add(new BarEntry(5, 0));
+        barEntryLunch.add(new BarEntry(6, 0));
+        barEntryLunch.add(new BarEntry(7, 0));
+        barEntryLunchLabels.add("10");
+        barEntryLunchLabels.add("11");
+        barEntryLunchLabels.add("12");
+        barEntryLunchLabels.add("13");
+        barEntryLunchLabels.add("14");
+        barEntryLunchLabels.add("15");
+        barEntryLunchLabels.add("16");
 
-    }
+        //저녁
+        if (pieChartData.getDinnerVisitFive() == null || pieChartData.getDinnerVisitFive().isEmpty()) {
+            barEntryDinner.add(new BarEntry(1, 0));
+        } else {
+            barEntryDinner.add(new BarEntry(1, Float.parseFloat(pieChartData.getDinnerVisitFive())));
+        }
+        barEntryDinnerLabels.add("5");
 
-    public void AddValuesToBarEntryLabels(){
+        if (pieChartData.getDinnerVisitSix() == null || pieChartData.getDinnerVisitSix().isEmpty()) {
+            barEntryDinner.add(new BarEntry(2, 0));
+        } else {
+            barEntryDinner.add(new BarEntry(2, Float.parseFloat(pieChartData.getDinnerVisitSix())));
+        }
+        barEntryDinnerLabels.add("6");
 
-        barEntryLabels.add("04.10 수");
-        barEntryLabels.add("04.11 목");
-        barEntryLabels.add("04.12 금");
+        if (pieChartData.getDinnerVisitSeven() == null || pieChartData.getDinnerVisitSeven().isEmpty()) {
+            barEntryDinner.add(new BarEntry(3, 0));
+        } else {
+            barEntryDinner.add(new BarEntry(3, Float.parseFloat(pieChartData.getDinnerVisitSeven())));
+        }
+        barEntryDinnerLabels.add("7");
+
+        if (pieChartData.getDinnerVisitEight() == null || pieChartData.getDinnerVisitEight().isEmpty()) {
+            barEntryDinner.add(new BarEntry(4, 0));
+        } else {
+            barEntryDinner.add(new BarEntry(4, Float.parseFloat(pieChartData.getDinnerVisitEight())));
+        }
+        barEntryDinnerLabels.add("8");
+
+        if (pieChartData.getDinnerVisitNine() == null || pieChartData.getDinnerVisitNine().isEmpty()) {
+            barEntryDinner.add(new BarEntry(5, 0));
+        } else {
+            barEntryDinner.add(new BarEntry(5, Float.parseFloat(pieChartData.getDinnerVisitNine())));
+        }
+        barEntryDinnerLabels.add("9");
+
+        if (pieChartData.getDinnerVisitTen() == null || pieChartData.getDinnerVisitTen().isEmpty()) {
+            barEntryDinner.add(new BarEntry(6, 0));
+        } else {
+            barEntryDinner.add(new BarEntry(6, Float.parseFloat(pieChartData.getDinnerVisitTen())));
+        }
+        barEntryDinnerLabels.add("10");
+
+        if (pieChartData.getDinnerVisitEleven() == null || pieChartData.getDinnerVisitEleven().isEmpty()) {
+            barEntryDinner.add(new BarEntry(7, 0));
+        } else {
+            barEntryDinner.add(new BarEntry(7, Float.parseFloat(pieChartData.getDinnerVisitEleven())));
+        }
+        barEntryDinnerLabels.add("11");
+
+        if (pieChartData.getDinnerVisitTwelve() == null || pieChartData.getDinnerVisitTwelve().isEmpty()) {
+            barEntryDinner.add(new BarEntry(8, 0));
+        } else {
+            barEntryDinner.add(new BarEntry(8, Float.parseFloat(pieChartData.getDinnerVisitTwelve())));
+        }
+        barEntryDinnerLabels.add("12");
+
+        if (pieChartData.getDinnerVisitOne() == null || pieChartData.getDinnerVisitOne().isEmpty()) {
+            barEntryDinner.add(new BarEntry(9, 0));
+        } else {
+            barEntryDinner.add(new BarEntry(9, Float.parseFloat(pieChartData.getDinnerVisitOne())));
+        }
+        barEntryDinnerLabels.add("1");
+
+        Log.d(TAG, "addValuesForBarChartVisit - barEntryDinner : " + barEntryDinner.toString());
 
     }
 
@@ -348,28 +547,154 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
                 deadlineSalesBarChart.setCurrentItem(2);
 
                 break;
+
+            case R.id.tv_main_deadline_barchart_lunch :
+                tv_main_deadline_barchart_lunch.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                tv_main_deadline_barchart_lunch.setTypeface(Typeface.DEFAULT_BOLD);
+
+                tv_main_deadline_barchart_dinner.setBackground(null);
+                tv_main_deadline_barchart_dinner.setTypeface(Typeface.DEFAULT);
+
+                visitBarChart.setCurrentItem(0);
+                break;
+
+            case R.id.tv_main_deadline_barchart_dinner :
+                tv_main_deadline_barchart_dinner.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                tv_main_deadline_barchart_dinner.setTypeface(Typeface.DEFAULT_BOLD);
+
+                tv_main_deadline_barchart_lunch.setBackground(null);
+                tv_main_deadline_barchart_lunch.setTypeface(Typeface.DEFAULT);
+
+                visitBarChart.setCurrentItem(1);
+                break;
         }
     }
 
+    public void initBarChart(int position, int size) {
+        Log.d(TAG, "initBarChart");
 
-    public class MyCustomFormatter extends ValueFormatter {
-        private final BarLineChartBase<?> chart;
-
-        public MyCustomFormatter(BarLineChartBase<?> chart) {
-            this.chart = chart;
+        switch (position) {
+            case 0 :
+                barDataSet = new BarDataSet(barEntryDaily, null);
+                barData = new BarData(barDataSet);
+                break;
+            case 1 :
+                barDataSet = new BarDataSet(barEntryWeekly, null);
+                barData = new BarData(barDataSet);
+                break;
+            case 2 :
+                barDataSet = new BarDataSet(barEntryMonthly, null);
+                barData = new BarData(barDataSet);
+                break;
         }
 
-        @Override
-        public String getFormattedValue(float value) {
-//            for (int i =0; i < barEntryData.size(); i++) {
-//                return "" + barEntryLabels.get(i);
-//            }
-//            return "" + barEntryLabels.get((int)value);
-            return barEntryLabels.get((int)value - 1);
+        //막대 그래프의 너비
+        barData.setBarWidth(0.3f);
+
+        //막대 그래프의 색을 지정해준다.
+        switch (size) {
+            case 3 :
+                barDataSet.setColors(getResources().getColor(R.color.color_e6e9f7),
+                        getResources().getColor(R.color.color_e6e9f7),
+                        getResources().getColor(R.color.color_4263ff));
+
+                List<Integer> colorList = new ArrayList<Integer>();
+
+                colorList.add(getResources().getColor(R.color.color_222222));
+                colorList.add(getResources().getColor(R.color.color_222222));
+                colorList.add(getResources().getColor(R.color.color_4263ff));
+                barDataSet.setValueTextColors(colorList);
+                break;
+            case 2 :
+                barDataSet.setColors(getResources().getColor(R.color.color_e6e9f7),
+                        getResources().getColor(R.color.color_4263ff));
+
+                List<Integer> colorListTwo = new ArrayList<Integer>();
+
+                colorListTwo.add(getResources().getColor(R.color.color_222222));
+                colorListTwo.add(getResources().getColor(R.color.color_4263ff));
+                barDataSet.setValueTextColors(colorListTwo);
+                break;
+            case 1 :
+                barDataSet.setColors(getResources().getColor(R.color.color_4263ff));
+
+                List<Integer> colorListOne = new ArrayList<Integer>();
+
+                colorListOne.add(getResources().getColor(R.color.color_4263ff));
+                barDataSet.setValueTextColors(colorListOne);
+                break;
+
         }
 
+        //막대 그래프 상단 수치text 크기
+        barDataSet.setValueTextSize(13);
+
+        barChart.animateY(3000);
+        barChart.setExtraBottomOffset(24.5f);
+
+        //x축 설정
+        XAxis xAxis = barChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(14);
+        xAxis.setYOffset(9.5f);
+        xAxis.setTextColor(getResources().getColor(R.color.color_909090));
+        xAxis.setDrawAxisLine(true);
+        xAxis.setDrawGridLines(false);
+        //x축 라벨 갯수
+        xAxis.setLabelCount(size);
+        if (size == 1) {
+            xAxis.setLabelCount(2);
+        }
+
+        Log.d(TAG, "check size : " + size + ", but why?" + xAxis.getLabelCount());
+
+
+        // 라벨 커스텀을 위함...(x축 라벨)
+        switch (position) {
+            case 0:
+                xAxis.setValueFormatter(new MyDailyFormatter(barChart));
+                break;
+            case 1:
+                xAxis.setValueFormatter(new MyWeeklyFormatter(barChart));
+                break;
+            case 2:
+                xAxis.setValueFormatter(new MyMonthlyFormatter(barChart));
+                break;
+        }
+
+        //Y축 설정 (왼쪽 / 오른쪽)
+        YAxis YLAxis = barChart.getAxisLeft();
+        YAxis YRAXis = barChart.getAxisRight();
+
+        //비활성화
+        YLAxis.setDrawLabels(false);
+        YLAxis.setDrawAxisLine(false);
+        //gridline 은 옆에 선
+        YLAxis.setDrawGridLines(true);
+
+        //비활성화
+        YRAXis.setDrawLabels(false);
+        YRAXis.setDrawAxisLine(false);
+        YRAXis.setDrawGridLines(false);
+
+        // 각종 이벤트 방지.
+        barChart.setTouchEnabled(false);
+        barChart.setDragEnabled(false);
+        barChart.setScaleEnabled(false);
+        barChart.setPinchZoom(false);
+        barChart.setDoubleTapToZoomEnabled(false);
+
+        //하단 차트 정보 (막대 색갈별 정보) 안보이게 조정
+        Legend legend = barChart.getLegend();
+        legend.setEnabled(false);
+
+        //하단 상세 설명(?) 안보이게 설정
+        barChart.getDescription().setEnabled(false);
+
+        barChart.setData(barData);
+        barChart.notifyDataSetChanged();
+        barChart.invalidate();
     }
-
 
     /**
      *
@@ -377,6 +702,8 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
      *
      * */
     public void initPieChart() {
+        Log.d(TAG, "initPieChart");
+
         if (pieChartData == null) {
             Log.e(TAG, "processPieData - data is null!!");
             return;
@@ -402,7 +729,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellLiquor()),getResources().getString(R.string.main_deadline_pie_graph_liquor)));
         yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellLunch()),getResources().getString(R.string.main_deadline_pie_graph_lunch)));
         yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellDelivery()),getResources().getString(R.string.main_deadline_pie_graph_delivery)));
-//        yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellDrink()),R.string.main_deadline_pie_graph_drink));
 
         Description description = new Description();
         description.setText(" "); //라벨
@@ -427,11 +753,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
                 getResources().getColor(R.color.light_blue_900)
         };
 
-//        Log.d(TAG, pieChart.)
-
-//        dataSet.setColors(R.color.color_ef6754, R.color.color_24609e,
-//                R.color.color_ffbe37, R.color.color_08b3a2, R.color.color_24609e);
-
         dataSet.setColors(color);
         pieChart.setDrawMarkers(false);
         pieChart.setDrawEntryLabels(false);
@@ -444,6 +765,217 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         data.setDrawValues(false);
 
         pieChart.setData(data);
+    }
+
+
+    //방문자 차트
+    public void initVisitChart(int position) {
+        Log.d(TAG, "initVisitChart");
+
+        Log.d(TAG, "check : " + barEntryDinner.toString());
+
+        switch (position) {
+            case 0 :
+                barDataVisitSet = new BarDataSet(barEntryLunch, getResources().getString(R.string.main_deadline_visit_labels));
+                barDataVisit = new BarData(barDataVisitSet);
+                break;
+            case 1 :
+                barDataVisitSet = new BarDataSet(barEntryDinner, getResources().getString(R.string.main_deadline_visit_labels));
+                barDataVisit = new BarData(barDataVisitSet);
+                break;
+        }
+
+        //막대 그래프의 너비
+        barDataVisit.setBarWidth(0.3f);
+
+        //막대 그래프의 색을 지정해준다.
+        barDataVisitSet.setColor(getResources().getColor(R.color.color_4263ff));
+
+        //막대 그래프 상단 수치text 크기
+        barDataVisitSet.setValueTextSize(11);
+        barDataVisitSet.setValueTextColor(getResources().getColor(R.color.color_222222));
+        //소수점 제거를 위한 데이터 포맷 설정
+        barDataVisitSet.setValueFormatter(new DeleteDecimal());
+
+        visitChart.animateY(3000);
+        visitChart.setExtraBottomOffset(24.5f);
+
+        //x축 설정
+        XAxis xAxis = visitChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(12);
+        xAxis.setYOffset(9.5f);
+        xAxis.setTextColor(getResources().getColor(R.color.color_909090));
+        xAxis.setDrawAxisLine(true);
+        xAxis.setDrawGridLines(false);
+
+        //x축 라벨 갯수
+        //라벨 커스텀을 위함...(x축 라벨)
+        switch (position) {
+            case 0:
+                xAxis.setLabelCount(barEntryLunchLabels.size());
+                xAxis.setValueFormatter(new MyLunchFormatter(visitChart));
+                break;
+            case 1:
+                xAxis.setLabelCount(barEntryDinnerLabels.size());
+                xAxis.setValueFormatter(new MyDinnerFormatter(visitChart));
+                break;
+        }
+
+        //Y축 설정 (왼쪽 / 오른쪽)
+        YAxis YLAxis = visitChart.getAxisLeft();
+        YAxis YRAXis = visitChart.getAxisRight();
+
+        //활성화
+        YLAxis.setDrawLabels(true);
+        YLAxis.setDrawAxisLine(false);
+        //gridline 은 옆에 선
+        YLAxis.setDrawGridLines(true);
+        YLAxis.setAxisMinimum(0);
+        YLAxis.setAxisMaximum(40);
+        YLAxis.setGranularity(10);
+        YLAxis.setTextColor(getResources().getColor(R.color.color_909090));
+        YLAxis.setTextSize(12);
+
+        //비활성화
+        YRAXis.setDrawLabels(false);
+        YRAXis.setDrawAxisLine(false);
+        YRAXis.setDrawGridLines(false);
+
+        // 각종 이벤트 방지.
+        visitChart.setTouchEnabled(false);
+        visitChart.setDragEnabled(false);
+        visitChart.setScaleEnabled(false);
+        visitChart.setPinchZoom(false);
+        visitChart.setDoubleTapToZoomEnabled(false);
+
+        //하단 차트 정보 (막대 색갈별 정보)
+        Legend legend = visitChart.getLegend();
+        legend.setEnabled(true);
+        legend.setFormSize(8);
+        legend.setForm(Legend.LegendForm.CIRCLE);
+        legend.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setTextSize(13);
+        legend.setTextColor(getResources().getColor(R.color.color_222222));
+
+        //하단 상세 설명(?) 안보이게 설정
+        visitChart.getDescription().setEnabled(false);
+
+        visitChart.setData(barDataVisit);
+        visitChart.notifyDataSetChanged();
+        visitChart.invalidate();
+    }
+
+    public class MyDailyFormatter extends ValueFormatter {
+        private final BarLineChartBase<?> chart;
+
+        public MyDailyFormatter(BarLineChartBase<?> chart) {
+            this.chart = chart;
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+            //라벨값으로..
+            //TODO value 가 왜 float인지..?
+            if ((int)value - 1 < 0) {
+                return barEntryWeeklyLabels.get(0);
+            } else {
+                return barEntryDailyLabels.get((int)value - 1);
+            }
+        }
+
+    }
+
+    public class MyWeeklyFormatter extends ValueFormatter {
+        private final BarLineChartBase<?> chart;
+
+        public MyWeeklyFormatter(BarLineChartBase<?> chart) {
+            this.chart = chart;
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+            if ((int)value - 1 < 0) {
+                return barEntryWeeklyLabels.get(0);
+            } else {
+                return barEntryWeeklyLabels.get((int)value - 1);
+            }
+        }
+    }
+
+    public class MyMonthlyFormatter extends ValueFormatter {
+        private final BarLineChartBase<?> chart;
+
+        public MyMonthlyFormatter(BarLineChartBase<?> chart) {
+            this.chart = chart;
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+//            Log.d(TAG, "getFormattedValue - " + value);
+
+            if ((int)value - 1 < 0) {
+                return barEntryMonthlyLabels.get(0);
+            } else {
+                return barEntryMonthlyLabels.get((int)value - 1);
+            }
+
+        }
+    }
+
+    public class MyLunchFormatter extends ValueFormatter {
+        private final BarLineChartBase<?> chart;
+
+        public MyLunchFormatter(BarLineChartBase<?> chart) {
+            this.chart = chart;
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+//            Log.d(TAG, "getFormattedValue - " + value);
+
+            if ((int)value - 1 < 0) {
+                return barEntryLunchLabels.get(0);
+            } else {
+                return barEntryLunchLabels.get((int)value - 1);
+            }
+
+        }
+    }
+
+    public class MyDinnerFormatter extends ValueFormatter {
+        private final BarLineChartBase<?> chart;
+
+        public MyDinnerFormatter(BarLineChartBase<?> chart) {
+            this.chart = chart;
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+
+            if ((int)value - 1 < 0) {
+                return barEntryDinnerLabels.get(0);
+            } else {
+                return barEntryDinnerLabels.get((int)value - 1);
+            }
+
+        }
+    }
+
+    //소수점 제거를 위함
+    public class DeleteDecimal extends ValueFormatter {
+        private DecimalFormat mFormat;
+
+        public DeleteDecimal() {
+            mFormat = new DecimalFormat("#");
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+            return mFormat.format(value);
+
+        }
     }
 
     /**
@@ -465,7 +997,19 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
             barChart = (BarChart) view.findViewById(R.id.chart1);
 
-            initBarChart();
+            //position에 따라 그리는 값을 달리한다.
+            //size에 따라 비춰지는 x.y축을 달리한다.
+            switch (position) {
+                case 0 :
+                    initBarChart(position, checkDaily);
+                    break;
+                case 1 :
+                    initBarChart(position, checkWeekly);
+                    break;
+                case 2 :
+                    initBarChart(position, checkMonthly);
+                    break;
+            }
 
             container.addView(view);
 
@@ -534,6 +1078,102 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
                     tv_main_deadline_barchart_day.setTypeface(Typeface.DEFAULT);
                     tv_main_deadline_barchart_week.setTypeface(Typeface.DEFAULT);
                     break;
+            }
+
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
+
+    /**
+     * 방문자 차트 영역
+     * View pager adapter
+     */
+    public class VisitViewpagerAdapter extends PagerAdapter {
+        private LayoutInflater layoutInflater;
+
+        public VisitViewpagerAdapter() {
+        }
+
+        @Override
+        public Object instantiateItem(final ViewGroup container, int position) {
+            Log.d(TAG, "instantiateItem : position - " + position);
+            layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            final View view = layoutInflater.inflate(R.layout.item_visit_bar_chart, container, false);
+
+            visitChart = (BarChart) view.findViewById(R.id.visit_chart);
+
+            //position에 따라 그리는 값을 달리한다.
+            switch (position) {
+                case 0 :
+                    initVisitChart(position);
+                    break;
+                case 1 :
+                    initVisitChart(position);
+                    break;
+            }
+
+            container.addView(view);
+
+            return view;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object obj) {
+            return view == obj;
+        }
+
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            View view = (View) object;
+            container.removeView(view);
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return super.getItemPosition(object);
+        }
+
+    }
+
+    //  visitviewpager change listener
+    ViewPager.OnPageChangeListener bottomViewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(final int position) {
+            switch (position) {
+                case 0 :
+                    tv_main_deadline_barchart_lunch.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                    tv_main_deadline_barchart_lunch.setTypeface(Typeface.DEFAULT_BOLD);
+
+                    tv_main_deadline_barchart_dinner.setBackground(null);
+                    tv_main_deadline_barchart_dinner.setTypeface(Typeface.DEFAULT);
+
+                    break;
+
+                case 1:
+                    tv_main_deadline_barchart_dinner.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                    tv_main_deadline_barchart_dinner.setTypeface(Typeface.DEFAULT_BOLD);
+
+                    tv_main_deadline_barchart_lunch.setBackground(null);
+                    tv_main_deadline_barchart_lunch.setTypeface(Typeface.DEFAULT);
+                    break;
+
             }
 
         }
@@ -723,12 +1363,14 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
     *
     * */
     public List<DailySalesListItems> makeListItems(List<SalesObject> inputList) {
+        Log.d(TAG, "makeListItems - " + inputList.toString());
+
         //같은 카테고리에서 같은 종류의 음식이 있는지 체크하는로직
         List<String> check  = new ArrayList<String>();
         List<DailySalesListItems> result = new ArrayList<>();
 
         for (int i = 0; i < inputList.size(); i ++) {
-            //상품명이 다른것이 잇을경우
+            //상품명이 다른 것이 있을 경우
             if (!check.contains(inputList.get(i).getProductName())) {
                 check.add(inputList.get(i).getProductName());
 

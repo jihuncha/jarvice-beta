@@ -6,11 +6,14 @@ import android.util.Log;
 import java.util.List;
 
 import huni.techtown.org.jarvice.common.data.DailySalesObject;
+import huni.techtown.org.jarvice.common.data.MonthSalesObject;
 import huni.techtown.org.jarvice.common.data.SalesObject;
+import huni.techtown.org.jarvice.common.data.WeeklySalesObject;
 import huni.techtown.org.jarvice.database.DatabaseHelper;
 import huni.techtown.org.jarvice.database.TBL_DAILY_SALES;
 import huni.techtown.org.jarvice.database.TBL_MONTH_SALES;
 import huni.techtown.org.jarvice.database.TBL_MY_SALES;
+import huni.techtown.org.jarvice.database.TBL_WEEKLY_SALES;
 
 public class DatabaseManager {
     public static final String TAG = DatabaseManager.class.getSimpleName();
@@ -27,6 +30,8 @@ public class DatabaseManager {
 
     private TBL_MONTH_SALES mTblMonthSales;
 
+    private TBL_WEEKLY_SALES mTblWeeklySales;
+
     private DatabaseManager(Context context) {
         mHelper = new DatabaseHelper(context);
         mContext = context;
@@ -34,6 +39,7 @@ public class DatabaseManager {
         mTblMySales = new TBL_MY_SALES(mHelper.getWritableDatabase());
         mTblDailySales = new TBL_DAILY_SALES(mHelper.getWritableDatabase());
         mTblMonthSales = new TBL_MONTH_SALES(mHelper.getWritableDatabase());
+        mTblWeeklySales = new TBL_WEEKLY_SALES(mHelper.getWritableDatabase());
     }
 
     public static DatabaseManager getInstance(Context context) {
@@ -63,6 +69,10 @@ public class DatabaseManager {
         return mTblDailySales;
     }
 
+    public TBL_WEEKLY_SALES getWeeklySales() { return mTblWeeklySales;}
+
+    public TBL_MONTH_SALES getMonthlySales() { return mTblMonthSales;}
+
 
 
     /**
@@ -73,6 +83,7 @@ public class DatabaseManager {
         mTblMySales.truncate();
         mTblDailySales.truncate();
         mTblMonthSales.truncate();
+        mTblWeeklySales.truncate();
     }
 
     public List<SalesObject> getDateSalesObject(String input, String f) {
@@ -99,12 +110,52 @@ public class DatabaseManager {
         return mTblMySales.getSum(gogo);
     }
 
-    public List<DailySalesObject> getDailCheck(String gogo) {
-        return mTblDailySales.getDailyData(gogo);
+    public List<DailySalesObject> getDailyCheck(String date) {
+        return mTblDailySales.getDailyData(date);
     }
 
+
+    /**
+     *
+     * 일간데이터 가져오기
+     * 기준점이 되는 데이터.
+     * id 정렬하여 실매출이 0이 아닌 가장 최신데이터를 가져온다
+     *
+     * */
     public List<DailySalesObject> getLastData() {
         return mTblDailySales.getLastData();
+    }
+
+    /**
+     *
+     * 주간데이터 가져오기
+     * 1. getWeeklyLastDataCheck -> 로 해당 년/Week로 아이디 체크
+     * 2. getWeeklyLastData -> 로 데이터 가져오기
+     *
+     * */
+
+    public List<WeeklySalesObject> getWeeklyLastDataCheck(String year, String weekCheck) {
+        return mTblWeeklySales.getWeeklyLastDataCheck(year, weekCheck);
+    }
+
+    public List<WeeklySalesObject> getWeeklyLastData(String input) {
+        return mTblWeeklySales.getWeeklyLastData(input);
+    }
+
+    /**
+     *
+     * 월간데이터 가져오기
+     * 1. getMonthlyLastDataCheck -> 로 해당 년/월 아이디 체크
+     * 2. getMonthlyLastData -> 로 데이터 가져오기
+     *
+     * */
+
+    public List<MonthSalesObject> getMonthlyLastDataCheck(String year, String month) {
+        return mTblMonthSales.getMonthlyLastDataCheck(year, month);
+    }
+
+    public List<MonthSalesObject> getMonthlyLastData(String input) {
+        return mTblMonthSales.getMonthlyLastData(input);
     }
 
 //    public List<Sa>

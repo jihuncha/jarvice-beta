@@ -9,16 +9,4 @@
         android:id="@+id/chart1"
         android:layout_width="match_parent"
         android:layout_height="306dp" />
-
-<!--    <com.github.mikephil.charting.charts.BarChart-->
-<!--        android:id="@+id/chart2"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="306dp"-->
-<!--        android:visibility="gone"/>-->
-
-<!--    <com.github.mikephil.charting.charts.BarChart-->
-<!--        android:id="@+id/chart3"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="306dp"-->
-<!--        android:visibility="gone"/>-->
 </RelativeLayout>

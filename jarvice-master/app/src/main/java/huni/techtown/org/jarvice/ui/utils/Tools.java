@@ -39,9 +39,12 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import huni.techtown.org.jarvice.R;
 
@@ -389,6 +392,54 @@ public class Tools {
 
         return result;
 
+    }
+
+    //String to Date
+    public static Date stringToDate(String date) {
+        SimpleDateFormat inputDate = new SimpleDateFormat("yyyy-MM-dd");
+        Date result = null;
+        try {
+            result = inputDate.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    //Date to String
+    public static String dateToString(Date date) {
+        SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
+        String result = fm.format(date);
+
+        return result;
+    }
+
+    //-1 주면 어제 -2 주면 그저꼐 날자 체크
+    public static String checkDate(String date, int check) {
+        SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
+        Date setDate = null;
+        String result = "";
+        try {
+            setDate = fm.parse(date);
+
+            Calendar cal = new GregorianCalendar(Locale.KOREA);
+            cal.setTime(setDate);
+            cal.add(Calendar.DATE, -(check));
+
+            result = fm.format(cal.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    //barchart를 위한 날짜형태 변경
+    public static String changeForBarChart(String input) {
+        String tmpResult[] = input.split("-");
+
+        return tmpResult[1] + ". " + tmpResult[2] + " ";
     }
 
 }

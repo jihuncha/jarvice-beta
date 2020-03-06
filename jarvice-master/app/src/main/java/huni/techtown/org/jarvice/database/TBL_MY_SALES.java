@@ -41,6 +41,7 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
     public static final String PLUS_SALES	        = "plus_sales";             // 가액
     public static final String VAT				    = "vat";                    // 부가세
     public static final String CATEGORY             = "category";               // 상품 분류
+    public static final String DAY                  = "day";                    // 요일
 
     /*** Table 생성 쿼리 **********************/
     public static final String CREATE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " " +
@@ -62,7 +63,8 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
                 REAL_SALES				+ " INTEGER," +
                 PLUS_SALES		        + " INTEGER," +
                 VAT					    + " INTEGER," +
-                CATEGORY                + " TEXT " +
+                CATEGORY                + " TEXT," +
+                DAY                     + " TEXT " +
                 ");";
 
     /*** Table 생성 쿼리 **********************/
@@ -72,7 +74,8 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
     protected static class INDEX {
         public int ID, SELL_DATE, RECEIPT_NO, SORT, TABLE_NO, FIRST_ORDER,
                 PAYMENT_TIME, PRODUCT_CODE, BARCODE, PRODUCT_NAME, PRODUCT_COUNT,
-                SELL, DISCOUNT, DISCOUNT_TYPE, REAL_SALES, PLUS_SALES, VAT, CATEGORY;
+                SELL, DISCOUNT, DISCOUNT_TYPE, REAL_SALES, PLUS_SALES, VAT,
+                CATEGORY, DAY;
     }
 
     protected static INDEX cursorToIndex(Cursor c) throws Exception {
@@ -96,6 +99,7 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
         idx.PLUS_SALES              = c.getColumnIndex(PLUS_SALES);
         idx.VAT                     = c.getColumnIndex(VAT);
         idx.CATEGORY                = c.getColumnIndex(CATEGORY);
+        idx.DAY                     = c.getColumnIndex(DAY);
 
         return idx;
     }
@@ -132,6 +136,7 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
         values.put(PLUS_SALES,              o.getPlusSales());
         values.put(VAT,                     o.getVat());
         values.put(CATEGORY,                o.getCategory());
+        values.put(DAY,                     o.getDay());
 
         return values;
     }
@@ -179,6 +184,7 @@ public class TBL_MY_SALES extends TABLE<SalesObject> {
         if (idx.PLUS_SALES != -1) o.setPlusSales(c.getString(idx.PLUS_SALES));
         if (idx.VAT != -1) o.setVat(c.getString(idx.VAT));
         if (idx.CATEGORY != -1) o.setCategory(c.getString(idx.CATEGORY));
+        if (idx.DAY != -1) o.setDay(c.getString(idx.DAY));
 
         return o;
     }

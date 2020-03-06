@@ -69,6 +69,47 @@ public class CurrentManager {
         return false;
     }
 
+    public boolean weeklyData = false;
+    public boolean weeklyDataFinish(boolean check, String f) {
+        Log.d(TAG, "weeklyDataFinish - " + check + " , f - " + f);
+
+        if(check) {
+            weeklyData = true;
+            return true;
+        } else {
+            weeklyData = false;
+            return false;
+        }
+    }
+
+    public boolean weeklyDataCheck(){
+        if (weeklyData) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean monthlyData = false;
+    public boolean monthlyDataFinish(boolean check, String f) {
+        Log.d(TAG, "monthlyDataFinish - " + check + " , f - " + f);
+
+        if(check) {
+            monthlyData = true;
+            return true;
+        } else {
+            monthlyData = false;
+            return false;
+        }
+    }
+
+    public boolean monthlyDataCheck(){
+        if (monthlyData) {
+            return true;
+        }
+        return false;
+    }
+
+
     //날짜값 조회
     public static String toFormatString(long time, String format) {
         DateFormat df = new SimpleDateFormat(format);

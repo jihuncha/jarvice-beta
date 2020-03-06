@@ -29,6 +29,7 @@ public class SalesObject implements Serializable {
     private String tableNo;
     private String vat;
     private String category;
+    private String day;
 
     public SalesObject(){}
 
@@ -40,7 +41,7 @@ public class SalesObject implements Serializable {
                        String receiptNo, String sell,
                        String sellDate, String sort,
                        String tableNo, String vat,
-                       String category) {
+                       String category, String day) {
         this.barcode = barcode;
         this.discount = discount;
         this.discountType = discountType;
@@ -59,6 +60,7 @@ public class SalesObject implements Serializable {
         this.tableNo = tableNo;
         this.vat = vat;
         this.category = category;
+        this.day = day;
     }
 
     public String getBarcode() {
@@ -205,6 +207,14 @@ public class SalesObject implements Serializable {
         this.category = category;
     }
 
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
     @Override
     public String toString() {
         return "SalesObject{" +
@@ -226,6 +236,7 @@ public class SalesObject implements Serializable {
                 ", tableNo='" + tableNo + '\'' +
                 ", vat='" + vat + '\'' +
                 ", category='" + category + '\'' +
+                ", day='" + day + '\'' +
                 '}';
     }
 }

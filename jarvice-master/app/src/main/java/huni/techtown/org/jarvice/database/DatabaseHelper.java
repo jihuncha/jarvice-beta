@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private int status = SQLITE_STATUS_NONE;
 
     /*** DB 상수 정의 *******************************/
-    public static final int    DB_VERSION = 2;
+    public static final int    DB_VERSION = 4;
 
     public static final String DB_NAME = "jarvice.db";
 
@@ -55,29 +55,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         break;
                 }
                 break;
-//
-//            case 3:
-//                switch (newVersion) {
-//                    case 8: // 3 --> 8
-//                        upgradeXTo4(db);
-//                        upgradeXTo5(db);
-//                        upgradeXTo6(db);
-//                        upgradeXTo7(db);
-//                        upgradeXTo8(db);
-//                        break;
-//                }
-//                break;
-//
-//            case 4:
-//                switch (newVersion) {
-//                    case 8: // 4 --> 8
-//                        upgradeXTo5(db);
-//                        upgradeXTo6(db);
-//                        upgradeXTo7(db);
-//                        upgradeXTo8(db);
-//                        break;
-//                }
-//                break;
+
+            case 3:
+                switch (newVersion) {
+                    case 8: // 3 --> 8
+                        upgradeXTo4(db);
+                        upgradeXTo5(db);
+                        upgradeXTo6(db);
+                        upgradeXTo7(db);
+                        upgradeXTo8(db);
+                        break;
+                }
+                break;
+
+            case 4:
+                switch (newVersion) {
+                    case 8: // 4 --> 8
+                        upgradeXTo5(db);
+                        upgradeXTo6(db);
+                        upgradeXTo7(db);
+                        upgradeXTo8(db);
+                        break;
+                }
+                break;
 //
 //            case 5:
 //                switch (newVersion) {
@@ -148,6 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(TBL_MY_SALES.CREATE);
         db.execSQL(TBL_MONTH_SALES.CREATE);
         db.execSQL(TBL_DAILY_SALES.CREATE);
+        db.execSQL(TBL_WEEKLY_SALES.CREATE);
 //        db.execSQL(TBL_GROUP_MEMBER.CREATE);
 //        db.execSQL(TBL_CALL_HISTORY.CREATE);
 //        db.execSQL(TBL_CALL_HISTORY_MEMBER.CREATE);
@@ -175,6 +176,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(TBL_MY_SALES.DROP);
         db.execSQL(TBL_MONTH_SALES.DROP);
         db.execSQL(TBL_DAILY_SALES.DROP);
+        db.execSQL(TBL_WEEKLY_SALES.DROP);
 //        db.execSQL(TBL_GROUP_MEMBER.DROP);
 //        db.execSQL(TBL_CALL_HISTORY.DROP);
 //        db.execSQL(TBL_CALL_HISTORY_MEMBER.DROP);

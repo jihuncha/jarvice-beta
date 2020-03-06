@@ -21,10 +21,11 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
     /*** Table 이름 정의 *******************/
     public static final String TABLE_NAME = "tbl_daily_sales";
 
-    /*** 21개 ***/
     /*** Column 이름 정의 **********************/
     public static final String ID					            = "_id";
     public static final String SELL_DATE		                = "sell_date";                  // 날짜
+    public static final String SELL_DAY_OF_WEEK		            = "sell_day_of_week";           // 요일
+    public static final String SELL_WEEK		                = "sell_week";                  // 몇번쨰주?
     public static final String SELL_ALL			                = "sell_all";                   // 전체매출
     public static final String SELL_REAL			            = "sell_real";                  // 전체 실 매출
     public static final String SELL_FOOD			            = "sell_food";                  // 음식 판매 금액
@@ -46,12 +47,24 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
     public static final String SELL_LUNCH_PERCENT			    = "sell_lunch_percent";         // 점심 판매 퍼센트
     public static final String SELL_DELIVERY			        = "sell_delivery";              // 배달 판매 금액
     public static final String SELL_DELIVERY_PERCENT			= "sell_delivery_percent";      // 배달 판매 퍼센트
+    public static final String DINNER_VISIT_FIVE			    = "dinner_visit_five";          // 오후 5-6시 방문자
+    public static final String DINNER_VISIT_SIX			        = "dinner_visit_six";           // 오후 6-7시 방문자
+    public static final String DINNER_VISIT_SEVEN			    = "dinner_visit_seven";         // 오후 7-8시 방문자
+    public static final String DINNER_VISIT_EIGHT			    = "dinner_visit_eight";         // 오후 8-9시 방문자
+    public static final String DINNER_VISIT_NINE			    = "dinner_visit_nine";          // 오후 9-10시 방문자
+    public static final String DINNER_VISIT_TEN			        = "dinner_visit_ten";           // 오후 10-11시 방문자
+    public static final String DINNER_VISIT_ELEVEN			    = "dinner_visit_eleven";        // 오후 11-12시 방문자
+    public static final String DINNER_VISIT_TWELVE			    = "dinner_visit_twelve";        // 새벽 12-1시 방문자
+    public static final String DINNER_VISIT_ONE			        = "dinner_visit_one";           // 새벽 1-2시 방문자
+    public static final String DINNER_VISIT_TOTAL		        = "dinner_visit_total";         // 오후 방문자 전체
 
     /*** Table 생성 쿼리 **********************/
     public static final String CREATE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " " +
             "(" +
                 ID						+ " INTEGER NOT NULL UNIQUE PRIMARY KEY," +
                 SELL_DATE			    + " TEXT," +
+                SELL_DAY_OF_WEEK	    + " TEXT," +
+                SELL_WEEK	            + " TEXT," +
                 SELL_ALL				+ " TEXT," +
                 SELL_REAL			    + " TEXT," +
                 SELL_FOOD			    + " TEXT," +
@@ -72,7 +85,17 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
                 SELL_LUNCH              + " TEXT," +
                 SELL_LUNCH_PERCENT      + " TEXT, "+
                 SELL_DELIVERY           + " TEXT," +
-                SELL_DELIVERY_PERCENT   + " TEXT " +
+                SELL_DELIVERY_PERCENT   + " TEXT," +
+                DINNER_VISIT_FIVE       + " TEXT," +
+                DINNER_VISIT_SIX        + " TEXT," +
+                DINNER_VISIT_SEVEN      + " TEXT," +
+                DINNER_VISIT_EIGHT      + " TEXT," +
+                DINNER_VISIT_NINE       + " TEXT," +
+                DINNER_VISIT_TEN        + " TEXT," +
+                DINNER_VISIT_ELEVEN     + " TEXT," +
+                DINNER_VISIT_TWELVE     + " TEXT," +
+                DINNER_VISIT_ONE        + " TEXT," +
+                DINNER_VISIT_TOTAL      + " TEXT " +
                 ");";
 
     /*** Table 생성 쿼리 **********************/
@@ -80,11 +103,13 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
 
     /*** INDEX 정의 **********************/
     protected static class INDEX {
-        public int ID, SELL_DATE, SELL_ALL, SELL_REAL, SELL_FOOD, SELL_FOOD_PERCENT,
+        public int ID, SELL_DATE, SELL_DAY_OF_WEEK, SELL_WEEK,  SELL_ALL, SELL_REAL, SELL_FOOD, SELL_FOOD_PERCENT,
                 SELL_FOOD_PRODUCT, SELL_BEER, SELL_BEER_PERCENT, SELL_BEER_PRODUCT, SELL_COCK,
                 SELL_COCK_PERCENT, SELL_COCK_PRODUCT, SELL_LIQUOR, SELL_LIQUOR_PERCENT, SELL_LIQUOR_PRODUCT,
                 SELL_DRINK, SELL_DRINK_PERCENT, SELL_DRINK_PRODUCT, SELL_LUNCH, SELL_LUNCH_PERCENT,
-                SELL_DELIVERY, SELL_DELIVERY_PERCENT;
+                SELL_DELIVERY, SELL_DELIVERY_PERCENT, DINNER_VISIT_FIVE, DINNER_VISIT_SIX, DINNER_VISIT_SEVEN,
+                DINNER_VISIT_EIGHT, DINNER_VISIT_NINE, DINNER_VISIT_TEN, DINNER_VISIT_ELEVEN, DINNER_VISIT_TWELVE,
+                DINNER_VISIT_ONE, DINNER_VISIT_TOTAL;
     }
 
     protected static INDEX cursorToIndex(Cursor c) throws Exception {
@@ -92,6 +117,8 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
 
         idx.ID                      = c.getColumnIndex(ID);
         idx.SELL_DATE               = c.getColumnIndex(SELL_DATE);
+        idx.SELL_DAY_OF_WEEK        = c.getColumnIndex(SELL_DAY_OF_WEEK);
+        idx.SELL_WEEK               = c.getColumnIndex(SELL_WEEK);
         idx.SELL_ALL                = c.getColumnIndex(SELL_ALL);
         idx.SELL_REAL               = c.getColumnIndex(SELL_REAL);
         idx.SELL_FOOD               = c.getColumnIndex(SELL_FOOD);
@@ -113,6 +140,16 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
         idx.SELL_LUNCH_PERCENT      = c.getColumnIndex(SELL_LUNCH_PERCENT);
         idx.SELL_DELIVERY           = c.getColumnIndex(SELL_DELIVERY);
         idx.SELL_DELIVERY_PERCENT   = c.getColumnIndex(SELL_DELIVERY_PERCENT);
+        idx.DINNER_VISIT_FIVE       = c.getColumnIndex(DINNER_VISIT_FIVE);
+        idx.DINNER_VISIT_SIX        = c.getColumnIndex(DINNER_VISIT_SIX);
+        idx.DINNER_VISIT_SEVEN      = c.getColumnIndex(DINNER_VISIT_SEVEN);
+        idx.DINNER_VISIT_EIGHT      = c.getColumnIndex(DINNER_VISIT_EIGHT);
+        idx.DINNER_VISIT_NINE       = c.getColumnIndex(DINNER_VISIT_NINE);
+        idx.DINNER_VISIT_TEN        = c.getColumnIndex(DINNER_VISIT_TEN);
+        idx.DINNER_VISIT_ELEVEN     = c.getColumnIndex(DINNER_VISIT_ELEVEN);
+        idx.DINNER_VISIT_TWELVE     = c.getColumnIndex(DINNER_VISIT_TWELVE);
+        idx.DINNER_VISIT_ONE        = c.getColumnIndex(DINNER_VISIT_ONE);
+        idx.DINNER_VISIT_TOTAL      = c.getColumnIndex(DINNER_VISIT_TOTAL);
 
         return idx;
     }
@@ -133,6 +170,8 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
 
         values.put(ID,                      o.getId());
         values.put(SELL_DATE,               o.getSellDate());
+        values.put(SELL_DAY_OF_WEEK,        o.getSellDayOfWeek());
+        values.put(SELL_WEEK,               o.getSellWeek());
         values.put(SELL_ALL,                o.getSellAll());
         values.put(SELL_REAL,               o.getSellReal());
         values.put(SELL_FOOD,               o.getSellFood());
@@ -154,6 +193,16 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
         values.put(SELL_LUNCH_PERCENT,      o.getSellLunchPercent());
         values.put(SELL_DELIVERY,           o.getSellDelivery());
         values.put(SELL_DELIVERY_PERCENT,   o.getSellDeliveryPercent());
+        values.put(DINNER_VISIT_FIVE,       o.getDinnerVisitFive());
+        values.put(DINNER_VISIT_SIX,        o.getDinnerVisitSix());
+        values.put(DINNER_VISIT_SEVEN,      o.getDinnerVisitSeven());
+        values.put(DINNER_VISIT_EIGHT,      o.getDinnerVisitEight());
+        values.put(DINNER_VISIT_NINE,       o.getDinnerVisitNine());
+        values.put(DINNER_VISIT_TEN,        o.getDinnerVisitTen());
+        values.put(DINNER_VISIT_ELEVEN,     o.getDinnerVisitEleven());
+        values.put(DINNER_VISIT_TWELVE,     o.getDinnerVisitTwelve());
+        values.put(DINNER_VISIT_ONE,        o.getDinnerVisitOne());
+        values.put(DINNER_VISIT_TOTAL,      o.getDinnerVisitTotal());
 
         return values;
     }
@@ -185,6 +234,8 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
         DailySalesObject o = new DailySalesObject();
         if (idx.ID != -1) o.setId(c.getLong(idx.ID));
         if (idx.SELL_DATE != -1) o.setSellDate(c.getString(idx.SELL_DATE));
+        if (idx.SELL_DAY_OF_WEEK != -1) o.setSellDayOfWeek(c.getString(idx.SELL_DAY_OF_WEEK));
+        if (idx.SELL_WEEK != -1) o.setSellWeek(c.getString(idx.SELL_WEEK));
         if (idx.SELL_ALL != -1) o.setSellAll(c.getString(idx.SELL_ALL));
         if (idx.SELL_REAL != -1) o.setSellReal(c.getString(idx.SELL_REAL));
         if (idx.SELL_FOOD != -1) o.setSellFood(c.getString(idx.SELL_FOOD));
@@ -206,6 +257,16 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
         if (idx.SELL_LUNCH_PERCENT != -1) o.setSellLunchPercent(c.getString(idx.SELL_LUNCH_PERCENT));
         if (idx.SELL_DELIVERY != -1) o.setSellDelivery(c.getString(idx.SELL_DELIVERY));
         if (idx.SELL_DELIVERY_PERCENT != -1) o.setSellDeliveryPercent(c.getString(idx.SELL_DELIVERY_PERCENT));
+        if (idx.DINNER_VISIT_FIVE != -1) o.setDinnerVisitFive(c.getString(idx.DINNER_VISIT_FIVE));
+        if (idx.DINNER_VISIT_SIX != -1) o.setDinnerVisitSix(c.getString(idx.DINNER_VISIT_SIX));
+        if (idx.DINNER_VISIT_SEVEN != -1) o.setDinnerVisitSeven(c.getString(idx.DINNER_VISIT_SEVEN));
+        if (idx.DINNER_VISIT_EIGHT != -1) o.setDinnerVisitEight(c.getString(idx.DINNER_VISIT_EIGHT));
+        if (idx.DINNER_VISIT_NINE != -1) o.setDinnerVisitNine(c.getString(idx.DINNER_VISIT_NINE));
+        if (idx.DINNER_VISIT_TEN != -1) o.setDinnerVisitTen(c.getString(idx.DINNER_VISIT_TEN));
+        if (idx.DINNER_VISIT_ELEVEN != -1) o.setDinnerVisitEleven(c.getString(idx.DINNER_VISIT_ELEVEN));
+        if (idx.DINNER_VISIT_TWELVE != -1) o.setDinnerVisitTwelve(c.getString(idx.DINNER_VISIT_TWELVE));
+        if (idx.DINNER_VISIT_ONE != -1) o.setDinnerVisitOne(c.getString(idx.DINNER_VISIT_ONE));
+        if (idx.DINNER_VISIT_TOTAL != -1) o.setDinnerVisitTotal(c.getString(idx.DINNER_VISIT_TOTAL));
 
         return o;
     }
@@ -475,12 +536,21 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
 //        String whereClause =
 //    }
 
-    //id 기준으로 정렬 및 결과값이 Total 이 아닌 것으로 추출.
+    //id 기준으로 정렬 및 결과값이 Total 이 아닌 것으로 추출. -> 3개 추출
     public List<DailySalesObject> getLastData() {
 //        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " != '" + "Total" +  "' ORDER BY " + ID + " DESC LIMIT 1";
 
-        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " != '" + "Total" +  "' AND " + SELL_REAL + " != '" + "0" + "' ORDER BY " + ID + " DESC LIMIT 1";
+        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " != '" + "Total" +  "' AND " + SELL_REAL + " != '" + "0" + "' ORDER BY " + ID + " DESC LIMIT 3";
 
         return select_raw(sql);
     }
+
+    //id 기준으로 정렬 및 결과값이 Total 이 아닌 것으로 추출.
+//    public List<DailySalesObject> getLastData() {
+////        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " != '" + "Total" +  "' ORDER BY " + ID + " DESC LIMIT 1";
+//
+//        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " != '" + "Total" +  "' AND " + SELL_REAL + " != '" + "0" + "' ORDER BY " + ID + " DESC LIMIT 1";
+//
+//        return select_raw(sql);
+//    }
 }

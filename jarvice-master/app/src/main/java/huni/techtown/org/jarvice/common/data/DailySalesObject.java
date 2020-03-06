@@ -14,6 +14,8 @@ public class DailySalesObject implements Serializable {
 
     private long id;
     private String sellDate;
+    private String sellDayOfWeek;
+    private String sellWeek;
     private String sellAll;
     private String sellReal;
     private String sellFood;
@@ -35,19 +37,37 @@ public class DailySalesObject implements Serializable {
     private String sellLunchPercent;
     private String sellDelivery;
     private String sellDeliveryPercent;
+    private String dinnerVisitFive;
+    private String dinnerVisitSix;
+    private String dinnerVisitSeven;
+    private String dinnerVisitEight;
+    private String dinnerVisitNine;
+    private String dinnerVisitTen;
+    private String dinnerVisitEleven;
+    private String dinnerVisitTwelve;
+    private String dinnerVisitOne;
+    private String dinnerVisitTotal;
+
 
     public DailySalesObject(){}
 
-    public DailySalesObject(long id, String sellDate, String sellAll, String sellReal,
+    public DailySalesObject(long id, String sellDate, String sellDayOfWeek,
+                            String sellWeek, String sellAll, String sellReal,
                             String sellFood, String sellFoodPercent, String sellFoodProduct,
                             String sellBeer, String sellBeerPercent, String sellBeerProduct,
                             String sellCock, String sellCockPercent, String sellCockProduct,
                             String sellLiquor, String sellLiquorPercent, String sellLiquorProduct,
                             String sellDrink, String sellDrinkPercent, String sellDrinkProduct,
                             String sellLunch, String sellLunchPercent, String sellDelivery,
-                            String sellDeliveryPercent) {
+                            String sellDeliveryPercent, String dinnerVisitFive,
+                            String dinnerVisitSix, String dinnerVisitSeven,
+                            String dinnerVisitEight, String dinnerVisitNine,
+                            String dinnerVisitTen, String dinnerVisitEleven,
+                            String dinnerVisitTwelve, String dinnerVisitOne, String dinnerVisitTotal) {
         this.id = id;
         this.sellDate = sellDate;
+        this.sellDayOfWeek = sellDayOfWeek;
+        this.sellWeek = sellWeek;
         this.sellAll = sellAll;
         this.sellReal = sellReal;
         this.sellFood = sellFood;
@@ -69,6 +89,16 @@ public class DailySalesObject implements Serializable {
         this.sellLunchPercent = sellLunchPercent;
         this.sellDelivery = sellDelivery;
         this.sellDeliveryPercent = sellDeliveryPercent;
+        this.dinnerVisitFive = dinnerVisitFive;
+        this.dinnerVisitSix = dinnerVisitSix;
+        this.dinnerVisitSeven = dinnerVisitSeven;
+        this.dinnerVisitEight = dinnerVisitEight;
+        this.dinnerVisitNine = dinnerVisitNine;
+        this.dinnerVisitTen = dinnerVisitTen;
+        this.dinnerVisitEleven = dinnerVisitEleven;
+        this.dinnerVisitTwelve = dinnerVisitTwelve;
+        this.dinnerVisitOne = dinnerVisitOne;
+        this.dinnerVisitTotal = dinnerVisitTotal;
     }
 
     public long getId() {
@@ -85,6 +115,22 @@ public class DailySalesObject implements Serializable {
 
     public void setSellDate(String sellDate) {
         this.sellDate = sellDate;
+    }
+
+    public String getSellDayOfWeek() {
+        return sellDayOfWeek;
+    }
+
+    public void setSellDayOfWeek(String sellDayOfWeek) {
+        this.sellDayOfWeek = sellDayOfWeek;
+    }
+
+    public String getSellWeek() {
+        return sellWeek;
+    }
+
+    public void setSellWeek(String sellWeek) {
+        this.sellWeek = sellWeek;
     }
 
     public String getSellAll() {
@@ -255,11 +301,93 @@ public class DailySalesObject implements Serializable {
         this.sellDeliveryPercent = sellDeliveryPercent;
     }
 
+    public String getDinnerVisitFive() {
+        return dinnerVisitFive;
+    }
+
+    public void setDinnerVisitFive(String dinnerVisitFive) {
+        this.dinnerVisitFive = dinnerVisitFive;
+    }
+
+    public String getDinnerVisitSix() {
+        return dinnerVisitSix;
+    }
+
+    public void setDinnerVisitSix(String dinnerVisitSix) {
+        this.dinnerVisitSix = dinnerVisitSix;
+    }
+
+    public String getDinnerVisitSeven() {
+        return dinnerVisitSeven;
+    }
+
+    public void setDinnerVisitSeven(String dinnerVisitSeven) {
+        this.dinnerVisitSeven = dinnerVisitSeven;
+    }
+
+    public String getDinnerVisitEight() {
+        return dinnerVisitEight;
+    }
+
+    public void setDinnerVisitEight(String dinnerVisitEight) {
+        this.dinnerVisitEight = dinnerVisitEight;
+    }
+
+    public String getDinnerVisitNine() {
+        return dinnerVisitNine;
+    }
+
+    public void setDinnerVisitNine(String dinnerVisitNine) {
+        this.dinnerVisitNine = dinnerVisitNine;
+    }
+
+    public String getDinnerVisitTen() {
+        return dinnerVisitTen;
+    }
+
+    public void setDinnerVisitTen(String dinnerVisitTen) {
+        this.dinnerVisitTen = dinnerVisitTen;
+    }
+
+    public String getDinnerVisitEleven() {
+        return dinnerVisitEleven;
+    }
+
+    public void setDinnerVisitEleven(String dinnerVisitEleven) {
+        this.dinnerVisitEleven = dinnerVisitEleven;
+    }
+
+    public String getDinnerVisitTwelve() {
+        return dinnerVisitTwelve;
+    }
+
+    public void setDinnerVisitTwelve(String dinnerVisitTwelve) {
+        this.dinnerVisitTwelve = dinnerVisitTwelve;
+    }
+
+    public String getDinnerVisitOne() {
+        return dinnerVisitOne;
+    }
+
+    public void setDinnerVisitOne(String dinnerVisitOne) {
+        this.dinnerVisitOne = dinnerVisitOne;
+    }
+
+    public String getDinnerVisitTotal() {
+        return dinnerVisitTotal;
+    }
+
+    public void setDinnerVisitTotal(String dinnerVisitTotal) {
+        this.dinnerVisitTotal = dinnerVisitTotal;
+    }
+
     @Override
     public String toString() {
         return "DailySalesObject{" +
                 "id=" + id +
                 ", sellDate='" + sellDate + '\'' +
+                ", sellDayOfWeek='" + sellDayOfWeek + '\'' +
+                ", sellWeek='" + sellWeek + '\'' +
                 ", sellAll='" + sellAll + '\'' +
                 ", sellReal='" + sellReal + '\'' +
                 ", sellFood='" + sellFood + '\'' +
@@ -281,6 +409,16 @@ public class DailySalesObject implements Serializable {
                 ", sellLunchPercent='" + sellLunchPercent + '\'' +
                 ", sellDelivery='" + sellDelivery + '\'' +
                 ", sellDeliveryPercent='" + sellDeliveryPercent + '\'' +
+                ", dinnerVisitFive='" + dinnerVisitFive + '\'' +
+                ", dinnerVisitSix='" + dinnerVisitSix + '\'' +
+                ", dinnerVisitSeven='" + dinnerVisitSeven + '\'' +
+                ", dinnerVisitEight='" + dinnerVisitEight + '\'' +
+                ", dinnerVisitNine='" + dinnerVisitNine + '\'' +
+                ", dinnerVisitTen='" + dinnerVisitTen + '\'' +
+                ", dinnerVisitEleven='" + dinnerVisitEleven + '\'' +
+                ", dinnerVisitTwelve='" + dinnerVisitTwelve + '\'' +
+                ", dinnerVisitOne='" + dinnerVisitOne + '\'' +
+                ", dinnerVisitTotal='" + dinnerVisitTotal + '\'' +
                 '}';
     }
 }

@@ -7,19 +7,21 @@ public class MonthSalesObject implements Serializable {
     private String TAG = MonthSalesObject.class.getSimpleName();
 
     private long id;
-    private long sell_month;
-    private long sell_all;
-    private long sell_card;
-    private long sell_cash;
+    private String sellYear;
+    private String sellMonth;
+    private String sellReal;
+    private String sellCard;
+    private String sellCash;
 
     public MonthSalesObject(){}
 
-    public MonthSalesObject(long id, long sell_month, long sell_all, long sell_card, long sell_cash) {
+    public MonthSalesObject(long id, String sellYear, String sellMonth, String sellReal, String sellCard, String sellCash) {
         this.id = id;
-        this.sell_month = sell_month;
-        this.sell_all = sell_all;
-        this.sell_card = sell_card;
-        this.sell_cash = sell_cash;
+        this.sellYear = sellYear;
+        this.sellMonth = sellMonth;
+        this.sellReal = sellReal;
+        this.sellCard = sellCard;
+        this.sellCash = sellCash;
     }
 
     public long getId() {
@@ -30,46 +32,55 @@ public class MonthSalesObject implements Serializable {
         this.id = id;
     }
 
-    public long getSell_month() {
-        return sell_month;
+    public String getSellYear() {
+        return sellYear;
     }
 
-    public void setSell_month(long sell_month) {
-        this.sell_month = sell_month;
+    public void setSellYear(String sellYear) {
+        this.sellYear = sellYear;
     }
 
-    public long getSell_all() {
-        return sell_all;
+    public String getSellMonth() {
+        return sellMonth;
     }
 
-    public void setSell_all(long sell_all) {
-        this.sell_all = sell_all;
+    public void setSellMonth(String sellMonth) {
+        this.sellMonth = sellMonth;
     }
 
-    public long getSell_card() {
-        return sell_card;
+    public String getSellReal() {
+        return sellReal;
     }
 
-    public void setSell_card(long sell_card) {
-        this.sell_card = sell_card;
+    public void setSellReal(String sellReal) {
+        this.sellReal = sellReal;
     }
 
-    public long getSell_cash() {
-        return sell_cash;
+    public String getSellCard() {
+        return sellCard;
     }
 
-    public void setSell_cash(long sell_cash) {
-        this.sell_cash = sell_cash;
+    public void setSellCard(String sellCard) {
+        this.sellCard = sellCard;
+    }
+
+    public String getSellCash() {
+        return sellCash;
+    }
+
+    public void setSellCash(String sellCash) {
+        this.sellCash = sellCash;
     }
 
     @Override
     public String toString() {
         return "MonthSalesObject{" +
                 "id=" + id +
-                ", sell_month=" + sell_month +
-                ", sell_all=" + sell_all +
-                ", sell_card=" + sell_card +
-                ", sell_cash=" + sell_cash +
+                ", sellYear='" + sellYear + '\'' +
+                ", sellWeek='" + sellMonth + '\'' +
+                ", sellReal='" + sellReal + '\'' +
+                ", sellCard='" + sellCard + '\'' +
+                ", sellCash='" + sellCash + '\'' +
                 '}';
     }
 }
