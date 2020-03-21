@@ -204,6 +204,7 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
                 Log.d(TAG, "iv_main_helper_title_left - onclick : " + todayDate);
                 main_helper_title_date.setText(todayDate);
                 insertNotificationData("iv_main_helper_title_left");
+                insertTodoListData("iv_main_helper_title_left");
 
                 break;
 
@@ -217,6 +218,7 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
                 Log.d(TAG, "iv_main_helper_title_right - onclick : " + todayDate);
                 main_helper_title_date.setText(todayDate);
                 insertNotificationData("iv_main_helper_title_right");
+                insertTodoListData("iv_main_helper_title_right");
                 break;
 
             case R.id.main_helper_title_date :
@@ -372,9 +374,6 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
 
         //해당 날짜에 대한 데이터 입력
         notificationList.addAll(mTblHelperNotification.getListDate(Tools.changeComma(todayDate)));
-        Log.d(TAG, "test2 : " + Tools.changeComma(todayDate));
-        Log.d(TAG, "test3 : " + mTblHelperNotification.getList().toString());
-        Log.d(TAG, "test : " + mTblHelperNotification.getListDate(Tools.changeComma(todayDate)));
 
         rv_main_helper_notice.setLayoutManager(new LinearLayoutManager(mContext));
         //TODO 이거때문에 항목 삭제시 view 갱신이 안됬음 -> false 로 변경...
@@ -390,7 +389,7 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
     }
 
     public void insertTodoListData (String f) {
-        Log.d(TAG, "insertNotificationData - " + f);
+        Log.d(TAG, "insertTodoListData - " + f);
 
         todoListList = new ArrayList<HelperTodoListObject>();
         todoListDefaultList = new ArrayList<HelperTodoListDefaultObject>();
@@ -402,6 +401,7 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
         mTblHelperTodoList = DatabaseManager.getInstance(mContext).getHelperTodoList();
         mTblHelperTodoDefaultList = DatabaseManager.getInstance(mContext).getHelperTodoListDefault();
 
+        Log.d(TAG, "day : " + todayDate);
         //1. 먼저 해당 날짜에 데이터가 있는지 체크 -> 없는 경우는 default 데이터를 가져온다.
         if (mTblHelperTodoList.getTodayList(Tools.changeComma(todayDate)).size() == 0
                 || mTblHelperTodoList.getTodayList(Tools.changeComma(todayDate)) == null) {

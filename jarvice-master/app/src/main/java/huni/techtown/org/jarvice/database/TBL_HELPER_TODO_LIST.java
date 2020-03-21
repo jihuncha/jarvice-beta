@@ -203,4 +203,13 @@ public class TBL_HELPER_TODO_LIST extends TABLE <HelperTodoListObject> {
         String where = ID + " = " + inputData.getId();
         return delete(where, null);
     }
+
+    public boolean deleteTodoListNoColumn(String input) {
+        Log.v(TABLE_NAME, "deleteTodoListNoColumn() - input: " + input);
+        String sql =
+                "DELETE FROM " + TABLE_NAME
+                        + " WHERE " + TODO_TITLE + "= '" + input + "'"
+                        + " AND " + TODO_COLUMN + "= " + 1;
+        return update_raw(sql);
+    }
 }

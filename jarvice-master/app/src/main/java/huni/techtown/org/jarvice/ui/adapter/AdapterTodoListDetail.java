@@ -106,6 +106,15 @@ public class AdapterTodoListDetail extends RecyclerView.Adapter<RecyclerView.Vie
 
             mTblHelperTodoList = DatabaseManager.getInstance(mContext).getHelperTodoList();
 
+            //타이틀항목은 아이템이 없으므로 view 를 숨겨준다.
+            Log.d(TAG, "test : " + items.getTodoColumn());
+//            if (items.getTodoColumn() == 1
+//                    || items.getItemName() == ""
+//                    || items.getItemName() == null) {
+//                viewHolder.ll_main_helper_todolist_detail_parent.setVisibility(View.GONE);
+////                notifyDataSetChanged();
+//            }
+
             viewHolder.tv_main_helper_todolist_detail_name.setText(insertData.get(position).getItemName());
 
             if (insertData.get(position).getItemCheck() == 1) {
@@ -232,8 +241,18 @@ public class AdapterTodoListDetail extends RecyclerView.Adapter<RecyclerView.Vie
                             HelperTodoListObject inputData = new HelperTodoListObject();
                             inputData.setId(insertData.get(position).getId());
 
+                            Log.d(TAG, "dsadad - " + getItemCount());
                             //db제거
-                            mTblHelperTodoList.deleteTodoListDetail(inputData);
+//                            if (getItemCount() == 1) {
+//                                Log.d(TAG, "inputcheck : " + inputData.toString());
+//                                inputData.setTodoDate(insertData.get(position).getTodoDate());
+//                                inputData.setTodoTitle(insertData.get(position).getItemTitle());
+//                                inputData.setTodoColumn(1);
+//                                inputData.setTodoWork("");
+//                                mTblHelperTodoList.updateTodoListDetail(inputData);
+//                            } else {
+                                mTblHelperTodoList.deleteTodoListDetail(inputData);
+//                            }
 
                             //view 제거
                             insertData.remove(position);
@@ -291,20 +310,6 @@ public class AdapterTodoListDetail extends RecyclerView.Adapter<RecyclerView.Vie
         inputData.setTodoColumn(input.getTodoColumn());
         inputData.setItemName(input.getTodoWork());
         inputData.setItemCheck(input.getTodoCheck());
-
-//        if (insertData == null) {
-//            insertData = new ArrayList<HelperTodoListItems>();
-//            insertData.add(0,inputData);
-//            notifyItemInserted(0);
-//            notifyItemRangeChanged(0,1);
-//            notifyDataSetChanged();
-//
-//            if (onNotifyDataChanged != null) {
-//                onNotifyDataChanged.onEnd();
-//            }
-//
-//        }
-
 
         Log.d(TAG, "position check : " + position);
 

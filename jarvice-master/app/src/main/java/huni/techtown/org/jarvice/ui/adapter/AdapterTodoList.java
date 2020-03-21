@@ -118,6 +118,7 @@ public class AdapterTodoList extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             viewHolder.tv_main_helper_todolist_title.setText(insertData.get(position).getTodoTitle());
 
+            Log.d(TAG, "ttt : " + insertData.get(position).getTodoColumn());
             final AdapterTodoListDetail itemListDataAdapter = new AdapterTodoListDetail(mContext, insertData.get(position).getItemList());
 
             viewHolder.rv_main_helper_todolist_detail.setHasFixedSize(true);
@@ -291,28 +292,48 @@ public class AdapterTodoList extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             inputData.setTodoCheck(0);
                             inputData.setTodoDate(dateChange);
                             inputData.setTodoColumn(0);
-//                            ArrayList<HelperTodoListItems> de = new ArrayList<HelperTodoListItems>();
-//                            de.add(new HelperTodoListItems());
-//                            inputData.setItemList();
 
-                            Log.d(TAG, "check : " + insertData.size());
                             viewHolder.rv_main_helper_todolist_detail.getAdapter().notifyDataSetChanged();
 
                             int result = itemListDataAdapter.getItemCount();
 
-                            if (itemListDataAdapter != null) {
+                            //TODO 여기 너무 임시방편코드....
+                            //TODO adatper 가 null이되는 경우 발생
+                            //어댑터가 null이 아니면서 항목이 하나라도 있는 경우에는 평소처럼 add.
+                            if (itemListDataAdapter != null && itemListDataAdapter.getItemCount() != 0) {
                                 itemListDataAdapter.add(result, inputData);
+                                itemListDataAdapter.notifyDataSetChanged();
                             } else {
-                                Log.d(TAG, "test2");
-                                notifyDataSetChanged();
-//                                itemListDataAdapter = new AdapterTodoListDetail(mContext, insertData.get(position).getItemList());
-                                itemListDataAdapter.add(result, inputData);
+                                //최초 add 할경우는 다르게한다.
+                                Log.e(TAG, "ll_main_helper_todolist_add - first Time!");
 
-                                //TODO 어댑터 갱신이 답인가...? adapter가 null 이뜬다..
-//                              AdapterTodoListDetail tes =  new AdapterTodoListDetail(mContext, insertData.get(position).getItemList());
-//                              viewHolder.rv_main_helper_todolist_detail.setAdapter(tes);
+                                //list 객체 생성
+                                HelperTodoListItems inputItem = new HelperTodoListItems();
+
+                                inputItem.setId(inputData.getId());
+                                inputItem.setItemTitle(inputData.getTodoTitle());
+                                inputItem.setTodoDate(inputData.getTodoDate());
+                                inputItem.setTodoColumn(inputData.getTodoColumn());
+                                inputItem.setItemName(inputData.getTodoWork());
+                                inputItem.setItemCheck(inputData.getTodoCheck());
+
+                                ArrayList<HelperTodoListItems> inputItemList = new ArrayList<HelperTodoListItems>();
+                                inputItemList.add(inputItem);
+
+                                insertData.get(position).setItemList(inputItemList);
+                                final AdapterTodoListDetail itemListDataAdapter = new AdapterTodoListDetail(mContext, insertData.get(position).getItemList());
+
+                                //어댑터 새로 생성 -> view 생성
+                                viewHolder.rv_main_helper_todolist_detail.setHasFixedSize(true);
+                                viewHolder.rv_main_helper_todolist_detail.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+                                viewHolder.rv_main_helper_todolist_detail.setAdapter(itemListDataAdapter);
+
+                                // database 에 반영.
+                                mTblHelperTodoList = DatabaseManager.getInstance(mContext).getHelperTodoList();
+//                                mTblHelperTodoList.deleteTodoListNoColumn(inputData.getTodoTitle());
+//                                mTblHelperTodoList.insert(inputData);
+                                mTblHelperTodoList.updateTodoListDetail(inputData);
                             }
-
 
                             notifyDataSetChanged();
 

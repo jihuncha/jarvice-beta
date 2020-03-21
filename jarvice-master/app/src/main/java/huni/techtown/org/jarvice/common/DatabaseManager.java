@@ -110,9 +110,9 @@ public class DatabaseManager {
         mTblWeeklySales.truncate();
 
         //TODO 여긴 아직 지우면안된다.
-        mTblHelperNotification.truncate();
-        mTblHelperTodoList.truncate();
-        mTblHelperTodoListDefault.truncate();
+//        mTblHelperNotification.truncate();
+//        mTblHelperTodoList.truncate();
+//        mTblHelperTodoListDefault.truncate();
     }
 
     public List<SalesObject> getDateSalesObject(String input, String f) {
