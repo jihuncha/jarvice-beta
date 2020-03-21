@@ -59,6 +59,8 @@ public class ViewAnimation {
 
         a.setDuration((int) (targtetHeight / v.getContext().getResources().getDisplayMetrics().density));
         v.startAnimation(a);
+        //TODO requestfoocus 다시 추가..
+        v.requestFocus();
         return a;
     }
 

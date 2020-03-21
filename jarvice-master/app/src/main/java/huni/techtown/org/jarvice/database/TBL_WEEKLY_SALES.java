@@ -15,7 +15,7 @@ import huni.techtown.org.jarvice.common.data.WeeklySalesObject;
  * 주간 데이터
  *
  * */
-public class TBL_WEEKLY_SALES extends TABLE<WeeklySalesObject> {
+public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
     private String TAG = TBL_WEEKLY_SALES.class.getSimpleName();
 
     /*** Table 이름 정의 *******************/

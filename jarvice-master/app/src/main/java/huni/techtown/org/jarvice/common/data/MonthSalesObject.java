@@ -3,6 +3,12 @@ package huni.techtown.org.jarvice.common.data;
 import java.io.Serializable;
 
 
+/**
+ * 월간 매출 통계 - 서버 데이터
+ *
+ *
+ *
+ * **/
 public class MonthSalesObject implements Serializable {
     private String TAG = MonthSalesObject.class.getSimpleName();
 

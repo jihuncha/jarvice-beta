@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private int status = SQLITE_STATUS_NONE;
 
     /*** DB 상수 정의 *******************************/
-    public static final int    DB_VERSION = 4;
+    public static final int    DB_VERSION = 6;
 
     public static final String DB_NAME = "jarvice.db";
 
@@ -78,25 +78,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         break;
                 }
                 break;
-//
-//            case 5:
-//                switch (newVersion) {
-//                    case 8: // 5 --> 8
-//                        upgradeXTo6(db);
-//                        upgradeXTo7(db);
-//                        upgradeXTo8(db);
-//                        break;
-//                }
-//                break;
-//
-//            case 6:
-//                switch (newVersion) {
-//                    case 8: // 6 --> 8
-//                        upgradeXTo7(db);
-//                        upgradeXTo8(db);
-//                        break;
-//                }
-//                break;
+
+            case 5:
+                switch (newVersion) {
+                    case 8: // 5 --> 8
+                        upgradeXTo6(db);
+                        upgradeXTo7(db);
+                        upgradeXTo8(db);
+                        break;
+                }
+                break;
+
+            case 6:
+                switch (newVersion) {
+                    case 8: // 6 --> 8
+                        upgradeXTo7(db);
+                        upgradeXTo8(db);
+                        break;
+                }
+                break;
 //
 //            case 7:
 //                switch (newVersion) {
@@ -144,28 +144,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * @param db
      */
     private void createTables(SQLiteDatabase db) {
-//        db.execSQL(TBL_MY_SALES.DROP);
         db.execSQL(TBL_MY_SALES.CREATE);
         db.execSQL(TBL_MONTH_SALES.CREATE);
         db.execSQL(TBL_DAILY_SALES.CREATE);
         db.execSQL(TBL_WEEKLY_SALES.CREATE);
-//        db.execSQL(TBL_GROUP_MEMBER.CREATE);
-//        db.execSQL(TBL_CALL_HISTORY.CREATE);
-//        db.execSQL(TBL_CALL_HISTORY_MEMBER.CREATE);
-//        db.execSQL(TBL_CHANNEL.CREATE);
-//        db.execSQL(TBL_CHANNEL_TALK.CREATE);
-//
-//        db.execSQL(TBL_COMPANY.CREATE);
-//        db.execSQL(TBL_DEPARTMENT.CREATE);
-//        db.execSQL(TBL_DEPARTMENT_MEMBER.CREATE);
-//
-//        db.execSQL(TBL_CHANNEL_HISTORY.CREATE);
-//        db.execSQL(TBL_CALL_RECORD.CREATE);
-//
-//        db.execSQL(TBL_PTT_HISTORY.CREATE);
-//        db.execSQL(TBL_ONE_MEMBER.CREATE);
-//
-//        db.execSQL(TBL_ROOM_IN_OUT.CREATE);
+
+        db.execSQL(TBL_HELPER_NOTIFICATION.CREATE);
+        db.execSQL(TBL_HELPER_TODO_LIST.CREATE);
+        db.execSQL(TBL_HELPER_TODO_LIST_DEFAULT.CREATE);
     }
 
     /**
@@ -177,23 +163,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(TBL_MONTH_SALES.DROP);
         db.execSQL(TBL_DAILY_SALES.DROP);
         db.execSQL(TBL_WEEKLY_SALES.DROP);
-//        db.execSQL(TBL_GROUP_MEMBER.DROP);
-//        db.execSQL(TBL_CALL_HISTORY.DROP);
-//        db.execSQL(TBL_CALL_HISTORY_MEMBER.DROP);
-//        db.execSQL(TBL_CHANNEL.DROP);
-//        db.execSQL(TBL_CHANNEL_TALK.DROP);
-//
-//        db.execSQL(TBL_COMPANY.DROP);
-//        db.execSQL(TBL_DEPARTMENT.DROP);
-//        db.execSQL(TBL_DEPARTMENT_MEMBER.DROP);
-//
-//        db.execSQL(TBL_CHANNEL_HISTORY.DROP);
-//        db.execSQL(TBL_CALL_RECORD.DROP);
-//
-//        db.execSQL(TBL_PTT_HISTORY.DROP);
-//        db.execSQL(TBL_ONE_MEMBER.DROP);
-//
-//        db.execSQL(TBL_ROOM_IN_OUT.DROP);
+
+        //TODO 여긴 제거하면안됨
+//        db.execSQL(TBL_HELPER_NOTIFICATION.DROP);
+//        db.execSQL(TBL_HELPER_TODO_LIST.DROP);
+//        db.execSQL(TBL_HELPER_TODO_LIST_DEFAULT.DROP);
     }
 
     @Override

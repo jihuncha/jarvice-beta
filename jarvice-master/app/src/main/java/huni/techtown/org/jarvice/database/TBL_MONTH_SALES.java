@@ -15,7 +15,7 @@ import huni.techtown.org.jarvice.common.data.MonthSalesObject;
  * 월 매출 테이블
  *
  * */
-public class TBL_MONTH_SALES extends TABLE<MonthSalesObject> {
+public class TBL_MONTH_SALES extends TABLE <MonthSalesObject> {
     private String TAG = TBL_MONTH_SALES.class.getSimpleName();
 
     /*** Table 이름 정의 *******************/
@@ -175,10 +175,8 @@ public class TBL_MONTH_SALES extends TABLE<MonthSalesObject> {
     }
 
     public List<MonthSalesObject> getMonthlyLastDataCheck(String year, String month) {
-
         String sql = "SELECT * FROM " + tableName + " WHERE " +
-                SELL_YEAR + " == " + year +  " AND " + SELL_MONTH + " == " + month + " ORDER BY " + ID + " DESC LIMIT 3";
-
+                SELL_YEAR + " == " + year + " AND " + SELL_MONTH + " == " + month + " ORDER BY " + ID + " DESC LIMIT 3";
 
 //        String sql = "SELECT * FROM " + tableName + " ORDER BY " +
 //                SELL_YEAR + " == " + year +  " AND " + SELL_MONTH + " == " + month + ID + " DESC LIMIT 3";
@@ -187,10 +185,8 @@ public class TBL_MONTH_SALES extends TABLE<MonthSalesObject> {
     }
 
     public List<MonthSalesObject> getMonthlyLastData(String id) {
-
 //        String sql = "SELECT * FROM " + tableName + " WHERE " +
 //                SELL_YEAR + " == " + year +  " AND " + SELL_MONTH + " == " + month + " ORDER BY " + ID + " DESC LIMIT 3";
-
 
         String sql = "SELECT * FROM " + tableName + " WHERE " + ID + " <= " + id + " ORDER BY " + ID + " DESC LIMIT 3";
 

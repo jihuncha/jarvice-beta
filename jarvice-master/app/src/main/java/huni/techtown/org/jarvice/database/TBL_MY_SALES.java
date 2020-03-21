@@ -16,7 +16,7 @@ import huni.techtown.org.jarvice.common.data.SalesObject;
  * 원본 데이터
  *
  * */
-public class TBL_MY_SALES extends TABLE<SalesObject> {
+public class TBL_MY_SALES extends TABLE <SalesObject> {
     private String TAG = TBL_MY_SALES.class.getSimpleName();
 
     /*** Table 이름 정의 *******************/

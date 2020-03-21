@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 항목 데이터 - 앱에서 가공
+ * 항목 데이터 - 서버데이터 앱에서 가공
  * 순 매출액이 0 이 아닌 카테고리
  *
  *

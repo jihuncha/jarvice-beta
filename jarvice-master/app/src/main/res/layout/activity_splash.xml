@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity"
-    android:background="#ffffff">
+    android:background="@color/color_4263ff">
 
     <ProgressBar
         android:id="@+id/splash_progress_image"
@@ -13,13 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"
-        android:progressDrawable="@drawable/circular_progress_bar"
+        android:indeterminateDrawable="@drawable/circular_progress_bar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/splash_progress_image"
@@ -28,9 +28,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintVertical_bias="0.1"
-        android:text="@string/splash_loading_data"
-        android:textSize="12dp"
-        android:gravity="center_horizontal"
-        />
+        android:src="@drawable/jarvice_logo"
+        android:gravity="center_horizontal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

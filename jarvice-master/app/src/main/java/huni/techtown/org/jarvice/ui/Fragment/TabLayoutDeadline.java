@@ -142,6 +142,11 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
     private TextView tv_main_deadline_barchart_lunch;
     private TextView tv_main_deadline_barchart_dinner;
 
+    //막대 데이터 - Top 메뉴
+    private BarChart topMenuChart;
+    private BarDataSet barDataTopMenuSet;
+    private BarData barDataTopMenu;
+
     public TabLayoutDeadline() {
     }
 
@@ -747,10 +752,10 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         PieDataSet dataSet = new PieDataSet(yValues," ");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
-        int [] color={ getResources().getColor(R.color.color_ef6754), getResources().getColor(R.color.color_24609e),
-                getResources().getColor(R.color.color_ffbe37), getResources().getColor(R.color.color_08b3a2),
-                getResources().getColor(R.color.purple_500), getResources().getColor(R.color.brown_400),
-                getResources().getColor(R.color.light_blue_900)
+        int [] color={ getResources().getColor(R.color.color_fb7a63), getResources().getColor(R.color.color_fcc849),
+                getResources().getColor(R.color.color_6bd67c), getResources().getColor(R.color.color_c7abf6),
+                getResources().getColor(R.color.color_839afe), getResources().getColor(R.color.color_81c6fc),
+                getResources().getColor(R.color.color_4993cd)
         };
 
         dataSet.setColors(color);
@@ -1202,7 +1207,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         dsl1.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_food));
         dsl1.setCategoryRealSell(pieChartData.getSellFood());
         dsl1.setCategorySellPer(pieChartData.getSellFoodPercent());
-        dsl1.setColor(R.color.color_ef6754);
+        dsl1.setColor(R.color.color_fb7a63);
         dsl1.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_food)));
         insertListOfSellsData.add(dsl1);
 //        }
@@ -1213,7 +1218,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         dsl2.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_beer));
         dsl2.setCategoryRealSell(pieChartData.getSellBeer());
         dsl2.setCategorySellPer(pieChartData.getSellBeerPercent());
-        dsl2.setColor(R.color.color_24609e);
+        dsl2.setColor(R.color.color_fcc849);
         dsl2.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_beer)));
         insertListOfSellsData.add(dsl2);
 //        }
@@ -1224,7 +1229,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         dsl3.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_cock));
         dsl3.setCategoryRealSell(pieChartData.getSellCock());
         dsl3.setCategorySellPer(pieChartData.getSellCockPercent());
-        dsl3.setColor(R.color.color_ffbe37);
+        dsl3.setColor(R.color.color_6bd67c);
         dsl3.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_cock)));
         insertListOfSellsData.add(dsl3);
 //        }
@@ -1235,7 +1240,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         dsl4.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_liquor));
         dsl4.setCategoryRealSell(pieChartData.getSellLiquor());
         dsl4.setCategorySellPer(pieChartData.getSellLiquorPercent());
-        dsl4.setColor(R.color.color_08b3a2);
+        dsl4.setColor(R.color.color_c7abf6);
         dsl4.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_liquor)));
         insertListOfSellsData.add(dsl4);
 //        }
@@ -1246,7 +1251,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         dsl5.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_drink));
         dsl5.setCategoryRealSell(pieChartData.getSellDrink());
         dsl5.setCategorySellPer(pieChartData.getSellDrinkPercent());
-        dsl5.setColor(R.color.purple_500);
+        dsl5.setColor(R.color.color_839afe);
         dsl5.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_drink)));
         insertListOfSellsData.add(dsl5);
 //        }
@@ -1257,7 +1262,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         dsl6.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_lunch));
         dsl6.setCategoryRealSell(pieChartData.getSellLunch());
         dsl6.setCategorySellPer(pieChartData.getSellLunchPercent());
-        dsl6.setColor(R.color.brown_400);
+        dsl6.setColor(R.color.color_81c6fc);
         dsl6.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_lunch)));
         insertListOfSellsData.add(dsl6);
 //        }
@@ -1268,7 +1273,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         dsl7.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_delivery));
         dsl7.setCategoryRealSell(pieChartData.getSellDelivery());
         dsl7.setCategorySellPer(pieChartData.getSellDeliveryPercent());
-        dsl7.setColor(R.color.light_blue_900);
+        dsl7.setColor(R.color.color_4993cd);
         dsl7.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_delivery)));
         insertListOfSellsData.add(dsl7);
 //        }

@@ -27,7 +27,7 @@ import huni.techtown.org.jarvice.ui.utils.ViewAnimation;
 public class AdapterListExpand extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = AdapterListExpand.class.getSimpleName();
 
-    private List<DailySalesList> inserData;
+    private List<DailySalesList> insertData;
 
     private Context mContext;
     private OnItemClickListener mOnItemClickListener;
@@ -41,7 +41,7 @@ public class AdapterListExpand extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public AdapterListExpand(Context context, List<DailySalesList> insertData) {
-        this.inserData = insertData;
+        this.insertData = insertData;
         mContext = context;
     }
 
@@ -75,20 +75,19 @@ public class AdapterListExpand extends RecyclerView.Adapter<RecyclerView.ViewHol
         return vh;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof OriginalViewHolder) {
             final OriginalViewHolder view = (OriginalViewHolder) holder;
 
-            final DailySalesList dso = inserData.get(position);
+            final DailySalesList dso = insertData.get(position);
 
             view.main_deadline_sell_item_title.setText(dso.getCategoryName());
             view.main_deadline_sell_item_money.setText(Tools.decimalFormat(dso.getCategoryRealSell()));
 
-            AdapterListDetail itemListDataAdapter = new AdapterListDetail(mContext, inserData.get(position).getItemList());
+            AdapterListDetail itemListDataAdapter = new AdapterListDetail(mContext, insertData.get(position).getItemList());
 
-            if (inserData.get(position).getItemList() == null) {
+            if (insertData.get(position).getItemList() == null) {
                 view.tv_main_deadline_sell_list_detail_empty.setVisibility(View.VISIBLE);
                 view.rv_main_deadline_sell_list_detail.setVisibility(View.GONE);
             } else {
@@ -104,8 +103,8 @@ public class AdapterListExpand extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View view) {
                     if (mOnItemClickListener != null) {
-                        Log.d(TAG, "test7 : " + inserData.get(position).toString());
-                        mOnItemClickListener.onItemClick(view, inserData.get(position), position);
+                        Log.d(TAG, "test7 : " + insertData.get(position).toString());
+                        mOnItemClickListener.onItemClick(view, insertData.get(position), position);
                     }
                 }
             });
@@ -115,7 +114,7 @@ public class AdapterListExpand extends RecyclerView.Adapter<RecyclerView.ViewHol
                 @Override
                 public void onClick(View v) {
                     boolean show = toggleLayoutExpand(!dso.expanded, v, view.ll_main_deadline_sell_list_detail);
-                    inserData.get(position).expanded = show;
+                    insertData.get(position).expanded = show;
                 }
             });
 
@@ -149,7 +148,7 @@ public class AdapterListExpand extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return inserData.size();
+        return insertData.size();
     }
 
 }

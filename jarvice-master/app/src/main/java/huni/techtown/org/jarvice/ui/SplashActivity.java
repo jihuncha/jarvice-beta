@@ -26,10 +26,12 @@ import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.CurrentManager;
 import huni.techtown.org.jarvice.common.DatabaseManager;
 import huni.techtown.org.jarvice.common.data.DailySalesObject;
+import huni.techtown.org.jarvice.common.data.HelperTodoListDefaultObject;
 import huni.techtown.org.jarvice.common.data.MonthSalesObject;
 import huni.techtown.org.jarvice.common.data.SalesObject;
 import huni.techtown.org.jarvice.common.data.WeeklySalesObject;
 import huni.techtown.org.jarvice.database.TBL_DAILY_SALES;
+import huni.techtown.org.jarvice.database.TBL_HELPER_TODO_LIST_DEFAULT;
 import huni.techtown.org.jarvice.database.TBL_MONTH_SALES;
 import huni.techtown.org.jarvice.database.TBL_MY_SALES;
 import huni.techtown.org.jarvice.database.TBL_WEEKLY_SALES;
@@ -64,10 +66,14 @@ public class SplashActivity  extends AppCompatActivity {
     private TBL_WEEKLY_SALES tblWeeklySalesDb = null;
     private TBL_MONTH_SALES tblMonthlySalesDb = null;
 
+    private TBL_HELPER_TODO_LIST_DEFAULT tblHelperTodoListDefault = null;
+
     private List<SalesObject> salesDataList = new ArrayList<SalesObject>();
     private List<DailySalesObject> dailySalesDataList = new ArrayList<DailySalesObject>();
     private List<WeeklySalesObject> weeklySalesDataList = new ArrayList<WeeklySalesObject>();
     private List<MonthSalesObject> monthlySalesDataList = new ArrayList<MonthSalesObject>();
+
+    private List<HelperTodoListDefaultObject> helperTodoListDefaultObjectList = new ArrayList<HelperTodoListDefaultObject>();
 
     private ProgressBar pb;
 
@@ -106,6 +112,56 @@ public class SplashActivity  extends AppCompatActivity {
         tblDailySalesDb = DatabaseManager.getInstance(mContext).getDailySales();
         tblWeeklySalesDb = DatabaseManager.getInstance(mContext).getWeeklySales();
         tblMonthlySalesDb = DatabaseManager.getInstance(mContext).getMonthlySales();
+
+        tblHelperTodoListDefault = DatabaseManager.getInstance(mContext).getHelperTodoListDefault();
+
+        //TODO default 리스트가 없는 경우
+        if (tblHelperTodoListDefault.getList() == null
+                || tblHelperTodoListDefault.getList().size() == 0) {
+            Log.d(TAG, "onCreate - helperTodoListDefaultObjectList insert");
+
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방오픈", 0, 0, "설거지대 정리"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방오픈", 0, 0, "주방&식재료 정리"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방오픈", 0, 0, "식재료 재고확인&소분"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방오픈", 0, 0, "식재료 주문"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방오픈", 0, 0, "기름&소스 리필"));
+
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방마감", 0, 0, "청소(바닥, 그릴, 냉장고 바닥)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방마감", 0, 0, "설거지 1(트레이, 조리도구, 칼)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방마감", 0, 0, "설거지 2(기름통, 바트, 렌지, 오븐)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방마감", 0, 0, "쓰래기 (일반, 분리수거, 음식물)"));
+
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바오픈", 0, 0, "제빙기on (얼음량 확인)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바오픈", 0, 0, "잔 제자리 정리"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바오픈", 0, 0, "쥬스 및 과일 셋팅"));
+
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바마감", 0, 0, "잔 모두 설거지 후 뒤집어둠"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바마감", 0, 0, "주스 및 과일 냉장고 넣기"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바마감", 0, 0, "바청소(바위,바닥,분리수거 비우기)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바마감", 0, 0, "맥주타워 청소(입구닦기,맥주통 비우기)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바마감", 0, 0, "술 재고 부족분 확인"));
+
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "전기차단 해제"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "POS&배달 실행"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "매장 정리"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "리필(식기, 물, 냅킨, 앞접시)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "셔터 계단 청소 및 오픈"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "노래 틀기"));
+
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "바닥 청소(2층, 계단, 3층)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "물걸레 (2층, 계단, 3층)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "화장실 청소 (물청소, 휴지리필)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "일반쓰래기 (주방, 2층, 3층, 화장실)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "분실물 확인"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "기계충전(s8, 포코, 킬번)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "전기차단 (간판, 에어컨, 제빙기)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "마감정산&POS종료"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "셔터 닫기"));
+
+            tblHelperTodoListDefault.insertForSync(helperTodoListDefaultObjectList);
+        } else {
+            Log.e(TAG, "onCreate - helperTodoListDefaultObjectList Already Exist!!");
+        }
 
         final onDownloadEnd mListener = new onDownloadEnd() {
             @Override
@@ -298,6 +354,8 @@ public class SplashActivity  extends AppCompatActivity {
                 myToast.show();
             }
         });
+
+
 
     }
 

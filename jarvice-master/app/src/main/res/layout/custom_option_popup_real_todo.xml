@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="95.5dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_option_popup_outer"
+    android:elevation="10dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_modify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:layout_marginLeft="15dp"
+        android:text="@string/main_helper_notice_settings_modify"
+        android:textSize="13.5dp"
+        android:textColor="@color/color_222222"
+        android:fontFamily="@font/notosans_regular"/>
+
+    <TextView
+        android:id="@+id/tv_delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="13dp"
+        android:layout_marginRight="15dp"
+        android:text="@string/main_helper_notice_settings_delete"
+        android:textSize="13.5dp"
+        android:textColor="@color/color_222222"
+        android:fontFamily="@font/notosans_regular"/>
+
+</LinearLayout>

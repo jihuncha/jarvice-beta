@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_main_helper_todolist_detail_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/color_ffffff">
+
+    <LinearLayout
+        android:id="@+id/ll_main_helper_todolist_detail"
+        android:layout_width="match_parent"
+        android:layout_height="22.5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@color/color_ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/cb_main_helper_todolist_detail_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:buttonTint="@color/color_4263ff"
+            android:layout_marginRight="40dp"/>
+
+        <TextView
+            android:id="@+id/tv_main_helper_todolist_detail_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="380,500원"
+            android:textSize="15dp"
+            android:textColor="@color/color_333333"
+            android:gravity="left"
+            android:fontFamily="@font/notosans_regular" />
+
+        <ImageView
+            android:id="@+id/iv_main_helper_todolist_detail_settings"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/notification_settings"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10.5dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:background="@color/color_e5e7e9" />
+
+</LinearLayout>

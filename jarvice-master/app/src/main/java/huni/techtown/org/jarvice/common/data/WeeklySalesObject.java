@@ -1,9 +1,14 @@
 package huni.techtown.org.jarvice.common.data;
 
 import java.io.Serializable;
-import java.util.List;
 
 
+/**
+ * 주간 매출 통계 - 서버 데이터
+ *
+ *
+ *
+ * **/
 public class WeeklySalesObject implements Serializable {
     private String TAG = WeeklySalesObject.class.getSimpleName();
 

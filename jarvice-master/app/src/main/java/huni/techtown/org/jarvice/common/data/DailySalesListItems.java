@@ -3,7 +3,7 @@ package huni.techtown.org.jarvice.common.data;
 import java.io.Serializable;
 
 /**
- * 항목 데이터 - 앱에서 가공
+ * 항목 데이터 - 서버데이터 앱에서 가공
  * 순 매출액이 0 이 아닌 카테고리 의 세부 내역 (어떤 식품이 얼마나 팔린것인가??)
  *
  *

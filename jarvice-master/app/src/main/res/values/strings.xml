@@ -67,4 +67,25 @@
     <string name="main_deadline_visit_yaxis">방문수</string>
     <string name="main_deadline_visit_xaxis">시간</string>
 
+    <!-- 가게 도우미 -->
+    <string name="main_helper_notice_title">공지·예약</string>
+    <string name="main_helper_notice_settings_modify">수정하기</string>
+    <string name="main_helper_notice_settings_delete">삭제하기</string>
+    <string name="main_helper_notice_settings_alarm">알림 보내기</string>
+    <string name="main_helper_notice_add_error">공지·예약은 3개 이상 추가하실 수 없습니다.</string>
+    <string name="dialog_title_notification_add">공지·예약을 입력하세요.</string>
+    <string name="dialog_title_todolist_add">To Do List를 입력하세요.</string>
+    <string name="dialog_title_notification_delete">공지·예약을 삭제하시겠습니까?</string>
+    <string name="dialog_title_todolist_delete">To Do List를 삭제하시겠습니까?</string>
+    <string name="dialog_cancel">취소</string>
+    <string name="dialog_confirm">완료</string>
+    <string name="dialog_modify">수정 완료</string>
+    <string name="dialog_modify_err_message">이전과 동일한 내용입니다.</string>
+
+    <string name="dialog_helper_todo_title">To Do List</string>
+    <string name="main_helper_todolist_add">추가하기</string>
+
+
+    <!---->
+
 </resources>

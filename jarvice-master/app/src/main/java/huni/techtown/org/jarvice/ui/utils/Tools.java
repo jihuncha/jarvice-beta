@@ -442,4 +442,40 @@ public class Tools {
         return tmpResult[1] + ". " + tmpResult[2] + " ";
     }
 
+    //date를 자비스타이틀형태로 출력
+    public static String getFormattedDateTitle(Long dateTime) {
+        SimpleDateFormat newFormat = new SimpleDateFormat("yyyy.MM.dd");
+        return newFormat.format(new Date(dateTime));
+    }
+
+    //해당일로 부터 변경일 받아오기
+    public static String handleDateChange(String inputDate, int changeDate) {
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy.MM.dd");
+
+        Date result = null;
+        try {
+            result = transFormat.parse(inputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(result);
+        calendar.add(Calendar.DATE, changeDate);
+        String todayTimeCheck = transFormat.format(calendar.getTime());
+
+        return todayTimeCheck;
+    }
+
+    //.을 - 로
+    public static String changeComma(String input) {
+        String result = "";
+        if (input.contains(".")) {
+            result = input.replace(".", "-");
+        } else {
+            result = input;
+        }
+
+        return result;
+    }
 }

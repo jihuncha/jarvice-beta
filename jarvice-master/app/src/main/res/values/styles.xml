@@ -245,6 +245,15 @@
         <item name="android:fontFamily">@font/notosans_bold</item>
     </style>
 
+    <!-- 팝업 스타일을 위함 -->
+    <style name="PopupStyle" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:textSize">13.5dp</item>
+        <item name="android:fontFamily">@font/notosans_regular</item>
+    </style>
 
+    <style name="EditTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/color_eaeaea</item>
+        <item name="colorControlNormal">@color/color_ffffff</item>
+    </style>
 
 </resources>

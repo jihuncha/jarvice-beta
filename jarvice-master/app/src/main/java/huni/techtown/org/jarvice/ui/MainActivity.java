@@ -6,9 +6,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +20,6 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -55,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ViewPager view_pager;
     private TabLayout main_tab_layout;
 
+    private BroadcastReceiver mReceiver = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switch (position) {
                 case 0 :
                     break;
-                    
+
                 case 1:
                     break;
 

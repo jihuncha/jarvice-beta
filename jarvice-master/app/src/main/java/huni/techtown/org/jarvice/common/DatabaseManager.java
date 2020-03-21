@@ -11,6 +11,10 @@ import huni.techtown.org.jarvice.common.data.SalesObject;
 import huni.techtown.org.jarvice.common.data.WeeklySalesObject;
 import huni.techtown.org.jarvice.database.DatabaseHelper;
 import huni.techtown.org.jarvice.database.TBL_DAILY_SALES;
+import huni.techtown.org.jarvice.database.TBL_HELPER_NOTIFICATION;
+import huni.techtown.org.jarvice.database.TBL_HELPER_TODAY_PEOPLE;
+import huni.techtown.org.jarvice.database.TBL_HELPER_TODO_LIST;
+import huni.techtown.org.jarvice.database.TBL_HELPER_TODO_LIST_DEFAULT;
 import huni.techtown.org.jarvice.database.TBL_MONTH_SALES;
 import huni.techtown.org.jarvice.database.TBL_MY_SALES;
 import huni.techtown.org.jarvice.database.TBL_WEEKLY_SALES;
@@ -32,6 +36,14 @@ public class DatabaseManager {
 
     private TBL_WEEKLY_SALES mTblWeeklySales;
 
+    private TBL_HELPER_NOTIFICATION mTblHelperNotification;
+
+//    private TBL_HELPER_TODAY_PEOPLE mTblHelperTodayPeople;
+
+    private TBL_HELPER_TODO_LIST mTblHelperTodoList;
+
+    private TBL_HELPER_TODO_LIST_DEFAULT mTblHelperTodoListDefault;
+
     private DatabaseManager(Context context) {
         mHelper = new DatabaseHelper(context);
         mContext = context;
@@ -40,6 +52,11 @@ public class DatabaseManager {
         mTblDailySales = new TBL_DAILY_SALES(mHelper.getWritableDatabase());
         mTblMonthSales = new TBL_MONTH_SALES(mHelper.getWritableDatabase());
         mTblWeeklySales = new TBL_WEEKLY_SALES(mHelper.getWritableDatabase());
+
+        mTblHelperNotification = new TBL_HELPER_NOTIFICATION(mHelper.getWritableDatabase());
+//        mTblHelperTodayPeople = new TBL_HELPER_TODAY_PEOPLE(mHelper.getWritableDatabase());
+        mTblHelperTodoList = new TBL_HELPER_TODO_LIST(mHelper.getWritableDatabase());
+        mTblHelperTodoListDefault = new TBL_HELPER_TODO_LIST_DEFAULT(mHelper.getWritableDatabase());
     }
 
     public static DatabaseManager getInstance(Context context) {
@@ -73,6 +90,13 @@ public class DatabaseManager {
 
     public TBL_MONTH_SALES getMonthlySales() { return mTblMonthSales;}
 
+    public TBL_HELPER_NOTIFICATION getHelperNotification() { return mTblHelperNotification;}
+
+//    public TBL_HELPER_TODAY_PEOPLE getHelperTodayPeople() { return mTblHelperTodayPeople;}
+
+    public TBL_HELPER_TODO_LIST getHelperTodoList() { return mTblHelperTodoList;}
+
+    public TBL_HELPER_TODO_LIST_DEFAULT getHelperTodoListDefault() { return mTblHelperTodoListDefault;}
 
 
     /**
@@ -84,6 +108,11 @@ public class DatabaseManager {
         mTblDailySales.truncate();
         mTblMonthSales.truncate();
         mTblWeeklySales.truncate();
+
+        //TODO 여긴 아직 지우면안된다.
+        mTblHelperNotification.truncate();
+        mTblHelperTodoList.truncate();
+        mTblHelperTodoListDefault.truncate();
     }
 
     public List<SalesObject> getDateSalesObject(String input, String f) {
@@ -158,5 +187,4 @@ public class DatabaseManager {
         return mTblMonthSales.getMonthlyLastData(input);
     }
 
-//    public List<Sa>
 }

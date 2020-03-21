@@ -1,11 +1,17 @@
 package huni.techtown.org.jarvice.common;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import huni.techtown.org.jarvice.ui.Fragment.TabLayoutHelper;
+import huni.techtown.org.jarvice.ui.MainActivity;
 
 public class CurrentManager {
     public static final String TAG = CurrentManager.class.getSimpleName();
@@ -117,16 +123,4 @@ public class CurrentManager {
         return df.format(now);
     }
 
-//    //String , 없애기
-//    public static int stringToInt(String input) {
-//        for (int i = 0; i < test.size(); i++) {
-//            String result = "";
-//            if (test.get(i).getSell().contains(",")) {
-//                result = test.get(i).getSell().replace(",", "");
-//            } else {
-//                result = test.get(i).getSell();
-//            }
-//            sum += Integer.parseInt(result);
-//        }
-//    }
 }
