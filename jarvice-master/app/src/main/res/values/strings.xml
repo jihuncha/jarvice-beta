@@ -34,6 +34,10 @@
     <string name="main_home_function_tab_third">가게분석</string>
     <string name="main_home_function_tab_first_title">마감 영수증 공유</string>
     <string name="main_home_function_tab_first_detail">한번 보고 버리는 종이 영수증을 정확하게 분석, 정리하여\n핸드폰으로 한 눈에 볼 수 있도록 영수증을 공유드립니다.</string>
+    <string name="main_home_function_tab_second_title">복잡한 가게 운영을 더욱 간편하게!</string>
+    <string name="main_home_function_tab_second_detail">알바관리, 단체관리, 레시피 등 수기로 작성하여 여기저기\n흩어져 있던 중요한 정보들을 간편하게 관리해드립니다.</string>
+    <string name="main_home_function_tab_third_title">주기 별 마감 리포트 공유</string>
+    <string name="main_home_function_tab_third_detail">주, 월 별로 마감 내역을 정리하고 상세하게 분석하여\n가게가 어떤 상황인지 주기별로 리포트를 공유해드립니다.</string>
 
     <!-- CBT -->
     <string name="main_home_cbt_title">곧 CBT 예정입니다.\n사전 예약을 원하시는 분께서는 구독해주세요</string>
@@ -67,6 +71,11 @@
     <string name="main_deadline_visit_yaxis">방문수</string>
     <string name="main_deadline_visit_xaxis">시간</string>
 
+    <!-- 어제의 top 메뉴 -->
+    <string name="main_deadline_top_menu_title">어제의 TOP 메뉴</string>
+    <string name="main_deadline_top_menu_sell_rank">매출액</string>
+    <string name="main_deadline_top_menu_order_rank">주문수</string>
+
     <!-- 가게 도우미 -->
     <string name="main_helper_notice_title">공지·예약</string>
     <string name="main_helper_notice_settings_modify">수정하기</string>
@@ -84,8 +93,10 @@
 
     <string name="dialog_helper_todo_title">To Do List</string>
     <string name="main_helper_todolist_add">추가하기</string>
-
-
-    <!---->
+    
+    <!-- 가게 분석 -->
+    <string name="main_analysis_sales_title">매출 통계</string>
+    <string name="main_analysis_sales_daily">요일</string>
+    <string name="main_analysis_sales_week">주차</string>
 
 </resources>

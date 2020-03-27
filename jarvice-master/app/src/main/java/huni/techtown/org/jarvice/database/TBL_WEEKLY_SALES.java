@@ -179,7 +179,6 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
         String sql = "SELECT * FROM " + tableName + " WHERE " +
                 SELL_YEAR + " == " + year +  " AND " + SELL_WEEK + " == " + weekCheck + " ORDER BY " + ID + " DESC LIMIT 3";
 
-
         return select_raw(sql);
     }
 

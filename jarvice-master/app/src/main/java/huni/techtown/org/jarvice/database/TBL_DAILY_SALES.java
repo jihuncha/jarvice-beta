@@ -546,11 +546,8 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
     }
 
     //id 기준으로 정렬 및 결과값이 Total 이 아닌 것으로 추출.
-//    public List<DailySalesObject> getLastData() {
-////        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " != '" + "Total" +  "' ORDER BY " + ID + " DESC LIMIT 1";
-//
-//        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " != '" + "Total" +  "' AND " + SELL_REAL + " != '" + "0" + "' ORDER BY " + ID + " DESC LIMIT 1";
-//
-//        return select_raw(sql);
-//    }
+    public List<DailySalesObject> getDailyDataForAnalysis(String sellYear, String sellWeek) {
+        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " LIKE '%" + sellYear + "%' AND " + SELL_WEEK + " = '" + sellWeek +"'";
+        return select_raw(sql);
+    }
 }

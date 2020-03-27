@@ -362,6 +362,7 @@
     <color name="color_888888">#888888</color>
     <color name="color_2a2a2a">#2a2a2a</color>
     <color name="color_e5e7e9">#e5e7e9</color>
+    <color name="color_19000000">#19000000</color>
 
     <!-- Chart Color-->
     <color name="color_ef6754">#ef6754</color>

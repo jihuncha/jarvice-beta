@@ -204,6 +204,12 @@ public class AdapterTodoList extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 return;
                             }
 
+                            if (output == null || output.equals("")) {
+                                Toast.makeText(mContext, "입력값이 없을 경우 To Do List 수정이 불가능합니다.", Toast.LENGTH_SHORT).show();
+//                                cd.dismiss();
+                                return;
+                            }
+
                             //TODO 순서 주의
                             insertData.get(position).setTodoTitle(output);
                             mTblHelperTodoList.updateTodoList(output, title.getText().toString().trim());
@@ -296,6 +302,12 @@ public class AdapterTodoList extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             viewHolder.rv_main_helper_todolist_detail.getAdapter().notifyDataSetChanged();
 
                             int result = itemListDataAdapter.getItemCount();
+
+                            if (inputText == null || inputText.equals("")) {
+                                Toast.makeText(mContext, "입력값이 없을 경우 To Do List 추가가 불가능합니다.", Toast.LENGTH_SHORT).show();
+                                customDialog.dismiss();
+                                return;
+                            }
 
                             //TODO 여기 너무 임시방편코드....
                             //TODO adatper 가 null이되는 경우 발생

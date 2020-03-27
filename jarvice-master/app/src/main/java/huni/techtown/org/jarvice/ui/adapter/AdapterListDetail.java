@@ -1,7 +1,6 @@
 package huni.techtown.org.jarvice.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -9,10 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -21,7 +18,6 @@ import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.data.DailySalesList;
 import huni.techtown.org.jarvice.common.data.DailySalesListItems;
 import huni.techtown.org.jarvice.ui.utils.Tools;
-import huni.techtown.org.jarvice.ui.utils.ViewAnimation;
 
 public class AdapterListDetail extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = AdapterListDetail.class.getSimpleName();
@@ -63,7 +59,6 @@ public class AdapterListDetail extends RecyclerView.Adapter<RecyclerView.ViewHol
         return vh;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof OriginalViewHolder) {

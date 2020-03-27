@@ -175,6 +175,7 @@ public class TBL_MONTH_SALES extends TABLE <MonthSalesObject> {
     }
 
     public List<MonthSalesObject> getMonthlyLastDataCheck(String year, String month) {
+        Log.d(TAG, "year : " + year + ", month : " + month);
         String sql = "SELECT * FROM " + tableName + " WHERE " +
                 SELL_YEAR + " == " + year + " AND " + SELL_MONTH + " == " + month + " ORDER BY " + ID + " DESC LIMIT 3";
 

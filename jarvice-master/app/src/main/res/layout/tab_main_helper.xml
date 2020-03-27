@@ -32,7 +32,7 @@
                     <!-- 아이콘이 너무 작아서..-->
                     <RelativeLayout
                         android:id="@+id/rl_main_helper_title_left"
-                        android:layout_width="30dp"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toLeftOf="@+id/main_helper_title_date">
@@ -62,7 +62,7 @@
                     <!-- 아이콘이 너무 작아서..-->
                     <RelativeLayout
                         android:id="@+id/rl_main_helper_title_right"
-                        android:layout_width="30dp"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/main_helper_title_date">

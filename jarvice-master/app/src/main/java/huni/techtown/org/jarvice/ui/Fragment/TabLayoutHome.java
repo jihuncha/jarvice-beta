@@ -88,8 +88,8 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
         about_title_array[2] = mContext.getString(R.string.main_home_function_tab_third);
 
         about_description_array[0] =  mContext.getString(R.string.main_home_function_tab_first_detail);
-        about_description_array[1] =  mContext.getString(R.string.main_home_function_tab_first_title);
-        about_description_array[2] =  mContext.getString(R.string.main_home_function_tab_first_title);
+        about_description_array[1] =  mContext.getString(R.string.main_home_function_tab_second_detail);
+        about_description_array[2] =  mContext.getString(R.string.main_home_function_tab_third_detail);
 
         mainFunctionViewPager = (ViewPager) root.findViewById(R.id.tab_home_cardview_viewpager);
         dotsLayout = (LinearLayout) root.findViewById(R.id.layoutDots);

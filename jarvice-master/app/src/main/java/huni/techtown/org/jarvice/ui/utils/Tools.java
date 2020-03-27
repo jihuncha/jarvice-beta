@@ -42,11 +42,13 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import huni.techtown.org.jarvice.R;
+import huni.techtown.org.jarvice.common.data.DailySalesListItems;
 
 public class Tools {
 
@@ -478,4 +480,24 @@ public class Tools {
 
         return result;
     }
+
+    // 제거
+    public static String deleteSpace(String input) {
+        String result = "";
+        if (input.contains(" ")) {
+            result = input.replace(" ", "");
+        } else {
+            result = input;
+        }
+
+        return result;
+    }
+
+//    public static class NoAscCompare implements Comparator<DailySalesListItems> {
+//
+//        @Override
+//        public int compare(DailySalesListItemsa dailySalesListItemsa, DailySalesListItemsa t1) {
+//            return 0;
+//        }
+//    }
 }

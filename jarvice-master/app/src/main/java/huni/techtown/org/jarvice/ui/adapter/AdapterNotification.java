@@ -320,6 +320,12 @@ public class AdapterNotification extends RecyclerView.Adapter<RecyclerView.ViewH
                                 return;
                             }
 
+                            if (output == null || output.equals("")) {
+                                Toast.makeText(mContext, "입력값이 없을 경우 공지 수정이 불가능합니다.", Toast.LENGTH_SHORT).show();
+//                                customDialog.dismiss();
+                                return;
+                            }
+
                             insertData.get(position).setNotiInfo(output);
                             et.setText(output);
                             mTblHelperNotification.updateNotification(insertData.get(position));

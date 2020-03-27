@@ -30,6 +30,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -37,6 +38,9 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -50,6 +54,8 @@ import huni.techtown.org.jarvice.ui.adapter.AdapterListExpand;
 import huni.techtown.org.jarvice.ui.adapter.AdapterPieChartList;
 import huni.techtown.org.jarvice.ui.utils.DateUtils;
 import huni.techtown.org.jarvice.ui.utils.Tools;
+
+import static com.github.mikephil.charting.components.XAxis.XAxisPosition.TOP_INSIDE;
 
 /**
  * 마감내역
@@ -143,9 +149,27 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
     private TextView tv_main_deadline_barchart_dinner;
 
     //막대 데이터 - Top 메뉴
+    private ViewPager topMenuBarChart;
+    private TopMenuViewpagerAdapter topMenuViewpagerAdapter;
+
+    private ArrayList<BarEntry> barEntryTopSell;
+    private ArrayList<String> barEntryTopSellLabels;
+    private ArrayList<BarEntry> barEntryTopOrder;
+    private ArrayList<String> barEntryTopOrderLabels;
+
+    private ArrayList<DailySalesListItems> topMenuList;
+    private ArrayList<DailySalesListItems> topMenuSellRankList;
+    private ArrayList<DailySalesListItems> topMenuOrderRankList;
+
+    private ArrayList<DailySalesListItems> test;
+
     private BarChart topMenuChart;
     private BarDataSet barDataTopMenuSet;
     private BarData barDataTopMenu;
+
+    // 매출액/주문수 로 나누기
+    private TextView tv_main_deadline_sell_rank;
+    private TextView tv_main_deadline_order_rank;
 
     public TabLayoutDeadline() {
     }
@@ -195,13 +219,20 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         }
 
         //주간 데이터 탐색
-        String WeekCheck = pieChartData.getSellWeek();
+        String weekCheck = pieChartData.getSellWeek();
         String year = checkDataFromDate[0];
 
-        weeklyId = "" +  DatabaseManager.getInstance(mContext).getWeeklyLastDataCheck(year, WeekCheck).get(0).getId();
-        if (weeklyId != null && weeklyId != "") {
-            checkWeekly = DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).size();
+        Log.d(TAG, "test2 : " + DatabaseManager.getInstance(mContext).getWeeklyLastDataCheck(year, weekCheck));
+        if (DatabaseManager.getInstance(mContext).getWeeklyLastDataCheck(year, weekCheck).size() == 0) {
+            weeklyId = "알수없음";
+            checkWeekly = 0;
+        } else {
+            weeklyId = "" +  DatabaseManager.getInstance(mContext).getWeeklyLastDataCheck(year, weekCheck).get(0).getId();
+            if (weeklyId != null && weeklyId != "") {
+                checkWeekly = DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).size();
+            }
         }
+
 
         //객체 생성
         barEntryDaily = new ArrayList<>();
@@ -273,7 +304,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         //Pie Chart Text Area
         mAdapterPieChartList = new AdapterPieChartList(mContext, insertListOfSellsData);
-        // on item list clicked
         mAdapterPieChartList.setOnItemClickListener(new AdapterPieChartList.OnItemClickListener() {
             @Override
             public void onItemClick(View view, DailySalesList obj, int position) {
@@ -288,7 +318,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         //Pie Chart Bottom Area
         mAdapterListExpand = new AdapterListExpand(mContext, insertListOfSellsData);
-        // on item list clicked
         mAdapterListExpand.setOnItemClickListener(new AdapterListExpand.OnItemClickListener() {
             @Override
             public void onItemClick(View view, DailySalesList obj, int position) {
@@ -308,6 +337,20 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         tv_main_deadline_barchart_lunch.setOnClickListener(this);
         tv_main_deadline_barchart_dinner.setOnClickListener(this);
+
+        //어제의 TOP 메뉴
+        initTopMenuList();
+
+        topMenuBarChart = (ViewPager) root.findViewById(R.id.top_menu_bar_chart);
+        topMenuViewpagerAdapter = new TopMenuViewpagerAdapter();
+        topMenuBarChart.setAdapter(topMenuViewpagerAdapter);
+        topMenuBarChart.addOnPageChangeListener(topMenuViewPagerPageChangeListener);
+
+        tv_main_deadline_sell_rank = root.findViewById(R.id.tv_main_deadline_sell_rank);
+        tv_main_deadline_order_rank = root.findViewById(R.id.tv_main_deadline_order_rank);
+
+        tv_main_deadline_sell_rank.setOnClickListener(this);
+        tv_main_deadline_order_rank.setOnClickListener(this);
 
         return root;
     }
@@ -390,6 +433,9 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
                         + DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).get(0).getEndWeek());
                 barEntryWeeklyLabels.add("데이터없음");
 
+                break;
+
+            case 0 :
                 break;
         }
 
@@ -571,6 +617,26 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
                 tv_main_deadline_barchart_lunch.setTypeface(Typeface.DEFAULT);
 
                 visitBarChart.setCurrentItem(1);
+                break;
+
+            case R.id.tv_main_deadline_sell_rank :
+                tv_main_deadline_sell_rank.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                tv_main_deadline_sell_rank.setTypeface(Typeface.DEFAULT_BOLD);
+
+                tv_main_deadline_order_rank.setBackground(null);
+                tv_main_deadline_order_rank.setTypeface(Typeface.DEFAULT);
+
+                topMenuBarChart.setCurrentItem(0);
+                break;
+
+            case R.id.tv_main_deadline_order_rank :
+                tv_main_deadline_order_rank.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                tv_main_deadline_order_rank.setTypeface(Typeface.DEFAULT_BOLD);
+
+                tv_main_deadline_sell_rank.setBackground(null);
+                tv_main_deadline_sell_rank.setTypeface(Typeface.DEFAULT);
+
+                topMenuBarChart.setCurrentItem(1);
                 break;
         }
     }
@@ -872,6 +938,115 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         visitChart.invalidate();
     }
 
+    //top Menu 차트
+    public void initTopMenuChart(int position) {
+        Log.d(TAG, "initTopMenuChart");
+
+        switch (position) {
+            case 0 :
+                barDataTopMenuSet = new BarDataSet(barEntryTopSell, getResources().getString(R.string.main_deadline_top_menu_sell_rank));
+                barDataTopMenu = new BarData(barDataTopMenuSet);
+                break;
+            case 1 :
+                barDataTopMenuSet = new BarDataSet(barEntryTopOrder, getResources().getString(R.string.main_deadline_top_menu_order_rank));
+                barDataTopMenu = new BarData(barDataTopMenuSet);
+                break;
+        }
+
+
+        //막대 그래프의 너비
+        barDataTopMenu.setBarWidth(0.3f);
+        barDataTopMenu.setDrawValues(true);
+        barDataTopMenu.setValueFormatter(new ValueFormatter() {
+
+        });
+
+
+        //막대 그래프의 색을 지정해준다.
+        barDataTopMenuSet.setColor(getResources().getColor(R.color.color_4263ff));
+
+        //막대 그래프 상단 수치text 크기
+        barDataTopMenuSet.setValueTextSize(11);
+        barDataTopMenuSet.setValueTextColor(getResources().getColor(R.color.color_222222));
+        //소수점 제거를 위한 데이터 포맷 설정
+        barDataTopMenuSet.setValueFormatter(new DeleteDecimal());
+//        barDataTopMenuSet.setva
+
+        topMenuChart.animateY(3000);
+        topMenuChart.setExtraBottomOffset(24.5f);
+
+        //x축 설정
+        XAxis xAxis = topMenuChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setTextSize(12);
+        xAxis.setYOffset(9.5f);
+        xAxis.setTextColor(getResources().getColor(R.color.color_909090));
+        xAxis.setDrawAxisLine(true);
+        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+
+        //x축 라벨 갯수
+        //라벨 커스텀을 위함...(x축 라벨)
+        switch (position) {
+            case 0:
+                xAxis.setLabelCount(barEntryTopSellLabels.size());
+                xAxis.setValueFormatter(new TopMenuSellFormatter(topMenuChart));
+                break;
+            case 1:
+                xAxis.setLabelCount(barEntryTopOrderLabels.size());
+                xAxis.setValueFormatter(new TopMenuOrderFormatter(topMenuChart));
+                break;
+        }
+
+        //Y축 설정 (왼쪽 / 오른쪽)
+        YAxis YLAxis = topMenuChart.getAxisLeft();
+        YAxis YRAXis = topMenuChart.getAxisRight();
+
+        //활성화
+        YLAxis.setDrawLabels(true);
+        YLAxis.setDrawAxisLine(false);
+        //gridline 은 옆에 선
+        YLAxis.setDrawGridLines(true);
+        YLAxis.setAxisMinimum(0);
+        if (position == 0) {
+            YLAxis.setAxisMaximum(500000);
+        } else {
+            YLAxis.setAxisMaximum(40);
+        }
+        YLAxis.setGranularity(10);
+        YLAxis.setTextColor(getResources().getColor(R.color.color_909090));
+        YLAxis.setTextSize(12);
+
+        //비활성화
+        YRAXis.setDrawLabels(false);
+        YRAXis.setDrawAxisLine(false);
+        YRAXis.setDrawGridLines(false);
+
+        // 각종 이벤트 방지.
+        topMenuChart.setTouchEnabled(false);
+        topMenuChart.setDragEnabled(false);
+        topMenuChart.setScaleEnabled(false);
+        topMenuChart.setPinchZoom(false);
+        topMenuChart.setDoubleTapToZoomEnabled(false);
+
+        //하단 차트 정보 (막대 색갈별 정보)
+        Legend legend = topMenuChart.getLegend();
+        legend.setEnabled(false);
+        legend.setFormSize(8);
+        legend.setForm(Legend.LegendForm.CIRCLE);
+        legend.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setTextSize(13);
+        legend.setTextColor(getResources().getColor(R.color.color_222222));
+
+        //하단 상세 설명(?) 안보이게 설정
+        topMenuChart.getDescription().setEnabled(false);
+
+        topMenuChart.setData(barDataTopMenu);
+        topMenuChart.notifyDataSetChanged();
+        topMenuChart.invalidate();
+    }
+
     public class MyDailyFormatter extends ValueFormatter {
         private final BarLineChartBase<?> chart;
 
@@ -963,6 +1138,46 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
                 return barEntryDinnerLabels.get(0);
             } else {
                 return barEntryDinnerLabels.get((int)value - 1);
+            }
+
+        }
+    }
+
+    public class TopMenuSellFormatter extends ValueFormatter {
+        private final BarLineChartBase<?> chart;
+
+        public TopMenuSellFormatter(BarLineChartBase<?> chart) {
+            this.chart = chart;
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+//            Log.d(TAG, "getFormattedValue - " + value);
+
+            if ((int)value - 1 < 0) {
+                return barEntryTopSellLabels.get(0);
+            } else {
+                return barEntryTopSellLabels.get((int)value - 1);
+            }
+
+        }
+    }
+
+    public class TopMenuOrderFormatter extends ValueFormatter {
+        private final BarLineChartBase<?> chart;
+
+        public TopMenuOrderFormatter(BarLineChartBase<?> chart) {
+            this.chart = chart;
+        }
+
+        @Override
+        public String getFormattedValue(float value) {
+//            Log.d(TAG, "getFormattedValue - " + value);
+
+            if ((int)value - 1 < 0) {
+                return barEntryTopOrderLabels.get(0);
+            } else {
+                return barEntryTopOrderLabels.get((int)value - 1);
             }
 
         }
@@ -1194,6 +1409,104 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         }
     };
 
+    /**
+     * TopMenu 차트 영역
+     * View pager adapter
+     */
+    public class TopMenuViewpagerAdapter extends PagerAdapter {
+        private LayoutInflater layoutInflater;
+
+        public TopMenuViewpagerAdapter() {
+        }
+
+        @Override
+        public Object instantiateItem(final ViewGroup container, int position) {
+            Log.d(TAG, "instantiateItem : position - " + position);
+            layoutInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            final View view = layoutInflater.inflate(R.layout.item_top_menu_bar_chart, container, false);
+
+            topMenuChart = (BarChart) view.findViewById(R.id.top_menu_chart);
+
+            //position에 따라 그리는 값을 달리한다.
+            switch (position) {
+                case 0 :
+                    initTopMenuChart(position);
+                    break;
+                case 1 :
+                    initTopMenuChart(position);
+                    break;
+            }
+
+            container.addView(view);
+
+            return view;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object obj) {
+            return view == obj;
+        }
+
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            View view = (View) object;
+            container.removeView(view);
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return super.getItemPosition(object);
+        }
+
+    }
+
+    //  visitviewpager change listener
+    ViewPager.OnPageChangeListener topMenuViewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(final int position) {
+            switch (position) {
+                case 0 :
+                    tv_main_deadline_sell_rank.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                    tv_main_deadline_sell_rank.setTypeface(Typeface.DEFAULT_BOLD);
+
+                    tv_main_deadline_order_rank.setBackground(null);
+                    tv_main_deadline_order_rank.setTypeface(Typeface.DEFAULT);
+
+                    break;
+
+                case 1:
+                    tv_main_deadline_order_rank.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
+                    tv_main_deadline_order_rank.setTypeface(Typeface.DEFAULT_BOLD);
+
+                    tv_main_deadline_sell_rank.setBackground(null);
+                    tv_main_deadline_sell_rank.setTypeface(Typeface.DEFAULT);
+                    break;
+
+            }
+
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
+
+
+
     //객체 생성하여 리스트 작성
     public void initSellList() {
         Log.d(TAG, "initSellList");
@@ -1406,5 +1719,224 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         }
 
         return result;
+    }
+
+    public void initTopMenuList() {
+        Log.d(TAG, "initTopMenuList - " + lastRawDataHash.toString());
+
+        ArrayList<List<DailySalesListItems>> topMenuListTemp;
+        topMenuListTemp = new ArrayList<List<DailySalesListItems>>();
+
+        //hash 를 arraylist 로 변경한다.
+        topMenuListTemp.addAll(lastRawDataHash.values());
+
+        topMenuList = new ArrayList<DailySalesListItems>();
+
+        for (int i = 0; i < topMenuListTemp.size(); i++) {
+            topMenuList.addAll(topMenuListTemp.get(i));
+        }
+
+        topMenuSellRankList = new ArrayList<DailySalesListItems>();
+        topMenuSellRankList.addAll(topMenuList);
+
+        //정렬
+        Collections.sort(topMenuSellRankList, new Comparator<DailySalesListItems>() {
+            @Override
+            public int compare(DailySalesListItems t1, DailySalesListItems t2) {
+                int ret = 0;
+                if (Integer.parseInt(t1.getItemRealSell()) < Integer.parseInt(t2.getItemRealSell())) {
+                    ret = 1;
+                }
+
+                if ((Integer.parseInt(t1.getItemRealSell()) == Integer.parseInt(t2.getItemRealSell()))) {
+                    if (Integer.parseInt(t1.getItemCount()) < Integer.parseInt(t2.getItemCount())) {
+                        ret = 1;
+                    } else if (Integer.parseInt(t1.getItemCount()) == Integer.parseInt(t2.getItemCount())) {
+                        ret = 0;
+                    } else if (Integer.parseInt(t1.getItemCount()) > Integer.parseInt(t2.getItemCount())) {
+                        ret = -1;
+                    }
+                }
+
+                if (Integer.parseInt(t1.getItemRealSell()) > Integer.parseInt(t2.getItemRealSell())) {
+                    ret = -1;
+                }
+
+                return ret;
+
+            }
+        });
+
+        Log.d(TAG, "topMenuSellRankList : " + topMenuSellRankList);
+
+        topMenuOrderRankList = new ArrayList<DailySalesListItems>();
+        topMenuOrderRankList.addAll(topMenuList);
+        //정렬
+        Collections.sort(topMenuOrderRankList, new Comparator<DailySalesListItems>() {
+            @Override
+            public int compare(DailySalesListItems t1, DailySalesListItems t2) {
+                int ret = 0;
+                if (Integer.parseInt(t1.getItemCount()) < Integer.parseInt(t2.getItemCount())) {
+                    ret = 1;
+                }
+
+                if ((Integer.parseInt(t1.getItemCount()) == Integer.parseInt(t2.getItemCount()))) {
+                    if (Integer.parseInt(t1.getItemRealSell()) < Integer.parseInt(t2.getItemRealSell())) {
+                        ret = 1;
+                    } else if (Integer.parseInt(t1.getItemRealSell()) == Integer.parseInt(t2.getItemRealSell())) {
+                        ret = 0;
+                    } else if (Integer.parseInt(t1.getItemRealSell()) > Integer.parseInt(t2.getItemRealSell())) {
+                        ret = -1;
+                    }
+                }
+
+                if (Integer.parseInt(t1.getItemCount()) > Integer.parseInt(t2.getItemCount())) {
+                    ret = -1;
+                }
+
+                return ret;
+
+            }
+        });
+
+        Log.d(TAG, "topMenuOrderRankList : " + topMenuOrderRankList);
+
+        //Entry 생성
+        makeTopMenuEntry();
+
+    }
+
+    public void makeTopMenuEntry() {
+        Log.d(TAG, "makeTopMenuEntry");
+
+        barEntryTopSellLabels = new ArrayList<String>();
+        test = new ArrayList<>();
+
+        test.add(new DailySalesListItems("실험1", "1", "1000"));
+//        test.add(new DailySalesListItems("실험2", "2", "1000"));
+
+        //판매액 랭킹
+        //항목이 5개 이상인 경우 5개로 설정
+        if (topMenuSellRankList.size() > 5) {
+            barEntryTopSellLabels.add("1");
+
+            //두번쨰항목
+            if (topMenuSellRankList.get(0).getItemRealSell().equals(topMenuSellRankList.get(1).getItemRealSell())) {
+                barEntryTopSellLabels.add("1");
+            } else {
+                barEntryTopSellLabels.add("2");
+            }
+
+            //세번쨰항목
+            if (topMenuSellRankList.get(1).getItemRealSell().equals(topMenuSellRankList.get(2).getItemRealSell())) {
+                barEntryTopSellLabels.add(barEntryTopSellLabels.get(1));
+            } else {
+                barEntryTopSellLabels.add("" + (Integer.parseInt(barEntryTopSellLabels.get(1)) + 1));
+            }
+
+            if (topMenuSellRankList.get(2).getItemRealSell().equals(topMenuSellRankList.get(3).getItemRealSell())) {
+                barEntryTopSellLabels.add(barEntryTopSellLabels.get(2));
+            } else {
+                barEntryTopSellLabels.add("" + (Integer.parseInt(barEntryTopSellLabels.get(2)) + 1));
+            }
+
+            if (topMenuSellRankList.get(3).getItemRealSell().equals(topMenuSellRankList.get(4).getItemRealSell())) {
+                barEntryTopSellLabels.add(barEntryTopSellLabels.get(3));
+            } else {
+                barEntryTopSellLabels.add("" + (Integer.parseInt(barEntryTopSellLabels.get(3)) + 1));
+            }
+
+        } else {
+            //항목이 5개 이하인 경우
+            if (topMenuSellRankList.size() == 0) {
+                Log.e(TAG, "항목이 없습니다.");
+            } else {
+                barEntryTopSellLabels.add("1");
+
+                for (int i = 1; i < topMenuSellRankList.size(); i++) {
+                    if (topMenuSellRankList.get(i - 1).getItemRealSell().equals(topMenuSellRankList.get(i).getItemRealSell())) {
+                        barEntryTopSellLabels.add(barEntryTopSellLabels.get(i - 1));
+                    } else {
+                        barEntryTopSellLabels.add("" + (Integer.parseInt(barEntryTopSellLabels.get(i - 1)) + 1));
+                    }
+                }
+            }
+        }
+
+        Log.d(TAG, "barEntryTopSellLabels : " + barEntryTopSellLabels.toString());
+
+        //sellRank barEntry 생성
+        barEntryTopSell = new ArrayList<BarEntry>();
+        for (int i = 0; i < barEntryTopSellLabels.size(); i++) {
+            barEntryTopSell.add(new BarEntry(i + 1 ,Integer.parseInt(topMenuSellRankList.get(barEntryTopSellLabels.size()-i-1).getItemRealSell())));
+        }
+
+        Log.d(TAG, "barEntryTopSell : " + barEntryTopSell.toString());
+
+        //주문수 랭킹
+        barEntryTopOrderLabels = new ArrayList<String>();
+        if (topMenuOrderRankList.size() > 5) {
+            barEntryTopOrderLabels.add("1");
+
+            //두번쨰항목
+            if (topMenuOrderRankList.get(0).getItemCount().equals(topMenuOrderRankList.get(1).getItemCount())) {
+                barEntryTopOrderLabels.add("1");
+            } else {
+                barEntryTopOrderLabels.add("2");
+            }
+
+            //세번쨰항목
+            if (topMenuOrderRankList.get(1).getItemCount().equals(topMenuOrderRankList.get(2).getItemCount())) {
+                barEntryTopOrderLabels.add(barEntryTopOrderLabels.get(1));
+            } else {
+                barEntryTopOrderLabels.add("" + (Integer.parseInt(barEntryTopOrderLabels.get(1)) + 1));
+            }
+
+            if (topMenuOrderRankList.get(2).getItemCount().equals(topMenuOrderRankList.get(3).getItemCount())) {
+                barEntryTopOrderLabels.add(barEntryTopSellLabels.get(2));
+            } else {
+                barEntryTopOrderLabels.add("" + (Integer.parseInt(barEntryTopOrderLabels.get(2)) + 1));
+            }
+
+            if (topMenuOrderRankList.get(3).getItemCount().equals(topMenuOrderRankList.get(4).getItemCount())) {
+                barEntryTopOrderLabels.add(barEntryTopOrderLabels.get(3));
+            } else {
+                barEntryTopOrderLabels.add("" + (Integer.parseInt(barEntryTopOrderLabels.get(3)) + 1));
+            }
+
+        } else {
+            //항목이 5개 이하인 경우
+            if (topMenuOrderRankList.size() == 0) {
+                Log.e(TAG, "항목이 없습니다.");
+            } else {
+                barEntryTopOrderLabels.add("1");
+
+                for (int i = 1; i < topMenuOrderRankList.size(); i++) {
+                    if (topMenuOrderRankList.get(i - 1).getItemRealSell().equals(topMenuOrderRankList.get(i).getItemRealSell())) {
+                        barEntryTopOrderLabels.add(barEntryTopOrderLabels.get(i - 1));
+                    } else {
+                        barEntryTopOrderLabels.add("" + (Integer.parseInt(barEntryTopOrderLabels.get(i - 1)) + 1));
+                    }
+                }
+            }
+        }
+
+        Log.d(TAG, "barEntryTopOrderLabels : " + barEntryTopOrderLabels.toString());
+
+
+        barEntryTopOrder = new ArrayList<BarEntry>();
+        for (int i = 0; i < barEntryTopOrderLabels.size(); i++) {
+            barEntryTopOrder.add(new BarEntry(i + 1 ,Integer.parseInt(topMenuOrderRankList.get(barEntryTopOrderLabels.size()-i-1).getItemCount())));
+        }
+
+        Log.d(TAG, "barEntryTopOrder : " + barEntryTopOrder.toString());
+
+//        Collections.reverse(barEntryTopSell);
+        Collections.reverse(barEntryTopSellLabels);
+//        Collections.reverse(barEntryTopOrder);
+        Collections.reverse(barEntryTopOrderLabels);
+
+        Log.d(TAG, "barEntryTopOrder22 : " + barEntryTopOrder.toString());
+        Log.d(TAG, "dsadasd : " + barEntryTopOrderLabels);
     }
 }

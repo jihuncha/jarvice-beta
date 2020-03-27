@@ -193,6 +193,12 @@ public class AdapterTodoListDetail extends RecyclerView.Adapter<RecyclerView.Vie
                                 return;
                             }
 
+                            if (output == null || output.equals("")) {
+                                Toast.makeText(mContext, "입력값이 없을 경우 To Do List 수정이 불가능합니다.", Toast.LENGTH_SHORT).show();
+//                                cd.dismiss();
+                                return;
+                            }
+
                             //아이템 네임만 변경
                             insertData.get(position).setItemName(output);
 
@@ -241,7 +247,6 @@ public class AdapterTodoListDetail extends RecyclerView.Adapter<RecyclerView.Vie
                             HelperTodoListObject inputData = new HelperTodoListObject();
                             inputData.setId(insertData.get(position).getId());
 
-                            Log.d(TAG, "dsadad - " + getItemCount());
                             //db제거
 //                            if (getItemCount() == 1) {
 //                                Log.d(TAG, "inputcheck : " + inputData.toString());

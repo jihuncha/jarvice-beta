@@ -227,7 +227,6 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.iv_notification_plus:
-
                 final CustomDialog customDialog = new CustomDialog(mContext, 0,0);
                 customDialog.setOnItemClickListener(new CustomDialog.OnDialogClickListener() {
                     @Override
@@ -279,6 +278,12 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
                             int result = notiAdapter.getItemCount();
 
                             Log.d(TAG, "result check : " + result);
+
+                            if (inputText == null || inputText.equals("")) {
+                                Toast.makeText(mContext, "입력값이 없을 경우 공지 추가가 불가능합니다.", Toast.LENGTH_SHORT).show();
+                                customDialog.dismiss();
+                                return;
+                            }
 
                             if (mTblHelperNotification.getList().size() > 0) {
                                 notiAdapter.add(result, new HelperNotificationObject(inputDate, inputText, 0));
@@ -345,6 +350,12 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
                         int result = todoListAdapter.getItemCount();
 
                         Log.d(TAG, "result check : " + result);
+
+                        if (inputText == null || inputText.equals("")) {
+                            Toast.makeText(mContext, "입력값이 없을 경우 To Do List 추가가 불가능합니다.", Toast.LENGTH_SHORT).show();
+                            customDialogTodo.dismiss();
+                            return;
+                        }
 
                         if (mTblHelperNotification.getList().size() > 0) {
                             todoListAdapter.add(result, new HelperTodoListObject(inputDate, inputText, 1));

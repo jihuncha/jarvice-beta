@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_f7f9fd">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:orientation="horizontal"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/iv_main_analysis_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="19dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/back_press_image" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2019년 23주차 리포트"
+            android:textSize="16dp"
+            android:textColor="@color/color_222222"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/notosans_regular" />
+
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_f7f9fd"
+        android:fillViewport="true"
+        android:paddingBottom="10dp">
+
+        <!-- 시간대 별 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/circular_background_graph"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/notosans_bold"
+                    android:text="@string/main_analysis_sales_title"
+                    android:textColor="@color/color_222222"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="25dp"
+                    android:background="@drawable/circular_background_graph_selector"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_main_analysis_sales_daily"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="@drawable/barchart_circular_background"
+                        android:clickable="true"
+                        android:fontFamily="@font/notosans_regular"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="7.5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/main_analysis_sales_daily"
+                        android:textSize="12dp" />
+
+                    <TextView
+                        android:id="@+id/tv_main_analysis_sales_week"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:clickable="true"
+                        android:fontFamily="@font/notosans_regular"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="7.5dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/main_analysis_sales_week"
+                        android:textSize="12dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/sales_bar_chart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="25dp" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</LinearLayout>

@@ -23,12 +23,16 @@
             </intent-filter>
         </activity>
 
-
         <activity
             android:name=".ui.MainActivity"
             android:theme="@style/AppTheme"
             android:screenOrientation="portrait"
             android:launchMode="singleTop" />
+
+        <activity
+            android:name=".ui.AnalysisDetailActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".ui.popup.LoadingActivity"

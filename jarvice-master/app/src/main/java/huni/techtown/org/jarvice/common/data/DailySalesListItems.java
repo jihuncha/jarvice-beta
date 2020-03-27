@@ -56,4 +56,5 @@ public class DailySalesListItems implements Serializable {
                 ", itemRealSell='" + itemRealSell + '\'' +
                 '}';
     }
+
 }
