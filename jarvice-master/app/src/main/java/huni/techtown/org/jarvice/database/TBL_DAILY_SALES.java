@@ -545,7 +545,7 @@ public class TBL_DAILY_SALES extends TABLE<DailySalesObject> {
         return select_raw(sql);
     }
 
-    //id 기준으로 정렬 및 결과값이 Total 이 아닌 것으로 추출.
+    //database 에서 날짜에 해당되는 값 추출..
     public List<DailySalesObject> getDailyDataForAnalysis(String sellYear, String sellWeek) {
         String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " LIKE '%" + sellYear + "%' AND " + SELL_WEEK + " = '" + sellWeek +"'";
         return select_raw(sql);

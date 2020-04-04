@@ -44,77 +44,200 @@
         android:fillViewport="true"
         android:paddingBottom="10dp">
 
-        <!-- 시간대 별 -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="320dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/circular_background_graph"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- 매출 통계 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="340dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/circular_background_graph"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/notosans_bold"
+                        android:text="@string/main_analysis_sales_title"
+                        android:textColor="@color/color_222222"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_main_analysis_sales"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="25dp"
+                        android:background="@drawable/circular_background_graph_test"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_main_analysis_sales_daily"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
+                            android:background="@drawable/barchart_circular_background"
+                            android:clickable="true"
+                            android:fontFamily="@font/notosans_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="5dp"
+                            android:paddingRight="7.5dp"
+                            android:paddingBottom="5dp"
+                            android:text="@string/main_analysis_sales_daily"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_main_analysis_sales_week"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
+                            android:clickable="true"
+                            android:fontFamily="@font/notosans_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="5dp"
+                            android:paddingRight="7.5dp"
+                            android:paddingBottom="5dp"
+                            android:text="@string/main_analysis_sales_week"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/sales_bar_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="25dp" />
+
+            </LinearLayout>
+
+            <!-- 방문 통계 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/circular_background_graph"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/notosans_bold"
+                        android:text="@string/main_analysis_visit_title"
+                        android:textColor="@color/color_222222"
+                        android:textSize="14dp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_main_analysis_visit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="25dp"
+                        android:background="@drawable/circular_background_graph_test"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_main_analysis_visit_daily"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
+                            android:background="@drawable/barchart_circular_background"
+                            android:clickable="true"
+                            android:fontFamily="@font/notosans_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="5dp"
+                            android:paddingRight="7.5dp"
+                            android:paddingBottom="5dp"
+                            android:text="@string/main_analysis_sales_daily"
+                            android:textSize="12dp" />
+
+                        <TextView
+                            android:id="@+id/tv_main_analysis_visit_week"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
+                            android:clickable="true"
+                            android:fontFamily="@font/notosans_regular"
+                            android:paddingLeft="8dp"
+                            android:paddingTop="5dp"
+                            android:paddingRight="7.5dp"
+                            android:paddingBottom="5dp"
+                            android:text="@string/main_analysis_sales_week"
+                            android:textSize="12dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/visit_bar_chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="25dp" />
+
+            </LinearLayout>
+
+            <!-- pie chart 영역-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/circular_background_graph"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
                     android:layout_marginTop="25dp"
-                    android:layout_weight="1"
                     android:fontFamily="@font/notosans_bold"
-                    android:text="@string/main_analysis_sales_title"
+                    android:text="@string/main_analysis_category_title"
                     android:textColor="@color/color_222222"
                     android:textSize="14dp"
                     android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/category_piechart"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginTop="22dp" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_category_detail"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="25dp"
-                    android:background="@drawable/circular_background_graph_selector"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_main_analysis_sales_daily"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
-                        android:background="@drawable/barchart_circular_background"
-                        android:clickable="true"
-                        android:fontFamily="@font/notosans_regular"
-                        android:paddingLeft="8dp"
-                        android:paddingTop="5dp"
-                        android:paddingRight="7.5dp"
-                        android:paddingBottom="5dp"
-                        android:text="@string/main_analysis_sales_daily"
-                        android:textSize="12dp" />
-
-                    <TextView
-                        android:id="@+id/tv_main_analysis_sales_week"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="2dp"
-                        android:clickable="true"
-                        android:fontFamily="@font/notosans_regular"
-                        android:paddingLeft="8dp"
-                        android:paddingTop="5dp"
-                        android:paddingRight="7.5dp"
-                        android:paddingBottom="5dp"
-                        android:text="@string/main_analysis_sales_week"
-                        android:textSize="12dp" />
-                </LinearLayout>
+                    android:layout_marginTop="17dp" />
 
             </LinearLayout>
-
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/sales_bar_chart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="25dp" />
 
         </LinearLayout>
 

@@ -192,6 +192,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         pieChartData = DatabaseManager.getInstance(mContext).getLastData().get(0);
         Log.d(TAG, "pieChartData - date : " + pieChartData.getSellDate());
+//        Log.d(TAG,"test : " + DatabaseManager.getInstance(mContext).getDailyCheck("2019-11-25").get(0).getDinnerVisitTotal());
 
         checkDaily = DatabaseManager.getInstance(mContext).getLastData().size();
 
@@ -232,7 +233,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
                 checkWeekly = DatabaseManager.getInstance(mContext).getWeeklyLastData(weeklyId).size();
             }
         }
-
 
         //객체 생성
         barEntryDaily = new ArrayList<>();
@@ -719,7 +719,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         Log.d(TAG, "check size : " + size + ", but why?" + xAxis.getLabelCount());
 
-
         // 라벨 커스텀을 위함...(x축 라벨)
         switch (position) {
             case 0:
@@ -776,7 +775,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         Log.d(TAG, "initPieChart");
 
         if (pieChartData == null) {
-            Log.e(TAG, "processPieData - data is null!!");
+            Log.e(TAG, "processPieData NULL!!");
             return;
         }
 
@@ -1504,8 +1503,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         }
     };
-
-
 
     //객체 생성하여 리스트 작성
     public void initSellList() {

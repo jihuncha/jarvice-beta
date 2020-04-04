@@ -98,5 +98,8 @@
     <string name="main_analysis_sales_title">매출 통계</string>
     <string name="main_analysis_sales_daily">요일</string>
     <string name="main_analysis_sales_week">주차</string>
+    <string name="main_analysis_combined_bar_y">매출</string>
+    <string name="main_analysis_visit_title">방문 통계</string>
+    <string name="main_analysis_category_title">카테고리 별 매출</string>
 
 </resources>

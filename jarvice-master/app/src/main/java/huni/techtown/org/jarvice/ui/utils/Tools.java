@@ -51,6 +51,7 @@ import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.data.DailySalesListItems;
 
 public class Tools {
+    private static final String TAG = Tools.class.getSimpleName();
 
     public static void setSystemBarColor(Activity act) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -336,6 +337,8 @@ public class Tools {
 
     //,을 제거하는 로직
     public static String deleteComma(String input) {
+        Log.d(TAG, "deleteComma - " + input);
+
         String result = "";
         if (input.contains(",")) {
             result = input.replace(",", "");
@@ -343,6 +346,7 @@ public class Tools {
             result = input;
         }
 
+        Log.d(TAG, "deleteComma - result : " + result);
         return result;
     }
 

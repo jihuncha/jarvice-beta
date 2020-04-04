@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import huni.techtown.org.jarvice.JarviceConfig;
+import huni.techtown.org.jarvice.JarviceSettings;
 import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.CurrentManager;
 import huni.techtown.org.jarvice.common.DatabaseManager;
@@ -60,6 +61,10 @@ public class SplashActivity  extends AppCompatActivity {
     DatabaseReference weeklyDataReference = databaseReference.child("weeklyData");
     //월간 데이터
     DatabaseReference monthlyDataReference = databaseReference.child("monthlyData");
+
+    //주간 평균 값 (일일자)
+    DatabaseReference weeklySellAvgDataReference = databaseReference.child("weeklySellAvg");
+    private ArrayList<String> weeklySellAvg = new ArrayList<String>();
 
     private TBL_MY_SALES tblMySalesDb = null;
     private TBL_DAILY_SALES tblDailySalesDb = null;
@@ -191,6 +196,35 @@ public class SplashActivity  extends AppCompatActivity {
                 Thread t1 = new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        //TODO Daily 데이터와 동일하므로 이 위치에 추가
+                        for(int i = 0; i < weeklySellAvg.size(); i++) {
+                            Log.d(TAG, "Test : " + weeklySellAvg.get(i));
+                            switch (i) {
+                                case 0 :
+                                    JarviceSettings.getInstance(mContext).setMondaySellAvg(weeklySellAvg.get(i));
+                                    break;
+                                case 1 :
+                                    JarviceSettings.getInstance(mContext).setTuesdaySellAvg(weeklySellAvg.get(i));
+                                    break;
+                                case 2 :
+                                    JarviceSettings.getInstance(mContext).setWednesdaySellAvg(weeklySellAvg.get(i));
+                                    break;
+                                case 3 :
+                                    JarviceSettings.getInstance(mContext).setThursdaySellAvg(weeklySellAvg.get(i));
+                                    break;
+                                case 4 :
+                                    JarviceSettings.getInstance(mContext).setFridaySellAvg(weeklySellAvg.get(i));
+                                    break;
+                                case 5 :
+                                    JarviceSettings.getInstance(mContext).setSaturdaySellAvg(weeklySellAvg.get(i));
+                                    break;
+                                case 6 :
+                                    //TODO 일요일은 0이다...
+                                    JarviceSettings.getInstance(mContext).setSundaySellAvg("0");
+                                    break;
+                            }
+                        }
+
                         tblDailySalesDb.insertForSync(dailySalesDataList);
 
                         CurrentManager.getInstance(mContext).dailyDataFinish(true, "end2");
@@ -355,8 +389,26 @@ public class SplashActivity  extends AppCompatActivity {
             }
         });
 
+        weeklySellAvgDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
+                    if (snapshot.getValue() != null) {
+                        Log.d(TAG, "weeklySellAvgDataReference - " + snapshot.getValue());
+                        weeklySellAvg.add((String)snapshot.getValue());
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e(TAG, "error : " + databaseError.toString());
+
+                Toast myToast = Toast.makeText(mContext.getApplicationContext(), "error!!", Toast.LENGTH_SHORT);
+                myToast.show();
+            }
+        });
     }
 
     private void goToMainActivity() {

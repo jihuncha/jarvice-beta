@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import huni.techtown.org.jarvice.JarviceSettings;
 import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.DatabaseManager;
 import huni.techtown.org.jarvice.common.data.SalesObject;
@@ -98,6 +99,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.e(TAG, "sum check : " + sum);
 
         Log.e(TAG, "" + DatabaseManager.getInstance(mContext).getSumCount("2019-04-12"));
+
+//        JarviceSettings.getInstance(mContext).setBtInfo("ds");
+
+
 
     }
 

@@ -21,7 +21,7 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
     /*** Table 이름 정의 *******************/
     public static final String TABLE_NAME = "tbl_weekly_sales";
 
-    /*** 21개 ***/
+    /***  ***/
     /*** Column 이름 정의 **********************/
     public static final String ID					            = "_id";
     public static final String SELL_YEAR		                = "sell_year";                  // 년
@@ -29,6 +29,12 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
     public static final String START_WEEK			            = "start_week";                 // 시작주
     public static final String END_WEEK			                = "end_week";                   // 끝주
     public static final String SELL_REAL			            = "sell_real";                  // 실매출
+    public static final String SELL_FOOD			            = "sell_food";                  // 음식
+    public static final String SELL_BEAR			            = "sell_bear";                  // 주류
+    public static final String SELL_COCK			            = "sell_cock";                  // 칵테일
+    public static final String SELL_LIQUOR			            = "sell_liquor";                // 양주
+    public static final String SELL_DRINK			            = "sell_drink";                 // 음료
+
 
     /*** Table 생성 쿼리 **********************/
     public static final String CREATE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " " +
@@ -38,7 +44,12 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
                 SELL_WEEK               + " TEXT," +
                 START_WEEK				+ " TEXT," +
                 END_WEEK			    + " TEXT," +
-                SELL_REAL			    + " TEXT " +
+                SELL_REAL			    + " TEXT," +
+                SELL_FOOD			    + " TEXT," +
+                SELL_BEAR			    + " TEXT," +
+                SELL_COCK			    + " TEXT," +
+                SELL_LIQUOR			    + " TEXT," +
+                SELL_DRINK			    + " TEXT " +
                 ");";
 
     /*** Table 생성 쿼리 **********************/
@@ -46,7 +57,7 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
 
     /*** INDEX 정의 **********************/
     protected static class INDEX {
-        public int ID, SELL_YEAR, SELL_WEEK, START_WEEK, END_WEEK, SELL_REAL;
+        public int ID, SELL_YEAR, SELL_WEEK, START_WEEK, END_WEEK, SELL_REAL, SELL_FOOD, SELL_BEAR, SELL_COCK, SELL_LIQUOR, SELL_DRINK;
     }
 
     protected static INDEX cursorToIndex(Cursor c) throws Exception {
@@ -58,6 +69,11 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
         idx.START_WEEK              = c.getColumnIndex(START_WEEK);
         idx.END_WEEK                = c.getColumnIndex(END_WEEK);
         idx.SELL_REAL               = c.getColumnIndex(SELL_REAL);
+        idx.SELL_FOOD               = c.getColumnIndex(SELL_FOOD);
+        idx.SELL_BEAR               = c.getColumnIndex(SELL_BEAR);
+        idx.SELL_COCK               = c.getColumnIndex(SELL_COCK);
+        idx.SELL_LIQUOR             = c.getColumnIndex(SELL_LIQUOR);
+        idx.SELL_DRINK              = c.getColumnIndex(SELL_DRINK);
 
         return idx;
     }
@@ -82,6 +98,11 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
         values.put(START_WEEK,              o.getStartWeek());
         values.put(END_WEEK,                o.getEndWeek());
         values.put(SELL_REAL,               o.getSellReal());
+        values.put(SELL_FOOD,               o.getSellFood());
+        values.put(SELL_BEAR,               o.getSellBear());
+        values.put(SELL_COCK,               o.getSellCock());
+        values.put(SELL_LIQUOR,             o.getSellLiquor());
+        values.put(SELL_DRINK,              o.getSellDrink());
 
         return values;
     }
@@ -117,6 +138,11 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
         if (idx.START_WEEK != -1) o.setStartWeek(c.getString(idx.START_WEEK));
         if (idx.END_WEEK != -1) o.setEndWeek(c.getString(idx.END_WEEK));
         if (idx.SELL_REAL != -1) o.setSellReal(c.getString(idx.SELL_REAL));
+        if (idx.SELL_FOOD != -1) o.setSellFood(c.getString(idx.SELL_FOOD));
+        if (idx.SELL_BEAR != -1) o.setSellBear(c.getString(idx.SELL_BEAR));
+        if (idx.SELL_COCK != -1) o.setSellCock(c.getString(idx.SELL_COCK));
+        if (idx.SELL_LIQUOR != -1) o.setSellLiquor(c.getString(idx.SELL_LIQUOR));
+        if (idx.SELL_DRINK != -1) o.setSellDrink(c.getString(idx.SELL_DRINK));
 
         return o;
     }
@@ -186,6 +212,12 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
 
         String sql = "SELECT * FROM " + tableName + " WHERE " + ID + " <= " + id + " ORDER BY " + ID + " DESC LIMIT 3";
 
+        return select_raw(sql);
+    }
+
+    //database 에서 날짜에 해당되는 값 추출..
+    public List<WeeklySalesObject> getWeeklyDataForAnalysis(String sellYear, String sellWeek) {
+        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_YEAR + " = '" + sellYear + "' AND " + SELL_WEEK + " = '" + sellWeek +"'";
         return select_raw(sql);
     }
 }
