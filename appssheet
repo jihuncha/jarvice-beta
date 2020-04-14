@@ -1,0 +1,244 @@
+//원본데이터
+function writeDataToFirebase() {
+
+// 스크립트를 실행한 시트를 가져옴
+var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('jarviceData');
+//병합된 셀을 분할해준다
+var rangeList = sheet.getRangeList(['A:A', 'B:B', 'C:C', 'D:D', 'E:E', 'F:F']);
+rangeList.breakApart();
+//각 데이터에 value를 가져온다
+var data = sheet.getDataRange().getValues();
+//dataFormat -> 적혀져있는걸로 가져옴..
+var dateFormat = sheet.getDataRange().getDisplayValues();
+//firebase 에 보낼 배열
+var dataToImport = {};
+  
+//for 문을 통하여 데이터 수집
+  for(var i = 1; i < data.length; i++) {
+    var id = i;
+    dataToImport[id] = {
+      id : i,
+      sellDate:dateFormat[i][0],
+      receiptNo:dateFormat[i][1],
+      sort:dateFormat[i][2],
+      tableNo:dateFormat[i][3],
+      firstOrder:dateFormat[i][4],
+      paymentTime:dateFormat[i][5],
+      productCode:dateFormat[i][6],
+      barcode:dateFormat[i][7],
+      productName:dateFormat[i][8],
+      productCount:dateFormat[i][9],
+      sell:dateFormat[i][10],
+      discount:dateFormat[i][11],
+      discountType:dateFormat[i][12],
+      realSales:dateFormat[i][13],
+      plusSales:dateFormat[i][14],
+      vat: dateFormat[i][15],
+      category: dateFormat[i][16],
+      day: dateFormat[i][24]
+    };
+  }
+
+//realtimeDatabase 에 전달
+  var firebaseUrl = "https://jarvice-265509.firebaseio.com/";
+  var secret = "fdwCVWpDQkzMwr1hR5zcqFUL1gWYfaiAlTnK8PQH";
+  var base = FirebaseApp.getDatabaseByUrl(firebaseUrl, secret);
+  
+//  base.removeData("");
+  base.setData("rawData", dataToImport);
+  
+}
+
+// 일간 데이터
+function writeDailyData() {
+  // 스크립트를 실행한 시트를 가져옴
+var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('jarviceDailyData');
+sheet.getRange(1,1,1,312).setNumberFormat("dd/MM/yyyy");
+//병합된 셀을 분할해준다
+//var rangeList = sheet.getRangeList(['A:A', 'B:B', 'C:C', 'D:D', 'E:E', 'F:F']);
+//rangeList.breakApart();
+//각 데이터에 value를 가져온다
+var data = sheet.getDataRange().getValues();
+//dataFormat -> 적혀져있는걸로 가져옴..
+var dateFormat = sheet.getDataRange().getDisplayValues();
+//firebase 에 보낼 배열
+var dataToImport = {};
+var dataWeeklyAvg = {};
+  
+  for (var i = 0; i < 7; i++) {
+    dataWeeklyAvg[i] = dateFormat[i + 1][5];
+  }
+  
+ for(var i = 15; i < dateFormat.length; i++) {
+    var id = i;
+   var dateSell = data[i][0];
+   
+    dataToImport[id] = {
+      id : id,
+      sellDate:dateFormat[i][0],
+      sellDayOfWeek:dateFormat[i][1],
+      sellWeek:dateFormat[i][4],
+      sellAll:data[i][5].toString(),
+      sellReal:data[i][7].toString(),
+      sellFood:data[i][11].toString(),
+      sellFoodPercent:dateFormat[i][12].toString(),
+      sellBeer:data[i][13].toString(),
+      sellBeerPercent:dateFormat[i][14].toString(),
+      sellCock:data[i][15].toString(),
+      sellCockPercent:dateFormat[i][16].toString(),
+      sellLiquor:data[i][17].toString(),
+      sellLiquorPercent:dateFormat[i][18].toString(),
+      sellDrink:data[i][19].toString(),
+      sellDrinkPercent:dateFormat[i][20].toString(),
+      sellLunch:data[i][21].toString(),
+      sellLunchPercent:dateFormat[i][22].toString(),
+      sellDelivery:data[i][23].toString(),
+      sellDeliveryPercent:dateFormat[i][24].toString(),
+      sellFoodProduct:data[i][30].toString(),
+      sellBeerProduct:data[i][32].toString(),
+      sellCockProduct:data[i][34].toString(),
+      sellLiquorProduct:data[i][36].toString(),
+      sellDrinkProduct:data[i][38].toString(),
+      dinnerVisitFive:dateFormat[i][49],
+      dinnerVisitSix:dateFormat[i][50],
+      dinnerVisitSeven:dateFormat[i][51],
+      dinnerVisitEight:dateFormat[i][52],
+      dinnerVisitNine:dateFormat[i][53],
+      dinnerVisitTen:dateFormat[i][54],
+      dinnerVisitEleven:dateFormat[i][55],
+      dinnerVisitTwelve:dateFormat[i][56],
+      dinnerVisitOne:dateFormat[i][57],
+      dinnerVisitTotal:dateFormat[i][58]
+    };
+  }
+
+  //realtimeDatabase 에 전달
+  var firebaseUrl = "https://jarvice-265509.firebaseio.com/";
+  var secret = "fdwCVWpDQkzMwr1hR5zcqFUL1gWYfaiAlTnK8PQH";
+  var base = FirebaseApp.getDatabaseByUrl(firebaseUrl, secret);
+  
+  base.setData("dailyData", dataToImport);
+  base.setData("weeklySellAvg", dataWeeklyAvg);
+}
+
+// 주간 데이터
+function writeWeeklyData() {
+  // 스크립트를 실행한 시트를 가져옴
+var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('jarviceWeeklyData');
+//병합된 셀을 분할해준다
+//var rangeList = sheet.getRangeList(['A:A', 'B:B', 'C:C', 'D:D', 'E:E', 'F:F']);
+//rangeList.breakApart();
+//각 데이터에 value를 가져온다
+var data = sheet.getDataRange().getValues();
+//dataFormat -> 적혀져있는걸로 가져옴..
+var dateFormat = sheet.getDataRange().getDisplayValues();
+//firebase 에 보낼 배열
+var dataToImport = {};
+  
+ for(var i = 4; i < dateFormat.length; i++) {
+   var id = i;
+    dataToImport[id] = {
+      id : id,
+      sellYear:dateFormat[i][0],
+      sellWeek:dateFormat[i][1],
+      startWeek:dateFormat[i][2],
+      endWeek:dateFormat[i][4],
+      sellReal:dateFormat[i][5],
+      sellFood:dateFormat[i][10],
+      sellBeer:dateFormat[i][12],
+      sellCock:dateFormat[i][14],
+      sellLiquor:dateFormat[i][16],
+      sellDrink:dateFormat[i][18]
+    };
+  }
+
+  //realtimeDatabase 에 전달
+  var firebaseUrl = "https://jarvice-265509.firebaseio.com/";
+  var secret = "fdwCVWpDQkzMwr1hR5zcqFUL1gWYfaiAlTnK8PQH";
+  var base = FirebaseApp.getDatabaseByUrl(firebaseUrl, secret);
+  
+  base.setData("weeklyData", dataToImport);
+}
+
+//월간데이터
+function writeMonthlyData() {
+  // 스크립트를 실행한 시트를 가져옴
+var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('jarviceMonthlyData');
+//병합된 셀을 분할해준다
+//var rangeList = sheet.getRangeList(['A:A', 'B:B', 'C:C', 'D:D', 'E:E', 'F:F']);
+//rangeList.breakApart();
+//각 데이터에 value를 가져온다
+var data = sheet.getDataRange().getValues();
+  //date 포맷 ㅅㅂ 너때매 4시간날림
+var dateFormat = sheet.getDataRange().getDisplayValues();
+//firebase 에 보낼 배열
+var dataToImport = {};
+  
+ for(var i = 1; i < dateFormat.length; i++) {
+   var id = i;
+    dataToImport[id] = {
+      id : id,
+      sellYear:dateFormat[i][0],
+      sellMonth:dateFormat[i][1],
+      sellReal:dateFormat[i][4],
+      sellCard:dateFormat[i][6],
+      sellCash:dateFormat[i][7]
+    };
+  }
+
+  //realtimeDatabase 에 전달
+  var firebaseUrl = "https://jarvice-265509.firebaseio.com/";
+  var secret = "fdwCVWpDQkzMwr1hR5zcqFUL1gWYfaiAlTnK8PQH";
+  var base = FirebaseApp.getDatabaseByUrl(firebaseUrl, secret);
+  
+  base.setData("monthlyData", dataToImport);
+}
+
+
+
+
+var checkRow = 17000;
+
+//빈 공간 채워주기..
+function fillEmptyCells() {
+//  getRssFeed();
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getActiveSheet();
+  var lastRow = sheet.getLastRow();
+  var saveData;
+  
+//5분 이상 넘어가면 꺼지므로 확인 이후에 다시 i값을 변경시키는 작업을 해야함 (feat.개구려)
+//  for (i = 17021; i <= lastRow; i++) { 
+  for (i = checkRow; i <= lastRow; i++) { 
+    var test = sheet.getRange(i, 5);
+    Logger.log(test);
+    
+    checkRow = i;
+    // 셀이 비어 있는지 체크
+    if (test.isBlank()) {
+      // 한단계 위에 행의 값을 가져오
+//      var rewind = sheet.getRange(i-1, 2, 1, 5).getValues();
+      // 값 대입
+      sheet.getRange(i, 2, 1, 5).setValues(saveData);
+    }  else {
+      saveData = sheet.getRange(i, 2, 1, 5).getValues();
+    }
+   
+  }
+}
+
+
+
+//자동화 시도중...........
+ function getRssFeed() {
+   var cache = CacheService.getPublicCache();
+   var cached = cache.get("rss-feed-contents");
+   if (cached != null) {
+     return cached;
+   }
+   var result = UrlFetchApp.fetch("http://example.com/my-slow-rss-feed.xml"); // takes 20 seconds
+   var contents = result.getContentText();
+   cache.put("rss-feed-contents", contents, 1500); // cache for 25 minutes
+   return contents;
+ }
