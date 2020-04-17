@@ -74,6 +74,7 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View root = inflater.inflate(R.layout.tab_main_home, container, false);
+        Log.d(TAG, "onCreateView");
 
         mContext = container.getContext();
 
@@ -82,7 +83,6 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
         tvMainHomeFunctionThirdTitle = (TextView) root.findViewById(R.id.tv_main_home_function_third_title);
 
         //하단 카드뷰 부분
-        //TODO 프래그먼트는 구지다..
         about_title_array[0] = mContext.getString(R.string.main_home_function_tab_first);
         about_title_array[1] = mContext.getString(R.string.main_home_function_tab_second);
         about_title_array[2] = mContext.getString(R.string.main_home_function_tab_third);
@@ -162,8 +162,6 @@ public class TabLayoutHome extends Fragment implements View.OnClickListener {
 
             }
         });
-
-
 
         return root;
     }

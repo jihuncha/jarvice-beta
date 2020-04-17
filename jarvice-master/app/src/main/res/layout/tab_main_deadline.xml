@@ -45,10 +45,13 @@
 
             <!-- bar chart 영역-->
             <LinearLayout
+                android:id="@+id/ll_test"
                 android:layout_width="match_parent"
                 android:layout_height="356dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/circular_background_graph"
+                android:background="@drawable/circular_background_graph_new"
+                android:padding="3dp"
+                android:elevation="6dp"
                 android:orientation="vertical">
 
                 <LinearLayout

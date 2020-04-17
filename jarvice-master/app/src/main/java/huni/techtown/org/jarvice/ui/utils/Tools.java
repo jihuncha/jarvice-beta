@@ -324,12 +324,14 @@ public class Tools {
 
     //천단위에 , 추가하는 로직
     public static String decimalFormat(String input) {
+        Log.d(TAG, "input - " + input);
         DecimalFormat sellFormatter = new DecimalFormat("###,###");
         String sellFormatterResult = "";
         try {
             sellFormatterResult = sellFormatter.format(Integer.parseInt(input));
         } catch (Exception e ) {
-
+            Log.e(TAG, e.toString());
+            sellFormatterResult = input;
         }
 
         return sellFormatterResult + "원";
@@ -340,6 +342,13 @@ public class Tools {
         Log.d(TAG, "deleteComma - " + input);
 
         String result = "";
+
+        if (input == null) {
+            Log.d(TAG, "deleteComma - input is null");
+            result = "0";
+            return result;
+        }
+
         if (input.contains(",")) {
             result = input.replace(",", "");
         } else {

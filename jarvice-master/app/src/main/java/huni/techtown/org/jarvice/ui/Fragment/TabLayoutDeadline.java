@@ -3,13 +3,16 @@ package huni.techtown.org.jarvice.ui.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -153,8 +156,10 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
     private TopMenuViewpagerAdapter topMenuViewpagerAdapter;
 
     private ArrayList<BarEntry> barEntryTopSell;
+    private ArrayList<String> barEntryTopSellLabelsSample;
     private ArrayList<String> barEntryTopSellLabels;
     private ArrayList<BarEntry> barEntryTopOrder;
+    private ArrayList<String> barEntryTopOrderLabelsSample;
     private ArrayList<String> barEntryTopOrderLabels;
 
     private ArrayList<DailySalesListItems> topMenuList;
@@ -170,6 +175,8 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
     // 매출액/주문수 로 나누기
     private TextView tv_main_deadline_sell_rank;
     private TextView tv_main_deadline_order_rank;
+
+    private LinearLayout ll_test;
 
     public TabLayoutDeadline() {
     }
@@ -190,7 +197,13 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         //날자 선정 -> 0 번쨰가 가장 최근
         Log.d(TAG, "getLastData - All :  " + DatabaseManager.getInstance(mContext).getLastData());
 
-        pieChartData = DatabaseManager.getInstance(mContext).getLastData().get(0);
+        if (DatabaseManager.getInstance(mContext).getLastData().size() != 0) {
+            pieChartData = DatabaseManager.getInstance(mContext).getLastData().get(0);
+        } else {
+            Toast.makeText(mContext,"해당 데이터 제공 불가능", Toast.LENGTH_LONG).show();
+            return root;
+        }
+
         Log.d(TAG, "pieChartData - date : " + pieChartData.getSellDate());
 //        Log.d(TAG,"test : " + DatabaseManager.getInstance(mContext).getDailyCheck("2019-11-25").get(0).getDinnerVisitTotal());
 
@@ -214,7 +227,13 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         //월간 데이터 탐색
         String[] checkDataFromDate = pieChartData.getSellDate().split("-");
-        monthlyId = "" +  DatabaseManager.getInstance(mContext).getMonthlyLastDataCheck(checkDataFromDate[0] , checkDataFromDate[1]).get(0).getId();
+        Log.d(TAG, "check : " + checkDataFromDate);
+        if (DatabaseManager.getInstance(mContext).getMonthlyLastDataCheck(checkDataFromDate[0] , checkDataFromDate[1]) != null) {
+            monthlyId = "" +  DatabaseManager.getInstance(mContext).getMonthlyLastDataCheck(checkDataFromDate[0] , checkDataFromDate[1]).get(0).getId();
+        } else {
+            Log.e(TAG, "montlyId null!!");
+        }
+
         if (monthlyId != null && monthlyId != "") {
             checkMonthly = DatabaseManager.getInstance(mContext).getMonthlyLastData(monthlyId).size();
         }
@@ -223,7 +242,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         String weekCheck = pieChartData.getSellWeek();
         String year = checkDataFromDate[0];
 
-        Log.d(TAG, "test2 : " + DatabaseManager.getInstance(mContext).getWeeklyLastDataCheck(year, weekCheck));
         if (DatabaseManager.getInstance(mContext).getWeeklyLastDataCheck(year, weekCheck).size() == 0) {
             weeklyId = "알수없음";
             checkWeekly = 0;
@@ -351,6 +369,11 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         tv_main_deadline_sell_rank.setOnClickListener(this);
         tv_main_deadline_order_rank.setOnClickListener(this);
+
+        ll_test = (LinearLayout) root.findViewById(R.id.ll_test);
+        Drawable testDraw = getResources().getDrawable(R.drawable.circular_background_graph_new);
+//        testDraw.setAlpha(120);
+//        ll_test.setBackground(testDraw);
 
         return root;
     }
@@ -795,8 +818,8 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellFood()),getResources().getString(R.string.main_deadline_pie_graph_food)));
         yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellBeer()),getResources().getString(R.string.main_deadline_pie_graph_beer)));
         yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellCock()),getResources().getString(R.string.main_deadline_pie_graph_cock)));
-        yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellDrink()),getResources().getString(R.string.main_deadline_pie_graph_drink)));
         yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellLiquor()),getResources().getString(R.string.main_deadline_pie_graph_liquor)));
+        yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellDrink()),getResources().getString(R.string.main_deadline_pie_graph_drink)));
         yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellLunch()),getResources().getString(R.string.main_deadline_pie_graph_lunch)));
         yValues.add(new PieEntry(Integer.parseInt(pieChartData.getSellDelivery()),getResources().getString(R.string.main_deadline_pie_graph_delivery)));
 
@@ -960,7 +983,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         });
 
-
         //막대 그래프의 색을 지정해준다.
         barDataTopMenuSet.setColor(getResources().getColor(R.color.color_4263ff));
 
@@ -982,7 +1004,9 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         xAxis.setTextColor(getResources().getColor(R.color.color_909090));
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+        //TODO 위치..
+//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM_INSIDE);
+        xAxis.setPosition(TOP_INSIDE);
 
         //x축 라벨 갯수
         //라벨 커스텀을 위함...(x축 라벨)
@@ -1154,9 +1178,9 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 //            Log.d(TAG, "getFormattedValue - " + value);
 
             if ((int)value - 1 < 0) {
-                return barEntryTopSellLabels.get(0);
+                return barEntryTopSellLabelsSample.get(0);
             } else {
-                return barEntryTopSellLabels.get((int)value - 1);
+                return barEntryTopSellLabelsSample.get((int)value - 1);
             }
 
         }
@@ -1174,9 +1198,9 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 //            Log.d(TAG, "getFormattedValue - " + value);
 
             if ((int)value - 1 < 0) {
-                return barEntryTopOrderLabels.get(0);
+                return barEntryTopOrderLabelsSample.get(0);
             } else {
-                return barEntryTopOrderLabels.get((int)value - 1);
+                return barEntryTopOrderLabelsSample.get((int)value - 1);
             }
 
         }
@@ -1635,37 +1659,30 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         }
 
         if (food.size() != 0) {
-//            makeListItems(food);
             lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_food), makeListItems(food));
         }
 
         if (beer.size() != 0) {
-//            makeListItems(beer);
             lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_beer), makeListItems(beer));
         }
 
         if (cock.size() != 0) {
-//            makeListItems(cock);
             lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_cock), makeListItems(cock));
         }
 
         if (liquor.size() != 0) {
-//            makeListItems(liquor);
             lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_liquor), makeListItems(liquor));
         }
 
         if (drink.size() != 0) {
-//            makeListItems(drink);
             lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_drink), makeListItems(drink));
         }
 
         if (lunch.size() != 0) {
-//            makeListItems(lunch);
             lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_lunch), makeListItems(lunch));
         }
 
         if (delivery.size() != 0) {
-//            makeListItems(delivery);
             lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_delivery), makeListItems(delivery));
         }
 
@@ -1760,7 +1777,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
                 }
 
                 return ret;
-
             }
         });
 
@@ -1792,7 +1808,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
                 }
 
                 return ret;
-
             }
         });
 
@@ -1806,6 +1821,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
     public void makeTopMenuEntry() {
         Log.d(TAG, "makeTopMenuEntry");
 
+        barEntryTopSellLabelsSample = new ArrayList<String>();
         barEntryTopSellLabels = new ArrayList<String>();
         test = new ArrayList<>();
 
@@ -1817,30 +1833,48 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         if (topMenuSellRankList.size() > 5) {
             barEntryTopSellLabels.add("1");
 
+            barEntryTopSellLabelsSample.add("1위 " + topMenuSellRankList.get(0).getItemName());
+
             //두번쨰항목
             if (topMenuSellRankList.get(0).getItemRealSell().equals(topMenuSellRankList.get(1).getItemRealSell())) {
                 barEntryTopSellLabels.add("1");
+
+                barEntryTopSellLabelsSample.add("1위 " + topMenuSellRankList.get(1).getItemName());
             } else {
                 barEntryTopSellLabels.add("2");
+
+                barEntryTopSellLabelsSample.add("2위 " + topMenuSellRankList.get(1).getItemName());
             }
 
             //세번쨰항목
             if (topMenuSellRankList.get(1).getItemRealSell().equals(topMenuSellRankList.get(2).getItemRealSell())) {
                 barEntryTopSellLabels.add(barEntryTopSellLabels.get(1));
+
+                barEntryTopSellLabelsSample.add(barEntryTopSellLabels.get(1) + "위 " + topMenuSellRankList.get(2).getItemName());
             } else {
                 barEntryTopSellLabels.add("" + (Integer.parseInt(barEntryTopSellLabels.get(1)) + 1));
+
+                barEntryTopSellLabelsSample.add((Integer.parseInt(barEntryTopSellLabels.get(1)) + 1) + "위 " + topMenuSellRankList.get(2).getItemName());
             }
 
             if (topMenuSellRankList.get(2).getItemRealSell().equals(topMenuSellRankList.get(3).getItemRealSell())) {
                 barEntryTopSellLabels.add(barEntryTopSellLabels.get(2));
+
+                barEntryTopSellLabelsSample.add(barEntryTopSellLabels.get(2) + "위 " + topMenuSellRankList.get(3).getItemName());
             } else {
                 barEntryTopSellLabels.add("" + (Integer.parseInt(barEntryTopSellLabels.get(2)) + 1));
+
+                barEntryTopSellLabelsSample.add((Integer.parseInt(barEntryTopSellLabels.get(2)) + 1) + "위 " + topMenuSellRankList.get(3).getItemName());
             }
 
             if (topMenuSellRankList.get(3).getItemRealSell().equals(topMenuSellRankList.get(4).getItemRealSell())) {
                 barEntryTopSellLabels.add(barEntryTopSellLabels.get(3));
+
+                barEntryTopSellLabelsSample.add(barEntryTopSellLabels.get(3) + "위 " + topMenuSellRankList.get(4).getItemName());
             } else {
                 barEntryTopSellLabels.add("" + (Integer.parseInt(barEntryTopSellLabels.get(3)) + 1));
+
+                barEntryTopSellLabelsSample.add((Integer.parseInt(barEntryTopSellLabels.get(3)) + 1) + "위 " + topMenuSellRankList.get(4).getItemName());
             }
 
         } else {
@@ -1850,11 +1884,17 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
             } else {
                 barEntryTopSellLabels.add("1");
 
+                barEntryTopSellLabelsSample.add("1위 " + topMenuSellRankList.get(0).getItemName());
+
                 for (int i = 1; i < topMenuSellRankList.size(); i++) {
                     if (topMenuSellRankList.get(i - 1).getItemRealSell().equals(topMenuSellRankList.get(i).getItemRealSell())) {
                         barEntryTopSellLabels.add(barEntryTopSellLabels.get(i - 1));
+
+                        barEntryTopSellLabelsSample.add(barEntryTopSellLabels.get(i - 1) + "위 " + topMenuSellRankList.get(i).getItemName());
                     } else {
                         barEntryTopSellLabels.add("" + (Integer.parseInt(barEntryTopSellLabels.get(i - 1)) + 1));
+
+                        barEntryTopSellLabelsSample.add((Integer.parseInt(barEntryTopSellLabels.get(i - 1)) + 1) + "위 " + topMenuSellRankList.get(i).getItemName());
                     }
                 }
             }
@@ -1871,34 +1911,53 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         Log.d(TAG, "barEntryTopSell : " + barEntryTopSell.toString());
 
         //주문수 랭킹
+        barEntryTopOrderLabelsSample = new ArrayList<String>();
         barEntryTopOrderLabels = new ArrayList<String>();
         if (topMenuOrderRankList.size() > 5) {
             barEntryTopOrderLabels.add("1");
 
+            barEntryTopOrderLabelsSample.add("1위 " + topMenuOrderRankList.get(0).getItemName());
+
             //두번쨰항목
             if (topMenuOrderRankList.get(0).getItemCount().equals(topMenuOrderRankList.get(1).getItemCount())) {
                 barEntryTopOrderLabels.add("1");
+
+                barEntryTopOrderLabelsSample.add("1위 " + topMenuOrderRankList.get(1).getItemName());
             } else {
                 barEntryTopOrderLabels.add("2");
+
+                barEntryTopOrderLabelsSample.add("2위 " + topMenuOrderRankList.get(1).getItemName());
             }
 
             //세번쨰항목
             if (topMenuOrderRankList.get(1).getItemCount().equals(topMenuOrderRankList.get(2).getItemCount())) {
                 barEntryTopOrderLabels.add(barEntryTopOrderLabels.get(1));
+
+                barEntryTopOrderLabelsSample.add(barEntryTopOrderLabels.get(1) + "위 " + topMenuOrderRankList.get(2).getItemName());
             } else {
                 barEntryTopOrderLabels.add("" + (Integer.parseInt(barEntryTopOrderLabels.get(1)) + 1));
+
+                barEntryTopOrderLabelsSample.add((Integer.parseInt(barEntryTopOrderLabels.get(1)) + 1) + "위 " + topMenuOrderRankList.get(2).getItemName());
             }
 
             if (topMenuOrderRankList.get(2).getItemCount().equals(topMenuOrderRankList.get(3).getItemCount())) {
-                barEntryTopOrderLabels.add(barEntryTopSellLabels.get(2));
+                barEntryTopOrderLabels.add(barEntryTopOrderLabels.get(2));
+
+                barEntryTopOrderLabelsSample.add(barEntryTopOrderLabels.get(2) + "위 " + topMenuOrderRankList.get(3).getItemName());
             } else {
                 barEntryTopOrderLabels.add("" + (Integer.parseInt(barEntryTopOrderLabels.get(2)) + 1));
+
+                barEntryTopOrderLabelsSample.add((Integer.parseInt(barEntryTopOrderLabels.get(2)) + 1) + "위 " + topMenuOrderRankList.get(3).getItemName());
             }
 
             if (topMenuOrderRankList.get(3).getItemCount().equals(topMenuOrderRankList.get(4).getItemCount())) {
                 barEntryTopOrderLabels.add(barEntryTopOrderLabels.get(3));
+
+                barEntryTopOrderLabelsSample.add(barEntryTopOrderLabels.get(3) + "위 " + topMenuOrderRankList.get(4).getItemName());
             } else {
                 barEntryTopOrderLabels.add("" + (Integer.parseInt(barEntryTopOrderLabels.get(3)) + 1));
+
+                barEntryTopOrderLabelsSample.add((Integer.parseInt(barEntryTopOrderLabels.get(3)) + 1) + "위 " + topMenuOrderRankList.get(4).getItemName());
             }
 
         } else {
@@ -1908,11 +1967,17 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
             } else {
                 barEntryTopOrderLabels.add("1");
 
+                barEntryTopOrderLabelsSample.add("1위 " + topMenuOrderRankList.get(0).getItemName());
+
                 for (int i = 1; i < topMenuOrderRankList.size(); i++) {
                     if (topMenuOrderRankList.get(i - 1).getItemRealSell().equals(topMenuOrderRankList.get(i).getItemRealSell())) {
                         barEntryTopOrderLabels.add(barEntryTopOrderLabels.get(i - 1));
+
+                        barEntryTopOrderLabelsSample.add(barEntryTopOrderLabels.get(i - 1) + "위 " + topMenuOrderRankList.get(i).getItemName());
                     } else {
                         barEntryTopOrderLabels.add("" + (Integer.parseInt(barEntryTopOrderLabels.get(i - 1)) + 1));
+
+                        barEntryTopOrderLabelsSample.add((Integer.parseInt(barEntryTopOrderLabels.get(i - 1)) + 1) + "위 " + topMenuOrderRankList.get(i).getItemName());
                     }
                 }
             }
@@ -1930,8 +1995,10 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
 //        Collections.reverse(barEntryTopSell);
         Collections.reverse(barEntryTopSellLabels);
+        Collections.reverse(barEntryTopSellLabelsSample);
 //        Collections.reverse(barEntryTopOrder);
         Collections.reverse(barEntryTopOrderLabels);
+        Collections.reverse(barEntryTopOrderLabelsSample);
 
         Log.d(TAG, "barEntryTopOrder22 : " + barEntryTopOrder.toString());
         Log.d(TAG, "dsadasd : " + barEntryTopOrderLabels);

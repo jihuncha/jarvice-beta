@@ -16,21 +16,44 @@
         android:textColor="@color/color_909090"
         android:fontFamily="@font/notosans_regular" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical">-->
 
         <com.github.mikephil.charting.charts.CombinedChart
             android:id="@+id/chart1"
             android:layout_width="match_parent"
             android:layout_height="320dp"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="18dp"/>
+
+<!--    </LinearLayout>-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <ImageView
+            android:id="@+id/iv_main_deadline_sell_list_color"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:layout_marginRight="6dp"
+            android:src="@drawable/circular_background_analysis"
+            android:layout_gravity="center"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dsaa"/>
+            android:text="@string/main_analysis_sales_legend"
+            android:textSize="13dp"
+            android:textColor="@color/color_222222"
+            android:fontFamily="@font/notosans_regular"
+            android:layout_gravity="center"/>
     </LinearLayout>
+
 
 </RelativeLayout>

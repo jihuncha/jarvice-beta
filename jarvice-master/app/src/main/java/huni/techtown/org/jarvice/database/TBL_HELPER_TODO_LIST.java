@@ -212,4 +212,14 @@ public class TBL_HELPER_TODO_LIST extends TABLE <HelperTodoListObject> {
                         + " AND " + TODO_COLUMN + "= " + 1;
         return update_raw(sql);
     }
+
+    public boolean updateTodoListCheck(long input, int checkResult) {
+        Log.v(TABLE_NAME, "updateTodoList() - input: " + input + ", checkResult - " + checkResult);
+        String sql =
+                "UPDATE " + TABLE_NAME
+                        + " SET "
+                        +  TODO_CHECK + "= " + checkResult + ""
+                        + " WHERE " + ID + "= " + input + "";
+        return update_raw(sql);
+    }
 }

@@ -2,6 +2,7 @@ package huni.techtown.org.jarvice.ui.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,7 @@ public class AdapterPieChartList extends RecyclerView.Adapter<RecyclerView.ViewH
             final OriginalViewHolder view = (OriginalViewHolder) holder;
 
             final DailySalesList dso = inserData.get(position);
+            Log.d(TAG, "dso : " + dso.toString());
             GradientDrawable imageColor = (GradientDrawable) view.iv_main_deadline_sell_list_color.getDrawable();
             imageColor.setColor(mContext.getResources().getColor(dso.getColor()));
             view.tv_main_deadline_sell_list_color_category.setText(dso.getCategoryName());

@@ -11,11 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -41,14 +45,25 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 
 import huni.techtown.org.jarvice.JarviceSettings;
 import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.DatabaseManager;
+import huni.techtown.org.jarvice.common.data.DailySalesList;
+import huni.techtown.org.jarvice.common.data.DailySalesListItems;
 import huni.techtown.org.jarvice.common.data.DailySalesObject;
+import huni.techtown.org.jarvice.common.data.SalesObject;
 import huni.techtown.org.jarvice.common.data.WeeklySalesObject;
 import huni.techtown.org.jarvice.database.TBL_DAILY_SALES;
+import huni.techtown.org.jarvice.database.TBL_MY_SALES;
 import huni.techtown.org.jarvice.database.TBL_WEEKLY_SALES;
+import huni.techtown.org.jarvice.ui.adapter.AdapterPieChartList;
+import huni.techtown.org.jarvice.ui.popup.LoadingActivity;
+import huni.techtown.org.jarvice.ui.utils.DateUtils;
 import huni.techtown.org.jarvice.ui.utils.Tools;
 
 /**
@@ -63,6 +78,8 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
     private Context mContext;
     private Handler mHandler;
 
+    private RelativeLayout rl_main_analysis_back;
+    private TextView tv_main_analysis_title;
     private ImageView iv_main_analysis_back;
 
     private WeeklySalesObject inputData;
@@ -125,9 +142,57 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
     private PieChart categoryPieChart;
     private ArrayList<PieEntry> categorySellEntry;
 
-    //카테고리 하단 순서
+    //카테고리 하단 색상 및 항목
     private ArrayList<Integer> categoryDetailPercentList;
+    //리사이클러뷰에 전달할 list
+    private ArrayList<DailySalesList> insertListOfSellsData;
 
+    private RecyclerView rv_category_detail;
+    private AdapterPieChartList mAdapterPieChartList;
+
+    //주간 날짜에 해당되는 일간 데이터를 전부 가져와서 list 처리한다..
+    private TBL_MY_SALES mTblMySales;
+    private ArrayList<List<SalesObject>> dailyDataSalesList;
+    private ArrayList<SalesObject> dailyDataSalesListReal;
+
+    //최종 카테고리별로 나눈 결과
+    private HashMap<String, List<DailySalesListItems>> lastRawDataHash;
+
+    //TODO - 이게 맞을까?? 카테고리별 음식 Entry
+    private ArrayList<BarEntry> barEntryCategory1;
+    private ArrayList<BarEntry> barEntryCategory2;
+    private ArrayList<BarEntry> barEntryCategory3;
+    private ArrayList<BarEntry> barEntryCategory4;
+    private ArrayList<BarEntry> barEntryCategory5;
+    private ArrayList<BarEntry> barEntryCategory6;
+    private ArrayList<BarEntry> barEntryCategory7;
+
+    private ArrayList<String> barEntryCategoryString1;
+    private ArrayList<String> barEntryCategoryString2;
+    private ArrayList<String> barEntryCategoryString3;
+    private ArrayList<String> barEntryCategoryString4;
+    private ArrayList<String> barEntryCategoryString5;
+    private ArrayList<String> barEntryCategoryString6;
+    private ArrayList<String> barEntryCategoryString7;
+
+    //최종 카테고리를 위한 viewpager 두개 생성 (1. 메뉴를 위한것 2.메뉴에 따른 내부 항목
+    private RecyclerView rv_category_menu;
+
+    private ViewPager vp_category_detail;
+    private HotCategoryMenuChartAdapter hotCategoryMenuChartAdapter;
+
+    private BarChart hotMenuBarChart;
+    private BarDataSet hotMenuBarDataSet;
+    private BarData hotMenuBarData;
+
+    private ArrayList<String> categoryMenuString;
+    private CategoryMenuAdapter categoryMenuAdapter;
+
+    private int [] color = { };
+    private int [] colorOriginal = {};
+
+    //TODO viewpager setitem 을위함..
+    private boolean checkFirstTime = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +204,23 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
         mContext = this;
         mHandler = new Handler();
 
+        LoadingActivity.show(mContext,"AnalysisDetailActivity - onCreate");
+
+        //색상 설정
+        color = new int[]{
+                getResources().getColor(R.color.color_fb7a63), getResources().getColor(R.color.color_fcc849),
+                getResources().getColor(R.color.color_6bd67c), getResources().getColor(R.color.color_c7abf6),
+                getResources().getColor(R.color.color_839afe), getResources().getColor(R.color.color_81c6fc),
+                getResources().getColor(R.color.color_4993cd)
+        };
+
+        colorOriginal = new int[] {
+                R.color.color_fb7a63, R.color.color_fcc849,
+                R.color.color_6bd67c, R.color.color_c7abf6,
+                R.color.color_839afe, R.color.color_81c6fc,
+                R.color.color_4993cd
+        };
+
         Log.d(TAG, "check : " + JarviceSettings.getInstance(mContext).getMondaySellAvg());
 
         if (getIntent() != null) {
@@ -149,11 +231,16 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
             finish();
         }
 
+        rl_main_analysis_back = (RelativeLayout) findViewById(R.id.rl_main_analysis_back);
+        rl_main_analysis_back.setOnClickListener(this);
         iv_main_analysis_back = (ImageView) findViewById(R.id.iv_main_analysis_back);
         iv_main_analysis_back.setOnClickListener(this);
 
         sellYear = inputData.getSellYear();
         sellWeek = inputData.getSellWeek();
+//        2019년 23주차 리포트
+        tv_main_analysis_title = (TextView) findViewById(R.id.tv_main_analysis_title);
+        tv_main_analysis_title.setText(sellYear + "년 " + sellWeek +"주차 리포트");
 
         //해당 요일별 비교를 위한 DailyData를 가져온다
         mTblDailySales = DatabaseManager.getInstance(mContext).getDailySales();
@@ -163,9 +250,14 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
 
         //TODO 0번째가 일요일이 아닌 월요일로 하기 위한 세팅..
         DailySalesObject sundayData = new DailySalesObject();
-        sundayData = dailyDataList.get(0);
-        dailyDataList.remove(0);
-        dailyDataList.add(sundayData);
+        if (dailyDataList.size() != 0) {
+            sundayData = dailyDataList.get(0);
+            dailyDataList.remove(0);
+            dailyDataList.add(sundayData);
+        } else {
+            Log.e(TAG, "sundayData NULL!");
+        }
+
 
         Log.d(TAG, "DailyDataList - " + dailyDataList);
 
@@ -218,23 +310,96 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
         addCategoryData();
         categoryPieChart = (PieChart) findViewById(R.id.category_piechart);
 
-        //카테고리 별 매출 상세 항목
-        categoryDetailPercentList = new ArrayList<Integer>();
-        initCategorySellList();
         initPieChart();
 
+        //카테고리 별 매출 상세 항목
+        //퍼센트담는곳
+        categoryDetailPercentList = new ArrayList<Integer>();
 
+        initCategorySellList();
+
+        rv_category_detail = (RecyclerView) findViewById(R.id.rv_category_detail);
+        rv_category_detail.setLayoutManager(new LinearLayoutManager(mContext));
+        rv_category_detail.setHasFixedSize(true);
+
+        insertListOfSellsData = new ArrayList<DailySalesList>();
+        categoryMenuString = new ArrayList<String>();
+
+        initColorList();
+
+        mAdapterPieChartList = new AdapterPieChartList(mContext, insertListOfSellsData);
+        mAdapterPieChartList.setOnItemClickListener(new AdapterPieChartList.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, DailySalesList obj, int position) {
+                Log.d(TAG, "mAdapterPieChartList - onItemClick : " + position);
+            }
+
+        });
+        rv_category_detail.setAdapter(mAdapterPieChartList);
+
+        //카테고리 별 인기메뉴 통계
+        dailyDataSalesList = new ArrayList<List<SalesObject>>();
+        dailyDataSalesListReal = new ArrayList<SalesObject>();
+        lastRawDataHash = new HashMap<>();
+
+        mTblMySales = DatabaseManager.getInstance(mContext).getMySales();
+
+        for (int i = 0; i < dailyDataList.size(); i++) {
+            dailyDataSalesList.add(mTblMySales.getRangeDailyData(dailyDataList.get(i).getSellDate()));
+        }
+
+        for (int i = 0; i < dailyDataSalesList.size(); i++) {
+            dailyDataSalesListReal.addAll(dailyDataSalesList.get(i));
+        }
+
+        Log.d(TAG, "dailyDataSalesListReal : " + dailyDataSalesListReal.toString());
+
+        initCategoryDetailList();
+
+        Log.d(TAG, "hana : " + lastRawDataHash.toString());
+
+        //카테고리 별 인기 메뉴의 타이틀.
+        rv_category_menu = (RecyclerView) findViewById(R.id.rv_category_menu);
+        rv_category_menu.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+        //TODO 이거때문에 항목 삭제시 view 갱신이 안됬음 -> false 로 변경...
+        rv_category_menu.setHasFixedSize(false);
+        categoryMenuAdapter = new CategoryMenuAdapter(categoryMenuString);
+        rv_category_menu.setAdapter(categoryMenuAdapter);
+
+        //카테고리 별 인기 메뉴
+        vp_category_detail = (ViewPager) findViewById(R.id.vp_category_detail);
+        hotCategoryMenuChartAdapter = new HotCategoryMenuChartAdapter();
+        vp_category_detail.setAdapter(hotCategoryMenuChartAdapter);
+        vp_category_detail.addOnPageChangeListener(hotCategoryBarChartListener);
+
+        //findViewHolderForAdapterPosition 가 바로하면 죽는 현상때문에 postdelay
+        setPosition();
+
+        LoadingActivity.hide(mContext,"AnalysisDetailActivity - onCreate");
+    }
+
+    public void setPosition(){
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                vp_category_detail.setCurrentItem(0);
+                hotCategoryMenuChartAdapter.notifyDataSetChanged();
+                categoryMenuAdapter.notifyDataSetChanged();
+                checkFirstTime = false;
+            }
+        },50);
 
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_main_analysis_back :
+            case R.id.iv_main_analysis_back:
+            case R.id.rl_main_analysis_back:
                 finish();
                 break;
 
-            case R.id.tv_main_analysis_sales_daily :
+            case R.id.tv_main_analysis_sales_daily:
                 sales_bar_chart.setCurrentItem(0);
 
                 tv_main_analysis_sales_daily.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
@@ -245,7 +410,7 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
 
                 break;
 
-            case R.id.tv_main_analysis_sales_week :
+            case R.id.tv_main_analysis_sales_week:
                 sales_bar_chart.setCurrentItem(1);
 
                 tv_main_analysis_sales_week.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
@@ -255,7 +420,7 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
                 tv_main_analysis_sales_daily.setTypeface(Typeface.DEFAULT);
                 break;
 
-            case R.id.tv_main_analysis_visit_daily :
+            case R.id.tv_main_analysis_visit_daily:
                 visit_bar_chart.setCurrentItem(0);
 
                 tv_main_analysis_visit_daily.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
@@ -266,7 +431,7 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
 
                 break;
 
-            case R.id.tv_main_analysis_visit_week :
+            case R.id.tv_main_analysis_visit_week:
                 visit_bar_chart.setCurrentItem(1);
 
                 tv_main_analysis_visit_week.setBackground(mContext.getResources().getDrawable(R.drawable.barchart_circular_background));
@@ -350,13 +515,29 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
 
         categorySellEntry = new ArrayList<PieEntry>();
         categorySellEntry.add(new PieEntry(Integer.parseInt(Tools.deleteComma(weeklyDataList.get(0).getSellFood()))));
-        categorySellEntry.add(new PieEntry(Integer.parseInt(Tools.deleteComma(weeklyDataList.get(0).getSellBear()))));
+        categorySellEntry.add(new PieEntry(Integer.parseInt(Tools.deleteComma(weeklyDataList.get(0).getSellBeer()))));
         categorySellEntry.add(new PieEntry(Integer.parseInt(Tools.deleteComma(weeklyDataList.get(0).getSellCock()))));
         categorySellEntry.add(new PieEntry(Integer.parseInt(Tools.deleteComma(weeklyDataList.get(0).getSellLiquor()))));
         categorySellEntry.add(new PieEntry(Integer.parseInt(Tools.deleteComma(weeklyDataList.get(0).getSellDrink()))));
 
         Log.d(TAG, "categorySellEntry : " + categorySellEntry);
 
+    }
+
+    public void addCategoryDetailData() {
+        Log.d(TAG, "addCategoryDetailData");
+
+        if (categoryMenuString.size() == 0) {
+            Log.e(TAG, "addCategoryDetailData NULL!!");
+            return;
+        }
+
+//        for (int i = 0; i < categoryMenuString.size(); i++) {
+//            switch (i) {
+////                case 0 :             barEntryCategory1.add(new BarEntry())
+//            }
+//
+//        }
 
     }
 
@@ -411,14 +592,13 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
 
         //하단 차트 정보 (막대 색갈별 정보)
         Legend legend = combinedChart.getLegend();
-        legend.setEnabled(true);
+        legend.setEnabled(false);
         legend.setFormSize(8);
         legend.setForm(Legend.LegendForm.CIRCLE);
         legend.setDirection(Legend.LegendDirection.LEFT_TO_RIGHT);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
         legend.setTextSize(13);
         legend.setTextColor(getResources().getColor(R.color.color_222222));
-//        legend.
 
                 //막대 그래프 상단 수치text 크기
 //        barDataTopMenuSet.setValueTextSize(11);
@@ -514,7 +694,7 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
         //소수점 제거를 위한 데이터 포맷 설정
         dailyVisitBarDataSet.setValueFormatter(new DeleteDecimal());
 
-        visitBarChart.animateY(3000);
+        visitBarChart.animateY(1500);
         visitBarChart.setExtraBottomOffset(24.5f);
 
         //x축 설정
@@ -624,11 +804,11 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
         PieDataSet dataSet = new PieDataSet(categorySellEntry," ");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
-        int [] color={ getResources().getColor(R.color.color_fb7a63), getResources().getColor(R.color.color_fcc849),
-                getResources().getColor(R.color.color_6bd67c), getResources().getColor(R.color.color_c7abf6),
-                getResources().getColor(R.color.color_839afe), getResources().getColor(R.color.color_81c6fc),
-                getResources().getColor(R.color.color_4993cd)
-        };
+//        int [] color={ getResources().getColor(R.color.color_fb7a63), getResources().getColor(R.color.color_fcc849),
+//                getResources().getColor(R.color.color_6bd67c), getResources().getColor(R.color.color_c7abf6),
+//                getResources().getColor(R.color.color_839afe), getResources().getColor(R.color.color_81c6fc),
+//                getResources().getColor(R.color.color_4993cd)
+//        };
 
         dataSet.setColors(color);
         categoryPieChart.setDrawMarkers(false);
@@ -653,7 +833,7 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
 
         @Override
         public String getFormattedValue(float value) {
-            Log.d(TAG, "value : " + value);
+//            Log.d(TAG, "value : " + value);
             if ((int)value - 1 < 0) {
                 return barEntrySellWeekLabels.get(0);
             } else {
@@ -849,6 +1029,183 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
         }
     };
 
+    /**
+     * BarChart 차트 영역
+     * 카테고리 별 인기 메뉴
+     */
+    public class HotCategoryMenuChartAdapter extends PagerAdapter {
+        private LayoutInflater layoutInflater;
+        private TextView tv_yaxis_title;
+
+        public HotCategoryMenuChartAdapter() {
+        }
+
+        @Override
+        public Object instantiateItem(final ViewGroup container, int position) {
+            Log.d(TAG, "instantiateItem : position - " + position);
+            layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            final View view = layoutInflater.inflate(R.layout.item_hot_category_bar_chart_analysis, container, false);
+
+            hotMenuBarChart = (BarChart) view.findViewById(R.id.hot_menu_chart);
+            tv_yaxis_title = (TextView) view.findViewById(R.id.tv_yaxis_title);
+
+            tv_yaxis_title.setText(categoryMenuString.get(position));
+
+            //position에 따라 그리는 값을 달리한다.
+            switch (position) {
+                case 0 :
+                    break;
+
+                case 1 :
+                    break;
+
+                case 2 :
+                    break;
+
+                case 3 :
+                    break;
+
+                case 4 :
+                    break;
+
+                case 5 :
+                    break;
+
+                case 6 :
+                    break;
+
+                case 7 :
+                    break;
+            }
+
+            container.addView(view);
+
+            return view;
+        }
+
+        @Override
+        public int getCount() {
+            return categoryMenuString.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object obj) {
+            return view == obj;
+        }
+
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            View view = (View) object;
+            container.removeView(view);
+        }
+
+        @Override
+        public int getItemPosition(@NonNull Object object) {
+            return super.getItemPosition(object);
+        }
+
+    }
+
+    ViewPager.OnPageChangeListener hotCategoryBarChartListener = new ViewPager.OnPageChangeListener() {
+
+        private TextView title;
+        private TextView lastTitle;
+        private int lastPosition = 0;
+
+        @Override
+        public void onPageSelected(final int position) {
+            Log.d(TAG, "hotCategoryBarChartListener - position : " + position + " lastPosition : " + lastPosition);
+
+            title = (TextView) rv_category_menu.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.tv_category_menu_title);
+            title.setTextColor(getResources().getColor(R.color.color_ffffff));
+            title.setBackground(getResources().getDrawable(R.drawable.circular_focus));
+            title.setTypeface(ResourcesCompat.getFont(mContext, R.font.notosans_bold));
+
+            if (lastPosition != position) {
+                lastTitle = (TextView) rv_category_menu.findViewHolderForAdapterPosition(lastPosition).itemView.findViewById(R.id.tv_category_menu_title);
+                lastTitle.setTextColor(getResources().getColor(R.color.color_707594));
+                lastTitle.setBackground(getResources().getDrawable(R.drawable.circular_regular));
+                lastTitle.setTypeface(ResourcesCompat.getFont(mContext, R.font.notosans_regular));
+                lastPosition = position;
+            }
+
+            categoryMenuAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+        }
+    };
+
+    //메뉴 title 어댑터
+    public class CategoryMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        private ArrayList<String> inputData;
+
+        public CategoryMenuAdapter(ArrayList<String> inputData) {
+            this.inputData = inputData;
+        }
+
+        public class OriginalViewHolder extends RecyclerView.ViewHolder {
+            public RelativeLayout rl_category_menu_container;
+            public TextView tv_category_menu_title;
+
+            public OriginalViewHolder(View v) {
+                super(v);
+                rl_category_menu_container = (RelativeLayout) v.findViewById(R.id.rl_category_menu_container);
+                tv_category_menu_title = (TextView) v.findViewById(R.id.tv_category_menu_title);
+            }
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            RecyclerView.ViewHolder vh;
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_analysis_menu, parent, false);
+            vh = new OriginalViewHolder(v);
+            return vh;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+            if (holder instanceof OriginalViewHolder) {
+                final OriginalViewHolder viewHolder = (OriginalViewHolder) holder;
+
+                //text 설정
+                viewHolder.tv_category_menu_title.setText(inputData.get(position));
+                if (position == 0 && checkFirstTime) {
+                    viewHolder.tv_category_menu_title.setTextColor(getResources().getColor(R.color.color_ffffff));
+                    viewHolder.tv_category_menu_title.setBackground(getResources().getDrawable(R.drawable.circular_focus));
+                    viewHolder.tv_category_menu_title.setTypeface(ResourcesCompat.getFont(mContext, R.font.notosans_bold));
+                }
+
+                viewHolder.tv_category_menu_title.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        vp_category_detail.setCurrentItem(position);
+                    }
+                });
+
+                viewHolder.rl_category_menu_container.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        viewHolder.tv_category_menu_title.performClick();
+                    }
+                });
+
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return inputData.size();
+        }
+    }
 
 
     //소수점 제거를 위함
@@ -864,6 +1221,112 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
             return mFormat.format(value);
 
         }
+    }
+
+    //객체 생성하여 리스트 작성
+    public void initColorList() {
+        Log.d(TAG, "initColorList");
+
+        //TODO 이 노가다를 해야하나??더 좋은 방법이...??
+        //TODO 정책 수정 -> 결국 7개 다보내야함
+
+        for (int i = 0; i < categoryDetailPercentList.size(); i++) {
+            DailySalesList input = new DailySalesList();
+            switch (i) {
+                case 0 :
+                    input.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_food));
+                    if (weeklyDataList.get(0).getSellFood() == null
+                            || weeklyDataList.get(0).getSellFood() == " "
+                            || weeklyDataList.get(0).getSellFood().equals("0")) {
+                        input.setCategoryRealSell("0");
+                    } else {
+                        input.setCategoryRealSell(weeklyDataList.get(0).getSellFood());
+
+                        categoryMenuString.add(getResources().getString(R.string.main_deadline_pie_graph_food));
+                    }
+//                    input.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_food)));
+                    break;
+                case 1 :
+                    input.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_beer));
+                    if (weeklyDataList.get(0).getSellBeer() == null
+                            || weeklyDataList.get(0).getSellBeer() == " "
+                            || weeklyDataList.get(0).getSellBeer().equals("0")) {
+                        input.setCategoryRealSell("0");
+                    } else {
+                        input.setCategoryRealSell(weeklyDataList.get(0).getSellBeer());
+
+                        categoryMenuString.add(getResources().getString(R.string.main_deadline_pie_graph_beer));
+                    }
+
+//                    input.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_beer)));
+                    break;
+                case 2 :
+                    if (weeklyDataList.get(0).getSellCock() == null
+                            || weeklyDataList.get(0).getSellCock() == " "
+                            || weeklyDataList.get(0).getSellCock().equals("0")) {
+                        input.setCategoryRealSell("0");
+                    } else {
+                        input.setCategoryRealSell(weeklyDataList.get(0).getSellCock());
+                    }
+                    input.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_cock));
+//                    input.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_cock)));
+
+                    categoryMenuString.add(getResources().getString(R.string.main_deadline_pie_graph_cock));
+                    break;
+                case 3 :
+                    if (weeklyDataList.get(0).getSellLiquor() == null
+                            || weeklyDataList.get(0).getSellLiquor() == " "
+                            || weeklyDataList.get(0).getSellLiquor().equals("0")) {
+                        input.setCategoryRealSell("0");
+                    } else {
+                        input.setCategoryRealSell(weeklyDataList.get(0).getSellLiquor());
+                    }
+                    input.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_liquor));
+//                    input.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_liquor)));
+
+                    categoryMenuString.add(getResources().getString(R.string.main_deadline_pie_graph_liquor));
+                    break;
+                case 4 :
+                    if (weeklyDataList.get(0).getSellDrink() == null
+                            || weeklyDataList.get(0).getSellDrink() == " "
+                            || weeklyDataList.get(0).getSellDrink().equals("0")) {
+                        input.setCategoryRealSell("0");
+                    } else {
+                        input.setCategoryRealSell(weeklyDataList.get(0).getSellDrink());
+                    }
+                    input.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_drink));
+//                    input.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_drink)));
+
+                    categoryMenuString.add(getResources().getString(R.string.main_deadline_pie_graph_drink));
+                    break;
+                case 5 :
+                    break;
+                case 6 :
+                    break;
+            }
+            input.setCategorySellPer(categoryDetailPercentList.get(i) + "%");
+            input.setColor(colorOriginal[i]);
+            insertListOfSellsData.add(input);
+        }
+
+//        DailySalesList dsl6 = new DailySalesList();
+//        dsl6.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_lunch));
+//        dsl6.setCategoryRealSell(pieChartData.getSellLunch());
+//        dsl6.setCategorySellPer(pieChartData.getSellLunchPercent());
+//        dsl6.setColor(R.color.color_81c6fc);
+//        dsl6.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_lunch)));
+//        insertListOfSellsData.add(dsl6);
+//
+//        DailySalesList dsl7 = new DailySalesList();
+//        dsl7.setCategoryName(getResources().getString(R.string.main_deadline_pie_graph_delivery));
+//        dsl7.setCategoryRealSell(pieChartData.getSellDelivery());
+//        dsl7.setCategorySellPer(pieChartData.getSellDeliveryPercent());
+//        dsl7.setColor(R.color.color_4993cd);
+//        dsl7.setItemList(lastRawDataHash.get(getResources().getString(R.string.main_deadline_pie_graph_delivery)));
+//        insertListOfSellsData.add(dsl7);
+
+        Log.d(TAG, "initColorList - result : " + insertListOfSellsData);
+
     }
 
     public void initCategorySellList() {
@@ -887,13 +1350,13 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
                             / (Float.parseFloat(Tools.deleteComma(weeklyDataList.get(0).getSellReal())))));
         }
 
-        if (weeklyDataList.get(0).getSellBear() == null
-                || weeklyDataList.get(0).getSellBear() == " "
-                || weeklyDataList.get(0).getSellBear().equals("0")) {
+        if (weeklyDataList.get(0).getSellBeer() == null
+                || weeklyDataList.get(0).getSellBeer() == " "
+                || weeklyDataList.get(0).getSellBeer().equals("0")) {
             categoryDetailPercentList.add(0);
         } else {
             categoryDetailPercentList.add((int)
-                    ((Float.parseFloat(Tools.deleteComma(weeklyDataList.get(0).getSellBear()))) * 100
+                    ((Float.parseFloat(Tools.deleteComma(weeklyDataList.get(0).getSellBeer()))) * 100
                             / (Float.parseFloat(Tools.deleteComma(weeklyDataList.get(0).getSellReal())))));
         }
 
@@ -927,7 +1390,159 @@ public class AnalysisDetailActivity extends AppCompatActivity implements View.On
                     / (Float.parseFloat(Tools.deleteComma(weeklyDataList.get(0).getSellReal())))));
         }
 
-        Log.d(TAG, "test : " + categoryDetailPercentList);
+        Log.d(TAG, "initCategorySellList - result : " + categoryDetailPercentList);
 
+    }
+
+    public void initCategoryDetailList() {
+        Log.d(TAG, "initCategoryDetailList");
+        DateUtils.d(TAG, "initCategoryDetailList - start");
+
+        //TODO 이 노가다를 해야하나??더 좋은 방법이...??
+        List<SalesObject> food = new ArrayList<SalesObject>();
+        List<SalesObject> beer = new ArrayList<SalesObject>();
+        List<SalesObject> cock = new ArrayList<SalesObject>();
+        List<SalesObject> liquor = new ArrayList<SalesObject>();
+        List<SalesObject> drink = new ArrayList<SalesObject>();
+        List<SalesObject> lunch = new ArrayList<SalesObject>();
+        List<SalesObject> delivery = new ArrayList<SalesObject>();
+
+        for (int i = 0; i < dailyDataSalesListReal.size(); i++ ) {
+            if (dailyDataSalesListReal.get(i).getCategory().equals("푸드")){
+                food.add(dailyDataSalesListReal.get(i));
+            }
+
+            if (dailyDataSalesListReal.get(i).getCategory().equals("주류")){
+                beer.add(dailyDataSalesListReal.get(i));
+            }
+
+            if (dailyDataSalesListReal.get(i).getCategory().equals("칵테일")){
+                cock.add(dailyDataSalesListReal.get(i));
+            }
+
+            if (dailyDataSalesListReal.get(i).getCategory().equals("양주")){
+                liquor.add(dailyDataSalesListReal.get(i));
+            }
+
+            if (dailyDataSalesListReal.get(i).getCategory().equals("드링크")){
+                drink.add(dailyDataSalesListReal.get(i));
+            }
+
+            if (dailyDataSalesListReal.get(i).getCategory().equals("런치")){
+                lunch.add(dailyDataSalesListReal.get(i));
+            }
+
+            if (dailyDataSalesListReal.get(i).getCategory().equals("배달")){
+                delivery.add(dailyDataSalesListReal.get(i));
+            }
+        }
+
+        if (food.size() != 0) {
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_food), makeListItems(food));
+        }
+
+        if (beer.size() != 0) {
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_beer), makeListItems(beer));
+        }
+
+        if (cock.size() != 0) {
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_cock), makeListItems(cock));
+        }
+
+        if (liquor.size() != 0) {
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_liquor), makeListItems(liquor));
+        }
+
+        if (drink.size() != 0) {
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_drink), makeListItems(drink));
+        }
+
+        if (lunch.size() != 0) {
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_lunch), makeListItems(lunch));
+        }
+
+        if (delivery.size() != 0) {
+            lastRawDataHash.put(getResources().getString(R.string.main_deadline_pie_graph_delivery), makeListItems(delivery));
+        }
+
+        Log.d(TAG, "initCategoryDetailList - hash : " + lastRawDataHash.toString());
+
+        addCategoryDetailData();
+
+        DateUtils.d(TAG, "initCategoryDetailList - end");
+    }
+
+    /**
+     * 중복되는 아이템 체크를 위한 로직
+     *
+     * */
+    public List<DailySalesListItems> makeListItems(List<SalesObject> inputList) {
+        Log.d(TAG, "makeListItems - " + inputList.toString());
+
+        //같은 카테고리에서 같은 종류의 음식이 있는지 체크하는로직
+        List<String> check  = new ArrayList<String>();
+        List<DailySalesListItems> result = new ArrayList<>();
+
+        for (int i = 0; i < inputList.size(); i ++) {
+            //상품명이 다른 것이 있을 경우
+            if (!check.contains(inputList.get(i).getProductName())) {
+                check.add(inputList.get(i).getProductName());
+
+                //새로운 아이템을 생성해준다.
+                DailySalesListItems items = new DailySalesListItems();
+                items.setItemName(inputList.get(i).getProductName());
+                items.setItemCount(inputList.get(i).getProductCount());
+                items.setItemRealSell(Tools.deleteComma(inputList.get(i).getRealSales()));
+
+                //결과 값에 반영한다.
+                result.add(items);
+            } else {
+                //기존에 있는 상품일 경우
+                for (int j = 0; j < result.size(); j++) {
+                    if (result.get(j).getItemName().equals(inputList.get(i).getProductName())) {
+                        //상품갯수
+                        String count = result.get(j).getItemCount();
+                        //판매금액
+                        String sales = result.get(j).getItemRealSell();
+                        //파싱 이후 set해준다 (,때문에)
+                        int resultCount = Integer.parseInt(Tools.deleteComma(count)) + Integer.parseInt(Tools.deleteComma(inputList.get(i).getProductCount()));
+                        result.get(j).setItemCount("" + resultCount);
+                        int resultSales = Integer.parseInt(Tools.deleteComma(sales)) + Integer.parseInt(Tools.deleteComma(inputList.get(i).getRealSales()));
+                        result.get(j).setItemRealSell("" + resultSales);
+                    }
+                }
+            }
+        }
+
+        //TODO 팔린 가격순으로 정렬
+        Collections.sort(result, new Comparator<DailySalesListItems>() {
+            @Override
+            public int compare(DailySalesListItems t1, DailySalesListItems t2) {
+                int ret = 0;
+                if (Integer.parseInt(t1.getItemRealSell()) < Integer.parseInt(t2.getItemRealSell())) {
+                    ret = 1;
+                }
+
+                if ((Integer.parseInt(t1.getItemRealSell()) == Integer.parseInt(t2.getItemRealSell()))) {
+                    if (Integer.parseInt(t1.getItemCount()) < Integer.parseInt(t2.getItemCount())) {
+                        ret = 1;
+                    } else if (Integer.parseInt(t1.getItemCount()) == Integer.parseInt(t2.getItemCount())) {
+                        ret = 0;
+                    } else if (Integer.parseInt(t1.getItemCount()) > Integer.parseInt(t2.getItemCount())) {
+                        ret = -1;
+                    }
+                }
+
+                if (Integer.parseInt(t1.getItemRealSell()) > Integer.parseInt(t2.getItemRealSell())) {
+                    ret = -1;
+                }
+
+                return ret;
+            }
+        });
+
+        Log.d(TAG, "result check : " + result);
+
+        return result;
     }
 }

@@ -101,5 +101,7 @@
     <string name="main_analysis_combined_bar_y">매출</string>
     <string name="main_analysis_visit_title">방문 통계</string>
     <string name="main_analysis_category_title">카테고리 별 매출</string>
+    <string name="main_analysis_sales_legend">평균 매출</string>
+    <string name="main_analysis_category_sales_title">카테고리 별 인기메뉴 통계</string>
 
 </resources>

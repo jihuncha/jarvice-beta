@@ -67,7 +67,6 @@ public class AdapterListDetail extends RecyclerView.Adapter<RecyclerView.ViewHol
             final DailySalesListItems items = insertData.get(position);
 
             String inputTitle = items.getItemName() + " " + items.getItemCount() + "건";
-            Log.d(TAG, "Test : " + inputTitle);
             SpannableStringBuilder ssb = new SpannableStringBuilder(inputTitle);
 //            span.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.color_0c4bff)), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             ssb.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.color_4263ff)),

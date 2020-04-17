@@ -30,7 +30,7 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
     public static final String END_WEEK			                = "end_week";                   // 끝주
     public static final String SELL_REAL			            = "sell_real";                  // 실매출
     public static final String SELL_FOOD			            = "sell_food";                  // 음식
-    public static final String SELL_BEAR			            = "sell_bear";                  // 주류
+    public static final String SELL_BEER                        = "sell_beer";                  // 주류
     public static final String SELL_COCK			            = "sell_cock";                  // 칵테일
     public static final String SELL_LIQUOR			            = "sell_liquor";                // 양주
     public static final String SELL_DRINK			            = "sell_drink";                 // 음료
@@ -46,7 +46,7 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
                 END_WEEK			    + " TEXT," +
                 SELL_REAL			    + " TEXT," +
                 SELL_FOOD			    + " TEXT," +
-                SELL_BEAR			    + " TEXT," +
+                SELL_BEER               + " TEXT," +
                 SELL_COCK			    + " TEXT," +
                 SELL_LIQUOR			    + " TEXT," +
                 SELL_DRINK			    + " TEXT " +
@@ -57,7 +57,7 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
 
     /*** INDEX 정의 **********************/
     protected static class INDEX {
-        public int ID, SELL_YEAR, SELL_WEEK, START_WEEK, END_WEEK, SELL_REAL, SELL_FOOD, SELL_BEAR, SELL_COCK, SELL_LIQUOR, SELL_DRINK;
+        public int ID, SELL_YEAR, SELL_WEEK, START_WEEK, END_WEEK, SELL_REAL, SELL_FOOD, SELL_BEER, SELL_COCK, SELL_LIQUOR, SELL_DRINK;
     }
 
     protected static INDEX cursorToIndex(Cursor c) throws Exception {
@@ -70,7 +70,7 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
         idx.END_WEEK                = c.getColumnIndex(END_WEEK);
         idx.SELL_REAL               = c.getColumnIndex(SELL_REAL);
         idx.SELL_FOOD               = c.getColumnIndex(SELL_FOOD);
-        idx.SELL_BEAR               = c.getColumnIndex(SELL_BEAR);
+        idx.SELL_BEER               = c.getColumnIndex(SELL_BEER);
         idx.SELL_COCK               = c.getColumnIndex(SELL_COCK);
         idx.SELL_LIQUOR             = c.getColumnIndex(SELL_LIQUOR);
         idx.SELL_DRINK              = c.getColumnIndex(SELL_DRINK);
@@ -99,7 +99,7 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
         values.put(END_WEEK,                o.getEndWeek());
         values.put(SELL_REAL,               o.getSellReal());
         values.put(SELL_FOOD,               o.getSellFood());
-        values.put(SELL_BEAR,               o.getSellBear());
+        values.put(SELL_BEER,               o.getSellBeer());
         values.put(SELL_COCK,               o.getSellCock());
         values.put(SELL_LIQUOR,             o.getSellLiquor());
         values.put(SELL_DRINK,              o.getSellDrink());
@@ -139,7 +139,7 @@ public class TBL_WEEKLY_SALES extends TABLE <WeeklySalesObject> {
         if (idx.END_WEEK != -1) o.setEndWeek(c.getString(idx.END_WEEK));
         if (idx.SELL_REAL != -1) o.setSellReal(c.getString(idx.SELL_REAL));
         if (idx.SELL_FOOD != -1) o.setSellFood(c.getString(idx.SELL_FOOD));
-        if (idx.SELL_BEAR != -1) o.setSellBear(c.getString(idx.SELL_BEAR));
+        if (idx.SELL_BEER != -1) o.setSellBeer(c.getString(idx.SELL_BEER));
         if (idx.SELL_COCK != -1) o.setSellCock(c.getString(idx.SELL_COCK));
         if (idx.SELL_LIQUOR != -1) o.setSellLiquor(c.getString(idx.SELL_LIQUOR));
         if (idx.SELL_DRINK != -1) o.setSellDrink(c.getString(idx.SELL_DRINK));

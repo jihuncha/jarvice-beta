@@ -22,8 +22,43 @@ import huni.techtown.org.jarvice.R;
 public class LoadingActivity extends Activity {
     private static final String TAG = LoadingActivity.class.getSimpleName();
 
+    public static final String ACTION = "huni.techtown.org.jarvice.ui.popup.LoadingActivity";
+    public static final String EXTRA  = "show-or-hide";
+    public static final int    EXTRA_HIDE = 0;
+    public static final int    EXTRA_SHOW = 1;
+
     private Context mContext;
     private Handler mHandler;
+
+    private boolean   mRunning = false;
+    private static boolean sShowRequested = false;
+    private boolean   mFinishing = false;
+
+    public static final void show(Context context, String f) {
+        Log.d(TAG, "show() - f: " + f);
+        Intent intent = new Intent(context, LoadingActivity.class);
+        intent.setAction(ACTION);
+        intent.putExtra(EXTRA, EXTRA_SHOW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP
+                | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        context.startActivity(intent);
+
+        //
+        sShowRequested = true;
+    }
+
+    public static final void hide(Context context, String f) {
+        Log.d(TAG, "hide() - f: " + f);
+
+        Intent intent = new Intent(ACTION);
+        intent.putExtra(EXTRA, EXTRA_HIDE);
+        boolean result = LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+
+        //
+        sShowRequested = false;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,7 +68,6 @@ public class LoadingActivity extends Activity {
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setFinishOnTouchOutside(false);
 
-
         setContentView(R.layout.activity_loading);
 
         mContext = this;
@@ -41,9 +75,11 @@ public class LoadingActivity extends Activity {
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(JarviceAction.Action.DATE_CHANGED);
+        filter.addAction(ACTION);
         LocalBroadcastManager.getInstance(mContext).registerReceiver(mControlRecevier, filter);
 
-        startLoading();
+        processIntent(getIntent(), "onCreate()");
+//        startLoading();
     }
 
     public void startLoading() {
@@ -78,6 +114,51 @@ public class LoadingActivity extends Activity {
             finish();
         }
 
+    }
+
+    public void processIntent(Intent intent, String f) {
+        Log.d(TAG, "processIntent - f : " + f);
+//        IntentUtil.show(TAG, "[" + f + "] processIntent", intent);
+        if (intent.getIntExtra(EXTRA, EXTRA_HIDE) == EXTRA_SHOW) {
+            if (!sShowRequested) {
+                Log.d(TAG, "the Request is Canceled!!");
+                exit("!sShowRequested");
+                return;
+            }
+
+            mHandler.removeCallbacks(mSelfDestroy);
+            mHandler.postDelayed    (mSelfDestroy, 10*1000);
+
+            if (mRunning) {
+                Log.e(TAG, "processIntent - Already Running!!");
+                return;
+            }
+            //mLoadingAni.start();
+//            startAnimation();
+            mRunning = true;
+        }
+        else {
+            //mLoadingAni.stop();
+//            stopAnimation();
+            exit("processIntent");
+        }
+        return;
+    }
+
+    private Runnable mSelfDestroy = new Runnable() {
+        @Override
+        public void run() {
+            exit("SelfDestroy");
+        }
+    };
+
+    private void exit(String f) {
+        Log.d(TAG, "exit() - f: " + f + ", mFinishing: " + mFinishing);
+        if (!mFinishing) {
+            mFinishing = true;
+            finish();
+            overridePendingTransition(0, 0);
+        }
     }
 
     @Override

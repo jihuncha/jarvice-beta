@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Context mContext;
 
     private TBL_MY_SALES tblMySales;
-    private Button test;
 
     private CoordinatorLayout clParentView;
     private Toolbar toolbar;
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         int thisWeek = Tools.getWeekOfYear(sdf.format(new Date()));
 
-        Log.d(TAG, "Week Check:  " + thisWeek);
+        Log.d(TAG, "onCreate - thisWeek :  " + thisWeek);
 
         clParentView = (CoordinatorLayout) findViewById(R.id.cl_parent_view);
 
@@ -80,37 +79,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initComponent();
         setToolBarTitleClick();
 
-        ArrayList<SalesObject> SalesObjectTest = new ArrayList<SalesObject>();
-        SalesObjectTest.addAll(DatabaseManager.getInstance(mContext).getDateSalesObject("2019-04-12","MainActivity - onCreate"));
+//        ArrayList<SalesObject> SalesObjectTest = new ArrayList<SalesObject>();
+//        SalesObjectTest.addAll(DatabaseManager.getInstance(mContext).getDateSalesObject("2019-04-12","MainActivity - onCreate"));
+//
+//        int sum = 0;
+//        Log.e(TAG, "length : " + SalesObjectTest.size());
+//        for (int i = 0; i < SalesObjectTest.size(); i++) {
+//            Log.d(TAG, "test : " + SalesObjectTest.get(i).getSell());
+//            String result = "";
+//            if (SalesObjectTest.get(i).getSell().contains(",")) {
+//                result = SalesObjectTest.get(i).getSell().replace(",", "");
+//            } else {
+//                result = SalesObjectTest.get(i).getSell();
+//            }
+//            sum += Integer.parseInt(result);
+//        }
+//
+//        Log.e(TAG, "sum check : " + sum);
 
-        int sum = 0;
-        Log.e(TAG, "length : " + SalesObjectTest.size());
-        for (int i = 0; i < SalesObjectTest.size(); i++) {
-            Log.d(TAG, "test : " + SalesObjectTest.get(i).getSell());
-            String result = "";
-            if (SalesObjectTest.get(i).getSell().contains(",")) {
-                result = SalesObjectTest.get(i).getSell().replace(",", "");
-            } else {
-                result = SalesObjectTest.get(i).getSell();
-            }
-            sum += Integer.parseInt(result);
-        }
-
-        Log.e(TAG, "sum check : " + sum);
-
-        Log.e(TAG, "" + DatabaseManager.getInstance(mContext).getSumCount("2019-04-12"));
-
-//        JarviceSettings.getInstance(mContext).setBtInfo("ds");
-
-
+//        Log.e(TAG, "" + DatabaseManager.getInstance(mContext).getSumCount("2019-04-12"));
 
     }
 
     private void initToolbar() {
         Log.d(TAG, "initToolbar");
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.main_app_name);
+
         //뒤로가기 버튼 보여주기 (false -> gone)
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         Tools.setSystemBarColor(this);
@@ -148,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setupViewPager(ViewPager viewPager) {
         Log.d(TAG, "setupViewPager");
+
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(TabLayoutHome.newInstance(), getString(R.string.main_tab_home));
         adapter.addFragment(TabLayoutDeadline.newInstance(), getString(R.string.main_tab_deadline));

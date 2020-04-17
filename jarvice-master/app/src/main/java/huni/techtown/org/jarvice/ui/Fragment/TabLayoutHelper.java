@@ -196,8 +196,9 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.iv_main_helper_title_left :
             case R.id.rl_main_helper_title_left :
-                Intent intentLeft = new Intent(mContext, LoadingActivity.class);
-                startActivity(intentLeft);
+//                Intent intentLeft = new Intent(mContext, LoadingActivity.class);
+//                startActivity(intentLeft);
+                LoadingActivity.show(mContext,"iv_main_helper_title_left");
 
                 String leftResult = Tools.handleDateChange(todayDate, -1);
                 todayDate = leftResult;
@@ -206,12 +207,15 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
                 insertNotificationData("iv_main_helper_title_left");
                 insertTodoListData("iv_main_helper_title_left");
 
+                LoadingActivity.hide(mContext,"iv_main_helper_title_left");
+
                 break;
 
             case R.id.iv_main_helper_title_right :
             case R.id.rl_main_helper_title_right :
-                Intent intentRight = new Intent(mContext, LoadingActivity.class);
-                startActivity(intentRight);
+//                Intent intentRight = new Intent(mContext, LoadingActivity.class);
+//                startActivity(intentRight);
+                LoadingActivity.show(mContext,"iv_main_helper_title_right");
 
                 String rightResult = Tools.handleDateChange(todayDate, 1);
                 todayDate = rightResult;
@@ -219,6 +223,9 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
                 main_helper_title_date.setText(todayDate);
                 insertNotificationData("iv_main_helper_title_right");
                 insertTodoListData("iv_main_helper_title_right");
+
+                LoadingActivity.hide(mContext,"iv_main_helper_title_right");
+
                 break;
 
             case R.id.main_helper_title_date :

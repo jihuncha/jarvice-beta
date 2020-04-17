@@ -97,7 +97,7 @@ public class AdapterAnalysisList extends RecyclerView.Adapter<RecyclerView.ViewH
                         return;
                     }
 
-                    Intent intent = new Intent(mContext,AnalysisDetailActivity.class);
+                    Intent intent = new Intent(mContext, AnalysisDetailActivity.class);
                     intent.putExtra("inputObject", weeklySalesObject);
                     mContext.startActivity(intent);
                 }

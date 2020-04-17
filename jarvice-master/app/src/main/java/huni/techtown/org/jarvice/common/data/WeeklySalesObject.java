@@ -19,7 +19,7 @@ public class WeeklySalesObject implements Serializable {
     private String endWeek;
     private String sellReal;
     private String sellFood;
-    private String sellBear;
+    private String sellBeer;
     private String sellCock;
     private String sellLiquor;
     private String sellDrink;
@@ -27,7 +27,7 @@ public class WeeklySalesObject implements Serializable {
     public WeeklySalesObject(){}
 
     public WeeklySalesObject(long id, String sellYear, String sellWeek, String startWeek,
-                             String endWeek, String sellReal, String sellFood, String sellBear,
+                             String endWeek, String sellReal, String sellFood, String sellBeer,
                              String sellCock, String sellLiquor, String sellDrink) {
         this.id = id;
         this.sellYear = sellYear;
@@ -36,7 +36,7 @@ public class WeeklySalesObject implements Serializable {
         this.endWeek = endWeek;
         this.sellReal = sellReal;
         this.sellFood = sellFood;
-        this.sellBear = sellBear;
+        this.sellBeer = sellBeer;
         this.sellCock = sellCock;
         this.sellLiquor = sellLiquor;
         this.sellDrink = sellDrink;
@@ -98,12 +98,12 @@ public class WeeklySalesObject implements Serializable {
         this.sellFood = sellFood;
     }
 
-    public String getSellBear() {
-        return sellBear;
+    public String getSellBeer() {
+        return sellBeer;
     }
 
-    public void setSellBear(String sellBear) {
-        this.sellBear = sellBear;
+    public void setSellBeer(String sellBeer) {
+        this.sellBeer = sellBeer;
     }
 
     public String getSellCock() {
@@ -140,7 +140,7 @@ public class WeeklySalesObject implements Serializable {
                 ", endWeek='" + endWeek + '\'' +
                 ", sellReal='" + sellReal + '\'' +
                 ", sellFood='" + sellFood + '\'' +
-                ", sellBear='" + sellBear + '\'' +
+                ", sellBeer='" + sellBeer + '\'' +
                 ", sellCock='" + sellCock + '\'' +
                 ", sellLiquor='" + sellLiquor + '\'' +
                 ", sellDrink='" + sellDrink + '\'' +

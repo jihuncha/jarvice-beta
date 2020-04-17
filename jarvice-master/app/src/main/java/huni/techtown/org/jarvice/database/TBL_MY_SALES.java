@@ -448,4 +448,12 @@ public class TBL_MY_SALES extends TABLE <SalesObject> {
         String whereClause = SELL_DATE + "=" + sellDate;
         return select_raw(whereClause);
     }
+
+    public List<SalesObject> getRangeDailyData (String sellDate) {
+        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " = '" + sellDate +"'";
+        return select_raw(sql);
+
+//        String sql = "SELECT * FROM " + tableName + " WHERE " + SELL_DATE + " LIKE '%" + sellYear + "%' AND " + SELL_WEEK + " = '" + sellWeek +"'";
+//        return select_raw(sql);
+    }
 }

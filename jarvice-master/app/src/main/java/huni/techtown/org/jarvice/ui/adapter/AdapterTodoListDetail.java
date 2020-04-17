@@ -130,6 +130,20 @@ public class AdapterTodoListDetail extends RecyclerView.Adapter<RecyclerView.Vie
 
                 }
             });
+
+            viewHolder.cb_main_helper_todolist_detail_check.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (viewHolder.cb_main_helper_todolist_detail_check.isChecked()) {
+                        insertData.get(position).setItemCheck(1);
+                        mTblHelperTodoList.updateTodoListCheck(insertData.get(position).getId(), 1);
+                    } else {
+                        insertData.get(position).setItemCheck(0);
+                        mTblHelperTodoList.updateTodoListCheck(insertData.get(position).getId(), 0);
+                    }
+                }
+            });
+
         }
     }
 
