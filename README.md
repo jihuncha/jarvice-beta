@@ -2,6 +2,7 @@
 my first project Jarvice. Android App
 
 200214 - first commit (change my repository)
+
 200505 - end project
 
 후기
