@@ -5,6 +5,15 @@ my first project Jarvice. Android App
 
 200505 - end project
 
+*Summary
+가게 통계 분석 앱
+
+*Tools
+Firebase, Google Sheet, Android Studio(using JAVA)
+
+*Structure
+
+
 후기
 1. 첫 프로젝트인 만큼 부족한 부분이 많았다. 
 
