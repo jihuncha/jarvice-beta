@@ -125,167 +125,48 @@ public class SplashActivity  extends AppCompatActivity {
                 || tblHelperTodoListDefault.getList().size() == 0) {
             Log.d(TAG, "onCreate - helperTodoListDefaultObjectList insert");
 
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방오픈", 0, 0, "설거지대 정리"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방오픈", 0, 0, "주방&식재료 정리"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방오픈", 0, 0, "식재료 재고확인&소분"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방오픈", 0, 0, "식재료 주문"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방오픈", 0, 0, "기름&소스 리필"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_01), 0, 0, "설거지대 정리"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_01), 0, 0, "주방&식재료 정리"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_01), 0, 0, "식재료 재고확인&소분"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_01), 0, 0, "식재료 주문"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_01), 0, 0, "기름&소스 리필"));
 
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방마감", 0, 0, "청소(바닥, 그릴, 냉장고 바닥)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방마감", 0, 0, "설거지 1(트레이, 조리도구, 칼)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방마감", 0, 0, "설거지 2(기름통, 바트, 렌지, 오븐)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("주방마감", 0, 0, "쓰래기 (일반, 분리수거, 음식물)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_02), 0, 0, "청소(바닥, 그릴, 냉장고 바닥)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_02), 0, 0, "설거지 1(트레이, 조리도구, 칼)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_02), 0, 0, "설거지 2(기름통, 바트, 렌지, 오븐)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_02), 0, 0, "쓰래기 (일반, 분리수거, 음식물)"));
 
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바오픈", 0, 0, "제빙기on (얼음량 확인)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바오픈", 0, 0, "잔 제자리 정리"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바오픈", 0, 0, "쥬스 및 과일 셋팅"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_03), 0, 0, "제빙기on (얼음량 확인)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_03), 0, 0, "잔 제자리 정리"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_03), 0, 0, "쥬스 및 과일 셋팅"));
 
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바마감", 0, 0, "잔 모두 설거지 후 뒤집어둠"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바마감", 0, 0, "주스 및 과일 냉장고 넣기"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바마감", 0, 0, "바청소(바위,바닥,분리수거 비우기)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바마감", 0, 0, "맥주타워 청소(입구닦기,맥주통 비우기)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("바마감", 0, 0, "술 재고 부족분 확인"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_04), 0, 0, "잔 모두 설거지 후 뒤집어둠"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_04), 0, 0, "주스 및 과일 냉장고 넣기"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_04), 0, 0, "바청소(바위,바닥,분리수거 비우기)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_04), 0, 0, "맥주타워 청소(입구닦기,맥주통 비우기)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_04), 0, 0, "술 재고 부족분 확인"));
 
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "전기차단 해제"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "POS&배달 실행"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "매장 정리"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "리필(식기, 물, 냅킨, 앞접시)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "셔터 계단 청소 및 오픈"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀오픈", 0, 0, "노래 틀기"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_05), 0, 0, "전기차단 해제"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_05), 0, 0, "POS&배달 실행"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_05), 0, 0, "매장 정리"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_05), 0, 0, "리필(식기, 물, 냅킨, 앞접시)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_05), 0, 0, "셔터 계단 청소 및 오픈"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_05), 0, 0, "노래 틀기"));
 
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "바닥 청소(2층, 계단, 3층)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "물걸레 (2층, 계단, 3층)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "화장실 청소 (물청소, 휴지리필)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "일반쓰래기 (주방, 2층, 3층, 화장실)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "분실물 확인"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "기계충전(s8, 포코, 킬번)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "전기차단 (간판, 에어컨, 제빙기)"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "마감정산&POS종료"));
-            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject("홀마감", 0, 0, "셔터 닫기"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_06), 0, 0, "바닥 청소(2층, 계단, 3층)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_06), 0, 0, "물걸레 (2층, 계단, 3층)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_06), 0, 0, "화장실 청소 (물청소, 휴지리필)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_06), 0, 0, "일반쓰래기 (주방, 2층, 3층, 화장실)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_06), 0, 0, "분실물 확인"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_06), 0, 0, "기계충전(s8, 포코, 킬번)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_06), 0, 0, "전기차단 (간판, 에어컨, 제빙기)"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_06), 0, 0, "마감정산&POS종료"));
+            helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_06), 0, 0, "셔터 닫기"));
 
             tblHelperTodoListDefault.insertForSync(helperTodoListDefaultObjectList);
         } else {
             Log.e(TAG, "onCreate - helperTodoListDefaultObjectList Already Exist!!");
         }
-
-        final onDownloadEnd mListener = new onDownloadEnd() {
-            @Override
-            public void onRawDataEnd() {
-                Log.e(TAG, "onRawDataEnd ");
-
-                Thread t1 = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tblMySalesDb.insertForSync(salesDataList);
-                        CurrentManager.getInstance(mContext).rawDataFinish(true, "end1");
-
-                        if (CurrentManager.getInstance(mContext).dailyDataCheck()
-                                && CurrentManager.getInstance(mContext).weeklyDataCheck()
-                                && CurrentManager.getInstance(mContext).monthlyDataCheck()) {
-                            Log.d(TAG, "onRawDataEnd - goToMainActivity");
-                            goToMainActivity();
-                        }
-                    }
-                });
-                t1.start();
-            }
-
-            @Override
-            public void onDailyDataEnd() {
-                Log.e(TAG, "onDailyDataEnd ");
-                Thread t1 = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        //TODO Daily 데이터와 동일하므로 이 위치에 추가
-                        for(int i = 0; i < weeklySellAvg.size(); i++) {
-                            Log.d(TAG, "Test : " + weeklySellAvg.get(i));
-                            switch (i) {
-                                case 0 :
-                                    JarviceSettings.getInstance(mContext).setMondaySellAvg(weeklySellAvg.get(i));
-                                    break;
-                                case 1 :
-                                    JarviceSettings.getInstance(mContext).setTuesdaySellAvg(weeklySellAvg.get(i));
-                                    break;
-                                case 2 :
-                                    JarviceSettings.getInstance(mContext).setWednesdaySellAvg(weeklySellAvg.get(i));
-                                    break;
-                                case 3 :
-                                    JarviceSettings.getInstance(mContext).setThursdaySellAvg(weeklySellAvg.get(i));
-                                    break;
-                                case 4 :
-                                    JarviceSettings.getInstance(mContext).setFridaySellAvg(weeklySellAvg.get(i));
-                                    break;
-                                case 5 :
-                                    JarviceSettings.getInstance(mContext).setSaturdaySellAvg(weeklySellAvg.get(i));
-                                    break;
-                                case 6 :
-                                    //TODO 일요일은 0이다...
-                                    JarviceSettings.getInstance(mContext).setSundaySellAvg("0");
-                                    break;
-                            }
-                        }
-
-                        tblDailySalesDb.insertForSync(dailySalesDataList);
-
-                        CurrentManager.getInstance(mContext).dailyDataFinish(true, "end2");
-
-                        if (CurrentManager.getInstance(mContext).rawDataCheck()
-                                && CurrentManager.getInstance(mContext).weeklyDataCheck()
-                                && CurrentManager.getInstance(mContext).monthlyDataCheck()) {
-                            Log.d(TAG, "onDailyDataEnd - goToMainActivity");
-                            goToMainActivity();
-                        }
-                    }
-                });
-
-                t1.start();
-            }
-
-            @Override
-            public void onWeeklyDataEnd() {
-                Log.e(TAG, "onWeeklyDataEnd ");
-                Thread t1 = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tblWeeklySalesDb.insertForSync(weeklySalesDataList);
-
-                        CurrentManager.getInstance(mContext).weeklyDataFinish(true, "end3");
-
-                        if (CurrentManager.getInstance(mContext).rawDataCheck()
-                                && CurrentManager.getInstance(mContext).dailyDataCheck()
-                                && CurrentManager.getInstance(mContext).monthlyDataCheck()) {
-                            Log.d(TAG, "onWeeklyDataEnd - goToMainActivity");
-                            goToMainActivity();
-                        }
-                    }
-                });
-
-                t1.start();
-            }
-
-            @Override
-            public void onMonthlyDataEnd() {
-                Log.e(TAG, "onMonthlyDataEnd ");
-                Thread t1 = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tblMonthlySalesDb.insertForSync(monthlySalesDataList);
-
-                        CurrentManager.getInstance(mContext).monthlyDataFinish(true, "end4");
-
-                        if (CurrentManager.getInstance(mContext).rawDataCheck()
-                                && CurrentManager.getInstance(mContext).dailyDataCheck()
-                                && CurrentManager.getInstance(mContext).weeklyDataCheck()) {
-                            Log.d(TAG, "onMonthlyDataEnd - goToMainActivity");
-                            goToMainActivity();
-                        }
-                    }
-                });
-
-                t1.start();
-
-            }
-        };
 
         //원본데이터 가져오기
         rawDataReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -411,6 +292,124 @@ public class SplashActivity  extends AppCompatActivity {
         });
     }
 
+    private final onDownloadEnd mListener = new onDownloadEnd() {
+        @Override
+        public void onRawDataEnd() {
+            Log.v(TAG, "onRawDataEnd ");
+
+            Thread t1 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    tblMySalesDb.insertForSync(salesDataList);
+                    CurrentManager.getInstance(mContext).rawDataFinish(true, "end1");
+
+                    if (CurrentManager.getInstance(mContext).dailyDataCheck()
+                            && CurrentManager.getInstance(mContext).weeklyDataCheck()
+                            && CurrentManager.getInstance(mContext).monthlyDataCheck()) {
+                        Log.d(TAG, "onRawDataEnd - goToMainActivity");
+                        goToMainActivity();
+                    }
+                }
+            });
+            t1.start();
+        }
+
+        @Override
+        public void onDailyDataEnd() {
+            Log.v(TAG, "onDailyDataEnd");
+            Thread t1 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    //TODO Daily 데이터와 동일하므로 이 위치에 추가
+                    for(int i = 0; i < weeklySellAvg.size(); i++) {
+                        Log.d(TAG, "weeklySellAvg : " + weeklySellAvg.get(i));
+                        switch (i) {
+                            case 0 :
+                                JarviceSettings.getInstance(mContext).setMondaySellAvg(weeklySellAvg.get(i));
+                                break;
+                            case 1 :
+                                JarviceSettings.getInstance(mContext).setTuesdaySellAvg(weeklySellAvg.get(i));
+                                break;
+                            case 2 :
+                                JarviceSettings.getInstance(mContext).setWednesdaySellAvg(weeklySellAvg.get(i));
+                                break;
+                            case 3 :
+                                JarviceSettings.getInstance(mContext).setThursdaySellAvg(weeklySellAvg.get(i));
+                                break;
+                            case 4 :
+                                JarviceSettings.getInstance(mContext).setFridaySellAvg(weeklySellAvg.get(i));
+                                break;
+                            case 5 :
+                                JarviceSettings.getInstance(mContext).setSaturdaySellAvg(weeklySellAvg.get(i));
+                                break;
+                            case 6 :
+                                //TODO 일요일은 0이다...
+                                JarviceSettings.getInstance(mContext).setSundaySellAvg("0");
+                                break;
+                        }
+                    }
+
+                    tblDailySalesDb.insertForSync(dailySalesDataList);
+
+                    CurrentManager.getInstance(mContext).dailyDataFinish(true, "end2");
+
+                    if (CurrentManager.getInstance(mContext).rawDataCheck()
+                            && CurrentManager.getInstance(mContext).weeklyDataCheck()
+                            && CurrentManager.getInstance(mContext).monthlyDataCheck()) {
+                        Log.d(TAG, "onDailyDataEnd - goToMainActivity");
+                        goToMainActivity();
+                    }
+                }
+            });
+
+            t1.start();
+        }
+
+        @Override
+        public void onWeeklyDataEnd() {
+            Log.v(TAG, "onWeeklyDataEnd");
+            Thread t1 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    tblWeeklySalesDb.insertForSync(weeklySalesDataList);
+
+                    CurrentManager.getInstance(mContext).weeklyDataFinish(true, "end3");
+
+                    if (CurrentManager.getInstance(mContext).rawDataCheck()
+                            && CurrentManager.getInstance(mContext).dailyDataCheck()
+                            && CurrentManager.getInstance(mContext).monthlyDataCheck()) {
+                        Log.d(TAG, "onWeeklyDataEnd - goToMainActivity");
+                        goToMainActivity();
+                    }
+                }
+            });
+
+            t1.start();
+        }
+
+        @Override
+        public void onMonthlyDataEnd() {
+            Log.v(TAG, "onMonthlyDataEnd");
+            Thread t1 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    tblMonthlySalesDb.insertForSync(monthlySalesDataList);
+
+                    CurrentManager.getInstance(mContext).monthlyDataFinish(true, "end4");
+
+                    if (CurrentManager.getInstance(mContext).rawDataCheck()
+                            && CurrentManager.getInstance(mContext).dailyDataCheck()
+                            && CurrentManager.getInstance(mContext).weeklyDataCheck()) {
+                        Log.d(TAG, "onMonthlyDataEnd - goToMainActivity");
+                        goToMainActivity();
+                    }
+                }
+            });
+
+            t1.start();
+        }
+    };
+
     private void goToMainActivity() {
         Log.d(TAG, "goToMainActivity()");
 
@@ -445,6 +444,5 @@ public class SplashActivity  extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-
     }
 }

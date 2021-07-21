@@ -104,4 +104,12 @@
     <string name="main_analysis_sales_legend">평균 매출</string>
     <string name="main_analysis_category_sales_title">카테고리 별 인기메뉴 통계</string>
 
+    <!-- 210721 추가 -->
+    <string name="todo_list_title_01">주방오픈</string>
+    <string name="todo_list_title_02">주방마감</string>
+    <string name="todo_list_title_03">바오픈</string>
+    <string name="todo_list_title_04">바마감</string>
+    <string name="todo_list_title_05">홀오픈</string>
+    <string name="todo_list_title_06">홀마감</string>
+
 </resources>
