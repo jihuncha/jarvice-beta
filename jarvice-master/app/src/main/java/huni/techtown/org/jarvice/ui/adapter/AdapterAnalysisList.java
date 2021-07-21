@@ -81,8 +81,8 @@ public class AdapterAnalysisList extends RecyclerView.Adapter<RecyclerView.ViewH
             final WeeklySalesObject weeklySalesObject = inputData.get(position);
 
             if (inputData.get(position).getSellYear() == null || inputData.get(position).getSellYear().equals("")) {
-                viewHolder.tv_main_analysis_title.setText("알수없음");
-                viewHolder.tv_main_analysis_date.setText("알수없음");
+                viewHolder.tv_main_analysis_title.setText(mContext.getResources().getString(R.string.unknown_result));
+                viewHolder.tv_main_analysis_date.setText(mContext.getResources().getString(R.string.unknown_result));
             } else {
                 viewHolder.tv_main_analysis_title.setText(weeklySalesObject.getSellYear() + "년 " + weeklySalesObject.getSellWeek() + "주차 리포트");
                 viewHolder.tv_main_analysis_date.setText(weeklySalesObject.getSellYear() + "." + Tools.deleteSpace(weeklySalesObject.getStartWeek())

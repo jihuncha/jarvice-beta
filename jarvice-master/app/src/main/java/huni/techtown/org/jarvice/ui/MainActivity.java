@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -24,10 +23,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import huni.techtown.org.jarvice.JarviceSettings;
 import huni.techtown.org.jarvice.R;
 import huni.techtown.org.jarvice.common.DatabaseManager;
-import huni.techtown.org.jarvice.common.data.SalesObject;
 import huni.techtown.org.jarvice.ui.utils.Tools;
 import huni.techtown.org.jarvice.database.TBL_MY_SALES;
 import huni.techtown.org.jarvice.ui.Fragment.TabLayoutAnalysis;
@@ -78,27 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initToolbar();
         initComponent();
         setToolBarTitleClick();
-
-//        ArrayList<SalesObject> SalesObjectTest = new ArrayList<SalesObject>();
-//        SalesObjectTest.addAll(DatabaseManager.getInstance(mContext).getDateSalesObject("2019-04-12","MainActivity - onCreate"));
-//
-//        int sum = 0;
-//        Log.e(TAG, "length : " + SalesObjectTest.size());
-//        for (int i = 0; i < SalesObjectTest.size(); i++) {
-//            Log.d(TAG, "test : " + SalesObjectTest.get(i).getSell());
-//            String result = "";
-//            if (SalesObjectTest.get(i).getSell().contains(",")) {
-//                result = SalesObjectTest.get(i).getSell().replace(",", "");
-//            } else {
-//                result = SalesObjectTest.get(i).getSell();
-//            }
-//            sum += Integer.parseInt(result);
-//        }
-//
-//        Log.e(TAG, "sum check : " + sum);
-
-//        Log.e(TAG, "" + DatabaseManager.getInstance(mContext).getSumCount("2019-04-12"));
-
     }
 
     private void initToolbar() {
@@ -112,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         Tools.setSystemBarColor(this);
         invalidateOptionsMenu();
-
     }
 
     private void initComponent() {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -85,6 +84,7 @@ public class SplashActivity  extends AppCompatActivity {
     //로딩시간
     private long        mNextTime = 0;
 
+    //다운로드 interface
     public interface onDownloadEnd {
         void onRawDataEnd();
         void onDailyDataEnd();
@@ -120,9 +120,9 @@ public class SplashActivity  extends AppCompatActivity {
 
         tblHelperTodoListDefault = DatabaseManager.getInstance(mContext).getHelperTodoListDefault();
 
-        //TODO default 리스트가 없는 경우
-        if (tblHelperTodoListDefault.getList() == null
-                || tblHelperTodoListDefault.getList().size() == 0) {
+        if (tblHelperTodoListDefault.getList() == null) {
+            Log.e(TAG, "tblHelperTodoListDefault.getList() - NULL");
+        } else if (tblHelperTodoListDefault.getList().size() == 0) {
             Log.d(TAG, "onCreate - helperTodoListDefaultObjectList insert");
 
             helperTodoListDefaultObjectList.add(new HelperTodoListDefaultObject(mContext.getResources().getString(R.string.todo_list_title_01), 0, 0, "설거지대 정리"));
@@ -274,7 +274,6 @@ public class SplashActivity  extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
                     if (snapshot.getValue() != null) {
                         Log.d(TAG, "weeklySellAvgDataReference - " + snapshot.getValue());
                         weeklySellAvg.add((String)snapshot.getValue());
@@ -432,7 +431,7 @@ public class SplashActivity  extends AppCompatActivity {
         public void run() {
 
             //Intent 정보를 카피하여 전달..
-            JarviceConfig.startMainActivity(mContext, getIntent(), null, true, "goToMainActivity");
+            JarviceConfig.startMainActivity(mContext, getIntent(), null, "goToMainActivity");
             overridePendingTransition(0,0);
 
             //종료

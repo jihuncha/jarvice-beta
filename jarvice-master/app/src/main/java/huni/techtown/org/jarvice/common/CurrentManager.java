@@ -39,7 +39,7 @@ public class CurrentManager {
     public boolean rawDataFinish(boolean check, String f) {
         Log.d(TAG, "rawDataFinish - " + check + " , f - " + f);
 
-        if(check) {
+        if (check) {
             rawData = true;
             return true;
         } else {
@@ -59,7 +59,7 @@ public class CurrentManager {
     public boolean dailyDataFinish(boolean check, String f) {
         Log.d(TAG, "dailyDataFinish - " + check + " , f - " + f);
 
-        if(check) {
+        if (check) {
             dailyData = true;
             return true;
         } else {
@@ -79,7 +79,7 @@ public class CurrentManager {
     public boolean weeklyDataFinish(boolean check, String f) {
         Log.d(TAG, "weeklyDataFinish - " + check + " , f - " + f);
 
-        if(check) {
+        if (check) {
             weeklyData = true;
             return true;
         } else {
@@ -99,7 +99,7 @@ public class CurrentManager {
     public boolean monthlyDataFinish(boolean check, String f) {
         Log.d(TAG, "monthlyDataFinish - " + check + " , f - " + f);
 
-        if(check) {
+        if (check) {
             monthlyData = true;
             return true;
         } else {

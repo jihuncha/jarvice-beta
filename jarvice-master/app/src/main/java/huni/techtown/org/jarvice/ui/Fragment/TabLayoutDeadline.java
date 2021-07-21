@@ -68,6 +68,7 @@ import static com.github.mikephil.charting.components.XAxis.XAxisPosition.TOP_IN
  * 방문자 수
  * 오늘의 메뉴(?)
 * */
+
 public class TabLayoutDeadline extends Fragment implements View.OnClickListener {
     private static final String TAG = TabLayoutDeadline.class.getSimpleName();
 
@@ -194,7 +195,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         mContext = container.getContext();
         mHandler = new Handler();
 
-        //날자 선정 -> 0 번쨰가 가장 최근
+        //날짜 선정 -> 0 번쨰가 가장 최근
         Log.d(TAG, "getLastData - All :  " + DatabaseManager.getInstance(mContext).getLastData());
 
         if (DatabaseManager.getInstance(mContext).getLastData().size() != 0) {
@@ -205,7 +206,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         }
 
         Log.d(TAG, "pieChartData - date : " + pieChartData.getSellDate());
-//        Log.d(TAG,"test : " + DatabaseManager.getInstance(mContext).getDailyCheck("2019-11-25").get(0).getDinnerVisitTotal());
 
         checkDaily = DatabaseManager.getInstance(mContext).getLastData().size();
 
@@ -217,8 +217,8 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
             getDayOfWeek = Tools.getDayOfWeek(pieChartData.getSellDate());
 
         } else {
-            getLastDataDate = "알수없음";
-            getDayOfWeek = "앒수없음";
+            getLastDataDate = mContext.getResources().getString(R.string.unknown_result);
+            getDayOfWeek = mContext.getResources().getString(R.string.unknown_result);
         }
 
         //타이틀 생성
@@ -227,11 +227,11 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
         //월간 데이터 탐색
         String[] checkDataFromDate = pieChartData.getSellDate().split("-");
-        Log.d(TAG, "check : " + checkDataFromDate);
+        Log.d(TAG, "checkDataFromDate : " + checkDataFromDate);
         if (DatabaseManager.getInstance(mContext).getMonthlyLastDataCheck(checkDataFromDate[0] , checkDataFromDate[1]) != null) {
             monthlyId = "" +  DatabaseManager.getInstance(mContext).getMonthlyLastDataCheck(checkDataFromDate[0] , checkDataFromDate[1]).get(0).getId();
         } else {
-            Log.e(TAG, "montlyId null!!");
+            Log.e(TAG, "monthlyId null!!");
         }
 
         if (monthlyId != null && monthlyId != "") {
@@ -243,7 +243,7 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         String year = checkDataFromDate[0];
 
         if (DatabaseManager.getInstance(mContext).getWeeklyLastDataCheck(year, weekCheck).size() == 0) {
-            weeklyId = "알수없음";
+            weeklyId = mContext.getResources().getString(R.string.unknown_result);
             checkWeekly = 0;
         } else {
             weeklyId = "" +  DatabaseManager.getInstance(mContext).getWeeklyLastDataCheck(year, weekCheck).get(0).getId();
@@ -1285,7 +1285,6 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
 
     //  viewpager change listener
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
-
         @Override
         public void onPageSelected(final int position) {
             Log.d(TAG, "onPageSelected : " + position);
@@ -1629,31 +1628,31 @@ public class TabLayoutDeadline extends Fragment implements View.OnClickListener 
         List<SalesObject> delivery = new ArrayList<SalesObject>();
 
         for (int i = 0; i < lastRawData.size(); i++ ) {
-            if (lastRawData.get(i).getCategory().equals("푸드")){
+            if (lastRawData.get(i).getCategory().equals(getResources().getString(R.string.main_deadline_pie_graph_food))){
                 food.add(lastRawData.get(i));
             }
 
-            if (lastRawData.get(i).getCategory().equals("주류")){
+            if (lastRawData.get(i).getCategory().equals(getResources().getString(R.string.main_deadline_pie_graph_beer))){
                 beer.add(lastRawData.get(i));
             }
 
-            if (lastRawData.get(i).getCategory().equals("칵테일")){
+            if (lastRawData.get(i).getCategory().equals(getResources().getString(R.string.main_deadline_pie_graph_cock))){
                 cock.add(lastRawData.get(i));
             }
 
-            if (lastRawData.get(i).getCategory().equals("양주")){
+            if (lastRawData.get(i).getCategory().equals(getResources().getString(R.string.main_deadline_pie_graph_liquor))){
                 liquor.add(lastRawData.get(i));
             }
 
-            if (lastRawData.get(i).getCategory().equals("드링크")){
+            if (lastRawData.get(i).getCategory().equals(getResources().getString(R.string.main_deadline_pie_graph_drink))){
                 drink.add(lastRawData.get(i));
             }
 
-            if (lastRawData.get(i).getCategory().equals("런치")){
+            if (lastRawData.get(i).getCategory().equals(getResources().getString(R.string.main_deadline_pie_graph_lunch))){
                 lunch.add(lastRawData.get(i));
             }
 
-            if (lastRawData.get(i).getCategory().equals("배달")){
+            if (lastRawData.get(i).getCategory().equals(getResources().getString(R.string.main_deadline_pie_graph_delivery))){
                 delivery.add(lastRawData.get(i));
             }
         }

@@ -1,7 +1,6 @@
 package huni.techtown.org.jarvice.ui.Fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -108,7 +107,7 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
         if (todayDate != null) {
             main_helper_title_date.setText(todayDate);
         } else {
-            main_helper_title_date.setText("알 수 없음");
+            main_helper_title_date.setText(mContext.getResources().getString(R.string.unknown_result));
         }
 
         main_helper_title_date.setOnClickListener(this);
@@ -196,14 +195,15 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.iv_main_helper_title_left :
             case R.id.rl_main_helper_title_left :
-//                Intent intentLeft = new Intent(mContext, LoadingActivity.class);
-//                startActivity(intentLeft);
                 LoadingActivity.show(mContext,"iv_main_helper_title_left");
 
                 String leftResult = Tools.handleDateChange(todayDate, -1);
                 todayDate = leftResult;
+
                 Log.d(TAG, "iv_main_helper_title_left - onclick : " + todayDate);
+
                 main_helper_title_date.setText(todayDate);
+
                 insertNotificationData("iv_main_helper_title_left");
                 insertTodoListData("iv_main_helper_title_left");
 
@@ -213,14 +213,15 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
 
             case R.id.iv_main_helper_title_right :
             case R.id.rl_main_helper_title_right :
-//                Intent intentRight = new Intent(mContext, LoadingActivity.class);
-//                startActivity(intentRight);
                 LoadingActivity.show(mContext,"iv_main_helper_title_right");
 
                 String rightResult = Tools.handleDateChange(todayDate, 1);
                 todayDate = rightResult;
+
                 Log.d(TAG, "iv_main_helper_title_right - onclick : " + todayDate);
+
                 main_helper_title_date.setText(todayDate);
+
                 insertNotificationData("iv_main_helper_title_right");
                 insertTodoListData("iv_main_helper_title_right");
 
@@ -278,7 +279,7 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
                             if (todayDate != null && !todayDate.isEmpty()) {
                                 inputDate = todayDate.replace(".", "-");
                             } else {
-                                inputDate = "알수없음";
+                                inputDate = mContext.getResources().getString(R.string.unknown_result);
                             }
 
                             //2. 현재 아이템 갯수 가져오기 - recyclerview의
@@ -350,7 +351,7 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
                         if (todayDate != null && !todayDate.isEmpty()) {
                             inputDate = todayDate.replace(".", "-");
                         } else {
-                            inputDate = "알수없음";
+                            inputDate = mContext.getResources().getString(R.string.unknown_result);
                         }
 
                         //2. 현재 아이템 갯수 가져오기 - recyclerview의
@@ -376,8 +377,6 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
                 });
 
                 customDialogTodo.show();
-
-
                 break;
         }
     }
@@ -394,7 +393,7 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
         notificationList.addAll(mTblHelperNotification.getListDate(Tools.changeComma(todayDate)));
 
         rv_main_helper_notice.setLayoutManager(new LinearLayoutManager(mContext));
-        //TODO 이거때문에 항목 삭제시 view 갱신이 안됬음 -> false 로 변경...
+        //TODO 이거 때문에 항목 삭제시 view 갱신이 안됬음 -> false 로 변경...
         rv_main_helper_notice.setHasFixedSize(false);
         notiAdapter = new AdapterNotification(mContext, notificationList);
         notiAdapter.setOnItemClickListener(new AdapterNotification.OnItemClickListener() {
@@ -501,6 +500,7 @@ public class TabLayoutHelper extends Fragment implements View.OnClickListener {
 
         //4. 리사이클러뷰에 전달
         rv_main_helper_todolist.setLayoutManager(new LinearLayoutManager(mContext));
+
         //TODO 이거때문에 항목 삭제시 view 갱신이 안됬음 -> false 로 변경...
         rv_main_helper_todolist.setHasFixedSize(false);
         todoListAdapter = new AdapterTodoList(mContext, todoListResult, todayDate);

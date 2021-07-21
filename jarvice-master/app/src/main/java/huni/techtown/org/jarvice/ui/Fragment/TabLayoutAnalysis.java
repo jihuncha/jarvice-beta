@@ -56,7 +56,6 @@ public class TabLayoutAnalysis extends Fragment {
         Collections.reverse(inputWeeklyDataList);
 
         Log.d(TAG, "inputWeeklyDataList - " + inputWeeklyDataList);
-//        Log.d(TAG, "inputWeeklyDataList - last : " + inputWeeklyDataList.get(inputWeeklyDataList.size() -1 ));
 
         rv_main_analysis_list = (RecyclerView)root.findViewById(R.id.rv_main_analysis_list);
         rv_main_analysis_list.setLayoutManager(new LinearLayoutManager(mContext));
@@ -64,7 +63,6 @@ public class TabLayoutAnalysis extends Fragment {
 
         adapterAnalysisList = new AdapterAnalysisList(mContext, inputWeeklyDataList);
         rv_main_analysis_list.setAdapter(adapterAnalysisList);
-
 
         return root;
     }

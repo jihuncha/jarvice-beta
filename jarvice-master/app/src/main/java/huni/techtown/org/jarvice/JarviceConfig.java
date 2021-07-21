@@ -21,7 +21,7 @@ public class JarviceConfig {
      * @param originIntent
      * @param f
      */
-    public static void startMainActivity(Context context, Intent originIntent, String action, boolean singleTop, String f) {
+    public static void startMainActivity(Context context, Intent originIntent, String action, String f) {
         Log.d(TAG, "startMainActivity() - f: " + f + ", originIntent: " + originIntent);
 
         Intent intent = new Intent(context, MainActivity.class);
@@ -40,16 +40,9 @@ public class JarviceConfig {
             intent.setAction(Action.MAIN_ACTIVITY);
         }
 
-        if (singleTop) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                    | Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        }
-        else {
-            intent.addFlags(
-                    Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED
-            );
-        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         context.startActivity(intent);
     }
