@@ -112,4 +112,7 @@
     <string name="todo_list_title_05">홀오픈</string>
     <string name="todo_list_title_06">홀마감</string>
 
+    <!-- 누락 -->
+    <string name="unknown_result">알 수 없음</string>
+
 </resources>
